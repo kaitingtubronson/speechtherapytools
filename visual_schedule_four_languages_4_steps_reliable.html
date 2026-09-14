@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Visual Schedule">
+<meta name="theme-color" content="#fffaf0">
+<link rel="manifest" href="./visual_schedule_manifest.json">
+<title>Visual Schedule</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#27323a;background:#fffaf0}
+body{padding:clamp(8px,1.5vw,18px)}
+.app{width:100%;max-width:1500px;margin:auto;min-height:calc(100dvh - 16px);display:flex;flex-direction:column}
+header{margin-bottom:clamp(8px,1.5vw,16px)}
+h1{margin:0;font-size:clamp(25px,4vw,40px)}
+.panel{background:#fff;border:1px solid #e7dcc8;border-radius:clamp(14px,2vw,22px);padding:clamp(10px,1.5vw,18px);box-shadow:0 5px 20px rgba(60,45,20,.08);flex:1;display:flex;flex-direction:column}
+.language-field{width:min(220px,100%)}.controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:clamp(10px,1.5vw,18px)}
+.field{width:min(260px,100%)}
+label{display:block;font-weight:700;font-size:14px;margin-bottom:5px}
+select{width:100%;height:48px;padding:8px 12px;border:2px solid #d9cdb9;border-radius:12px;background:white;color:#27323a;font-size:18px}
+button{font-family:inherit;-webkit-appearance:none;appearance:none;touch-action:manipulation}
+.secondary{min-height:48px;padding:0 16px;border:0;border-radius:12px;background:#eee7dc;font-weight:800;font-size:16px;cursor:pointer}
+.schedule{display:grid;display:flex;flex-direction:column;gap:clamp(12px,1.5vw,18px);flex:1;min-height:0}
+.step{display:grid;grid-template-columns:clamp(52px,5vw,76px) minmax(150px,1fr) minmax(220px,2fr) clamp(46px,5vw,64px);align-items:center;gap:clamp(7px,1vw,14px);min-height:0;background:#fff;border:1px solid #e7dcc8;border-radius:clamp(14px,1.8vw,20px);padding:clamp(8px,1vw,14px);box-shadow:0 4px 12px rgba(60,45,20,.07);transition:opacity .2s,transform .2s}
+.step.done{opacity:.62}
+.step-marker{font-size:clamp(18px,2.5vw,28px);font-weight:850;text-align:center}
+.details{display:flex;flex-direction:column;gap:8px;justify-content:center;min-width:0}.activity{width:100%;min-height:48px;padding:8px 12px;border:2px solid #d9cdb9;border-radius:12px;background:#fff;color:#27323a;font-size:clamp(16px,2vw,21px)}.activity::placeholder{color:#8b8174}.temporal{width:100%;min-height:48px;border:2px solid #d9cdb9;border-radius:12px;background:#fff;color:#27323a;font-size:clamp(16px,2vw,21px);padding:8px}
+.photo-area{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;height:100%}
+.photo{width:clamp(150px,20vw,220px);height:clamp(150px,20vw,220px);border-radius:15px;border:2px solid #eadfce;object-fit:cover;display:none;background:#fffaf0;flex:none}
+.photo.show{display:block}
+.photo-placeholder{width:clamp(150px,20vw,220px);height:clamp(150px,20vw,220px);border-radius:15px;border:2px dashed #d9cdb9;display:flex;align-items:center;justify-content:center;font-size:clamp(26px,4vw,44px);background:#fffaf0;flex:none}
+.photo-placeholder.hide{display:none}
+.photo-button{min-height:48px;border:0;border-radius:12px;background:#eee7dc;padding:0 12px;font-weight:800;font-size:clamp(13px,1.4vw,16px);cursor:pointer}
+.file-input{display:none}
+.check-wrap{display:flex;justify-content:center;align-items:center}
+.check{width:clamp(36px,4vw,50px);height:clamp(36px,4vw,50px);accent-color:#27323a;cursor:pointer}
+.step.done .step-marker{text-decoration:line-through}
+.celebration{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(35,29,18,.5);z-index:9999;pointer-events:none;opacity:0}
+.celebration.show{animation:celebrateIn .95s ease forwards}
+.celebration-card{background:#fffdf7;border-radius:28px;padding:clamp(25px,5vw,55px);text-align:center;box-shadow:0 15px 50px rgba(0,0,0,.2);transform:scale(.55)}
+.celebration.show .celebration-card{animation:pop .85s cubic-bezier(.2,1.5,.4,1) forwards}
+.big-face{font-size:clamp(80px,18vw,150px);line-height:1;animation:wiggle .7s ease-in-out infinite alternate}
+.celebration h2{font-size:clamp(32px,7vw,60px);margin:12px 0 5px}
+.celebration p{font-size:clamp(16px,2.5vw,22px);margin:0;opacity:.7}
+@keyframes pop{0%{transform:scale(.55)}55%{transform:scale(1.08)}75%{transform:scale(.96)}100%{transform:scale(1)}}
+@keyframes wiggle{from{transform:rotate(-7deg) scale(1)}to{transform:rotate(7deg) scale(1.08)}}
+@keyframes celebrateIn{0%{opacity:0}12%{opacity:1}82%{opacity:1}100%{opacity:0}}
+@media(max-width:800px){
+ .app{min-height:calc(100dvh - 16px)}
+ .panel{flex:none}
+ .schedule{display:flex;flex-direction:column;min-height:0}
+ .step{display:grid;grid-template-columns:46px minmax(0,1fr) 52px;grid-template-areas:"marker details check" "photo photo photo";min-height:220px}
+ .step-marker{grid-area:marker}
+ .details{grid-area:details}
+ .photo-area{grid-area:photo;justify-content:flex-start;min-height:205px}
+ .check-wrap{grid-area:check}
+ .photo-button{flex:1;max-width:240px}
+}
+@media(max-width:480px){
+ body{padding:8px}
+ .panel{padding:9px}
+ .photo-area{flex-wrap:wrap}
+}
+
+
+
+@media(prefers-reduced-motion:reduce){
+ .celebration.show,.celebration.show .celebration-card,.big-face{animation:none}
+ .celebration.show{opacity:1}
+}
+
+
+
+@media(prefers-reduced-motion:reduce){
+ .celebration.show,.celebration.show .celebration-card,.big-face{animation:none}
+ .celebration.show{opacity:1}
+}
+
+.photo-editor{position:fixed;inset:0;background:rgba(35,29,18,.65);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px}
+.photo-editor.show{display:flex}
+.editor-card{width:min(92vw,620px);max-height:92vh;overflow:auto;background:#fffdf7;border-radius:24px;padding:18px;box-shadow:0 15px 50px rgba(0,0,0,.25)}
+.editor-title{font-size:22px;font-weight:850;margin:0 0 12px}
+.editor-frame{width:min(70vw,360px);height:min(70vw,360px);max-height:55vh;margin:0 auto 14px;overflow:hidden;border-radius:18px;background:#eee7dc;position:relative;touch-action:none}
+.editor-image{position:absolute;left:50%;top:50%;width:100%;height:100%;object-fit:cover;transform-origin:center;user-select:none;-webkit-user-drag:none}
+.editor-controls{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.editor-controls input{flex:1}
+.editor-buttons{display:flex;gap:10px;justify-content:flex-end}
+.editor-buttons button{min-height:46px;padding:0 16px;border:0;border-radius:12px;font-weight:800;font-size:16px}
+
+
+@media print{
+  @page{size:letter portrait;margin:.25in}
+  html,body{background:#fff!important;padding:0!important;margin:0!important}
+  .app{max-width:none!important;min-height:0!important}
+  header{margin:0 0 3px!important}
+  header h1{font-size:18pt!important;margin:0!important}
+  .panel{border:0!important;box-shadow:none!important;padding:0!important}
+  .controls,.photo-button,.file-input,.check-wrap,.celebration{display:none!important}
+
+  .schedule{
+    display:block!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+
+  /* Four steps fit comfortably inside one Letter page. */
+  .step{
+    display:grid!important;
+    grid-template-columns:30px minmax(0,1fr) 82px!important;
+    grid-template-areas:"marker details photo"!important;
+    width:100%!important;
+    height:1.95in!important;
+    min-height:1.95in!important;
+    max-height:1.95in!important;
+    margin:0 0 4px 0!important;
+    padding:4px!important;
+    gap:5px!important;
+    align-items:center!important;
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+    overflow:hidden!important;
+    box-shadow:none!important;
+    border:1px solid #ddd!important;
+  }
+
+  .step:nth-child(5),
+  .step:nth-child(9){
+    break-before:page!important;
+    page-break-before:always!important;
+  }
+
+  .step-marker{
+    grid-area:marker!important;
+    font-size:14pt!important;
+    text-align:center!important;
+  }
+
+  .details{
+    grid-area:details!important;
+    min-width:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:4px!important;
+    justify-content:center!important;
+  }
+
+  .activity{
+    min-height:0!important;
+    height:auto!important;
+    border:0!important;
+    padding:0!important;
+    font-weight:700!important;
+    font-size:11pt!important;
+    background:transparent!important;
+  }
+
+  .activity:placeholder-shown{display:none!important}
+
+  .temporal{
+    min-height:0!important;
+    height:auto!important;
+    border:0!important;
+    padding:0!important;
+    font-size:11pt!important;
+    background:transparent!important;
+  }
+
+  .photo-area{
+    grid-area:photo!important;
+    width:82px!important;
+    height:82px!important;
+    min-height:82px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+
+  .photo{
+    display:block!important;
+    width:78px!important;
+    height:78px!important;
+    border-radius:9px!important;
+    object-fit:cover!important;
+  }
+
+  .photo-placeholder{display:none!important}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>🗓️ Visual Schedule</h1></header>
+<section class="panel">
+<div class="controls">
+  <div class="language-field">
+    <label for="language">Language</label>
+    <select id="language">
+      <option value="en" selected>English</option>
+      <option value="es">Español</option>
+      <option value="zh">中文</option>
+      <option value="pt">Português</option>
+    </select>
+  </div>
+  <div class="field">
+    <label id="stepCountLabel" for="stepCount">Number of steps</label>
+    <select id="stepCount">
+      <option value="2">2</option><option value="3">3</option><option value="4">4</option>
+      <option value="5" selected>5</option><option value="6">6</option><option value="7">7</option>
+      <option value="8">8</option><option value="9">9</option><option value="10">10</option>
+    </select>
+  </div>
+  <button class="secondary" id="pdf" type="button">📄 Save as PDF</button><button class="secondary" id="reset" type="button">🔄 Reset Schedule</button>
+</div>
+<div id="schedule" class="schedule"></div>
+</section>
+</div>
+
+<div id="celebration" class="celebration" aria-live="polite">
+  <div class="celebration-card">
+    <div class="big-face">😊</div>
+    <h2 id="celebrationTitle">Great job!</h2>
+    <p id="celebrationText">Step finished! ⭐</p>
+  </div>
+</div>
+
+
+<script>
+(function(){
+"use strict";
+var translations={
+  en:{
+    name:"English",number:"Number of steps",reset:"🔄 Reset Schedule",pdf:"📄 Save as PDF",
+    activity:"Activity",picture:"📷 Add / Take Picture",first:"First",second:"Second",third:"Third",
+    next:"Next",then:"Then",last:"Last",finally:"Finally",before:"Before",after:"After",allDone:"All done",
+    great:"Great job!",finished:"Step finished! ⭐"
+  },
+  es:{
+    name:"Español",number:"Número de pasos",reset:"🔄 Reiniciar horario",pdf:"📄 Guardar como PDF",
+    activity:"Actividad",picture:"📷 Agregar / Tomar foto",first:"Primero",second:"Segundo",third:"Tercero",
+    next:"Siguiente",then:"Luego",last:"Último",finally:"Finalmente",before:"Antes",after:"Después",allDone:"Todo terminado",
+    great:"¡Muy bien!",finished:"¡Paso terminado! ⭐"
+  },
+  zh:{
+    name:"中文",number:"步骤数量",reset:"🔄 重置日程",pdf:"📄 保存为 PDF",
+    activity:"活动",picture:"📷 添加 / 拍照",first:"第一",second:"第二",third:"第三",
+    next:"下一步",then:"然后",last:"最后",finally:"最终",before:"之前",after:"之后",allDone:"全部完成",
+    great:"做得好！",finished:"完成一步！⭐"
+  },
+  pt:{
+    name:"Português",number:"Número de etapas",reset:"🔄 Reiniciar rotina",pdf:"📄 Salvar como PDF",
+    activity:"Atividade",picture:"📷 Adicionar / Tirar foto",first:"Primeiro",second:"Segundo",third:"Terceiro",
+    next:"Próximo",then:"Depois",last:"Último",finally:"Finalmente",before:"Antes",after:"Depois de",allDone:"Tudo pronto",
+    great:"Muito bem!",finished:"Etapa concluída! ⭐"
+  }
+};
+var language="en";
+var words=translations.en;
+var state={count:5,steps:[]};
+var stepCount=document.getElementById("stepCount");
+var languageSelect=document.getElementById("language");
+var schedule=document.getElementById("schedule");
+var celebration=document.getElementById("celebration");
+function t(key){return translations[language][key]}
+function translatedWords(){return [t("first"),t("second"),t("third"),t("next"),t("then"),t("last"),t("finally"),t("before"),t("after"),t("allDone")]}
+function defaultWord(i,count){
+  if(i===0)return t("first");
+  if(i===count-1)return t("last");
+  return t("next");
+}
+function makeSteps(count){
+  state.steps=[];
+  for(var i=0;i<count;i++){
+    state.steps.push({
+      word:defaultWord(i,count),
+      activity:"",
+      photo:null,
+      done:false
+    });
+  }
+}
+function showCelebration(){
+  celebration.classList.remove("show");
+  void celebration.offsetWidth;
+  celebration.classList.add("show");
+  setTimeout(function(){celebration.classList.remove("show")},1000);
+}
+function render(){
+  schedule.innerHTML="";
+  
+  state.steps.forEach(function(step,index){
+    var row=document.createElement("div");
+    row.className="step"+(step.done?" done":"");
+
+    var marker=document.createElement("div");
+    marker.className="step-marker";
+    marker.textContent=(index+1);
+
+    var details=document.createElement("div");
+    details.className="details";
+
+    var activity=document.createElement("input");
+    activity.className="activity";
+    activity.type="text";
+    activity.placeholder=t("activity");
+    activity.setAttribute("aria-label","Activity for step "+(index+1));
+    activity.value=step.activity||"";
+    activity.addEventListener("input",function(){step.activity=activity.value});
+
+    var select=document.createElement("select");
+    select.className="temporal";
+    select.setAttribute("aria-label","Temporal word for step "+(index+1));
+    translatedWords().forEach(function(word){
+      var option=document.createElement("option");
+      option.value=word;
+      option.textContent=word;
+      select.appendChild(option);
+    });
+    select.value=step.word;
+    select.addEventListener("change",function(){step.word=select.value});
+
+    var photoArea=document.createElement("div");
+    photoArea.className="photo-area";
+
+    var placeholder=document.createElement("div");
+    placeholder.className="photo-placeholder"+(step.photo?" hide":"");
+    placeholder.textContent="🖼️";
+
+    var image=document.createElement("img");
+    image.className="photo"+(step.photo?" show":"");
+    image.alt="Picture for step "+(index+1);
+    if(step.photo){
+      image.src=step.photo;
+    }
+
+    var photoButton=document.createElement("button");
+    photoButton.type="button";
+    photoButton.className="photo-button";
+    photoButton.textContent=t("picture");
+
+    var input=document.createElement("input");
+    input.type="file";
+    input.accept="image/*";
+    input.setAttribute("capture","environment");
+    input.className="file-input";
+    input.addEventListener("change",function(){
+      var file=input.files&&input.files[0];
+      if(!file)return;
+      var reader=new FileReader();
+      reader.onload=function(){
+        step.photo=reader.result;
+        render();
+      };
+      reader.readAsDataURL(file);
+    });
+    photoButton.addEventListener("click",function(){input.click()});
+
+    photoArea.appendChild(placeholder);
+    photoArea.appendChild(image);
+    photoArea.appendChild(photoButton);
+    photoArea.appendChild(input);
+
+    var checkWrap=document.createElement("div");
+    checkWrap.className="check-wrap";
+    var check=document.createElement("input");
+    check.type="checkbox";
+    check.className="check";
+    check.checked=step.done;
+    check.setAttribute("aria-label","Mark step "+(index+1)+" complete");
+    check.addEventListener("change",function(){
+      step.done=check.checked;
+      render();
+      if(step.done)showCelebration();
+    });
+    checkWrap.appendChild(check);
+
+    details.appendChild(activity);
+    details.appendChild(select);
+
+    row.appendChild(marker);
+    row.appendChild(details);
+    row.appendChild(photoArea);
+    row.appendChild(checkWrap);
+    schedule.appendChild(row);
+  });
+}
+function applyLanguage(){
+  var oldSteps=state.steps.map(function(s){return s.word});
+  language=languageSelect.value;
+  document.getElementById("stepCountLabel").textContent=t("number");
+  document.getElementById("pdf").textContent=t("pdf");
+  document.getElementById("reset").textContent=t("reset");
+  document.getElementById("celebrationTitle").textContent=t("great");
+  document.getElementById("celebrationText").textContent=t("finished");
+  state.steps.forEach(function(step,index){
+    var current=oldSteps[index];
+    var idx=translatedWords().indexOf(current);
+    if(idx>=0) step.word=translatedWords()[idx];
+    else step.word=defaultWord(index,state.count);
+  });
+  render();
+}
+languageSelect.addEventListener("change",applyLanguage);
+
+stepCount.addEventListener("change",function(){
+  state.count=parseInt(stepCount.value,10)||5;
+  makeSteps(state.count);
+  render();
+});
+document.getElementById("pdf").addEventListener("click",function(){
+  document.body.setAttribute("data-print-steps", state.steps.length);
+  window.print();
+});
+
+window.addEventListener("afterprint",function(){
+  document.body.removeAttribute("data-print-steps");
+});
+
+document.getElementById("reset").addEventListener("click",function(){
+  makeSteps(state.count);
+  render();
+});
+makeSteps(5);
+render();
+})();
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("./service-worker.js").catch(function(){});
+  });
+}
+</script>
+</body>
+</html>

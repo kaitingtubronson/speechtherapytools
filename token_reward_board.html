@@ -1,55 +1,20 @@
 <!doctype html>
 <html lang="en">
 <head>
+<head>
 <meta charset="utf-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Token Board">
+<meta name="apple-mobile-web-app-title" content="Token Reward Board">
+
 <meta name="theme-color" content="#fffaf0">
-<link rel="manifest" href="./manifest.json">
+
+<link rel="manifest" href="./token_reward_manifest.json">
+
 <title>Token Reward Board</title>
-<style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#27323a;background:#fffaf0}
-body{padding:12px}
-.app{width:100%;max-width:1100px;margin:auto}
-header{margin-bottom:12px}
-h1{margin:0;font-size:clamp(24px,5vw,40px)}
-.panel{background:#fff;border:1px solid #e7dcc8;border-radius:20px;padding:14px;box-shadow:0 5px 20px rgba(60,45,20,.08)}
-.controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.language-field{width:min(220px,100%)}
-.field{flex:1;min-width:180px}
-label{display:block;font-weight:700;font-size:14px;margin-bottom:5px}
-select{width:100%;height:48px;padding:8px 12px;border:2px solid #d9cdb9;border-radius:12px;background:white;color:#27323a;font-size:18px}
-button{font-family:inherit;-webkit-appearance:none;appearance:none;touch-action:manipulation}
-.secondary{height:48px;padding:0 16px;border:0;border-radius:12px;background:#eee7dc;font-weight:800;font-size:16px}
-.reward-row{display:flex;align-items:center;gap:14px;margin:16px 0}
-.reward-copy{min-width:0}
-.reward-title{font-size:24px;font-weight:850;margin-bottom:4px}
-.small{font-size:13px;opacity:.65}
-.reward-photo{display:none;width:clamp(64px,17vw,130px);height:clamp(64px,17vw,130px);border-radius:18px;border:2px solid #eadfce;object-fit:cover;flex:none}
-.reward-photo.show{display:block}
-.reward-input{display:none}
-.board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(7px,1.5vw,15px)}
-.token{width:100%;aspect-ratio:1;border:2px solid #eadfce;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:clamp(36px,9vw,76px);padding:0;box-shadow:0 4px 10px rgba(60,45,20,.08)}
-.token.filled{background:#fff7d9;border-color:#f2c96b}
-.modal{position:fixed;inset:0;background:rgba(35,29,18,.68);display:none;align-items:center;justify-content:center;z-index:9999;padding:14px}
-.modal.show{display:flex}
-.celebrate{width:100%;height:100%;max-width:900px;border-radius:28px;background:#fffdf7;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
-.face{font-size:clamp(90px,25vw,190px);animation:bounce .65s infinite alternate}
-.celebrate h2{font-size:clamp(38px,9vw,78px);margin:5px 0 10px}
-.celebrate p{font-size:20px;opacity:.7}
-.close{position:absolute;right:14px;top:12px;width:46px;height:46px;border:0;border-radius:50%;background:#eee7dc;font-size:28px;z-index:2}
-.confetti{position:absolute;inset:0;pointer-events:none}
-.confetti i{position:absolute;width:9px;height:20px;background:#f3b562;animation:fall 1.8s linear infinite}
-.confetti i:nth-child(2n){background:#8bc6c9}.confetti i:nth-child(3n){background:#d9a7df}.confetti i:nth-child(4n){background:#f28f8f}
-@keyframes bounce{to{transform:scale(1.1) rotate(4deg)}}
-@keyframes fall{from{transform:translateY(-120px) rotate(0)}to{transform:translateY(110vh) rotate(540deg)}}
-@media (orientation:landscape) and (max-height:600px){
- body{padding:6px}.panel{padding:8px}header{display:none}.reward-row{margin:7px 0}.reward-title{font-size:20px}.token{font-size:clamp(30px,10vh,70px)}
- .reward-photo{width:clamp(48px,18vh,88px);height:clamp(48px,18vh,88px)}
-}
-</style>
 </head>
 <body>
 <div class="app">

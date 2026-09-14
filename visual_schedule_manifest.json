@@ -1,0 +1,9 @@
+{
+  "name": "Visual Schedule",
+  "short_name": "Visual Schedule",
+  "start_url": "./visual_schedule.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffaf0",
+  "theme_color": "#fffaf0"
+}

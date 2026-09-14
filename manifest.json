@@ -1,7 +1,7 @@
 {
   "name": "Token Reward Board",
   "short_name": "Token Board",
-  "start_url": "./token_reward_board.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#fffaf0",
   "theme_color": "#fffaf0",

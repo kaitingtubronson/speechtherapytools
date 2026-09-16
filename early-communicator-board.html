@@ -345,13 +345,21 @@ body.child-mode .choice-label {
     <div id="board"></div>
 
     <button
-        id="childExit"
-        class="secondary"
-        onclick="exitChildMode()">
+id="childExit"
+class="secondary"
+onclick="exitChildMode()">
 
-        Exit Child Mode
+Exit Child Mode
 
-    </button>
+</button>
+
+<button
+class="secondary"
+onclick="exitToHome()">
+
+Back to Home
+
+</button>
 
 </div>
 
@@ -1026,6 +1034,17 @@ function renderBoard() {
 
 
 function exitChildMode() {
+
+    function exitToHome(){
+
+    document.body.classList.remove("child-mode");
+
+    hideAllSections();
+
+    document.getElementById("home")
+        .classList.remove("hidden");
+
+}
 
     document.body.classList.remove("child-mode");
 

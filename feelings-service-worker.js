@@ -1,4 +1,4 @@
-const CACHE_NAME = "feelings-board-v1";
+const CACHE_NAME = "feelings-board-v2";
 
 const FILES_TO_CACHE = [
   "feelings.html",

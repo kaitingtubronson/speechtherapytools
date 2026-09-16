@@ -9,102 +9,73 @@
 <style>
 
 body {
-    margin:0;
     font-family: Arial, sans-serif;
     background:#f7f7f7;
     text-align:center;
-}
-
-h1 {
-    font-size:28px;
-}
-
-.container {
+    margin:0;
     padding:15px;
 }
 
 button {
-    padding:12px;
-    margin:4px;
+    padding:12px 18px;
     border:none;
     border-radius:12px;
     background:#5b7cfa;
     color:white;
     font-size:18px;
+    margin:5px;
 }
 
+select {
+    padding:10px;
+    font-size:18px;
+}
+
+.editor {
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    margin:15px auto;
+    max-width:400px;
+}
+
+input {
+    padding:10px;
+    width:90%;
+    margin:5px;
+}
 
 #board {
-
     display:grid;
     gap:15px;
-    width:100%;
-    max-width:900px;
-    margin:auto;
+    margin-top:20px;
 }
 
 
 .choice {
-
     background:white;
     border-radius:20px;
-    box-shadow:0 3px 10px #ccc;
-    min-height:180px;
-
+    min-height:200px;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-
     font-size:24px;
-
+    box-shadow:0 3px 10px #ccc;
 }
 
 
 .choice img {
-
-    width:130px;
-    height:130px;
+    width:140px;
+    height:140px;
     object-fit:cover;
     border-radius:15px;
-
-}
-
-
-.choice:active {
-
-    transform:scale(.95);
-
-}
-
-
-
-.editor {
-
-    background:white;
-    padding:15px;
-    margin:10px auto;
-    border-radius:15px;
-    max-width:400px;
-
-}
-
-
-input {
-
-    width:90%;
-    padding:10px;
-    margin:5px;
-
 }
 
 
 .hidden {
-
-display:none;
-
+    display:none;
 }
-
 
 
 </style>
@@ -115,37 +86,44 @@ display:none;
 <body>
 
 
-<div class="container">
-
-
 <h1>Early Communicator Board</h1>
 
 
-<h3>Choose number of choices</h3>
+<div id="setup">
+
+<h3>How many choices?</h3>
 
 
-<div>
+<select id="numberChoices">
 
-<button onclick="createBoard(1)">1</button>
-<button onclick="createBoard(2)">2</button>
-<button onclick="createBoard(3)">3</button>
-<button onclick="createBoard(4)">4</button>
-<button onclick="createBoard(5)">5</button>
-<button onclick="createBoard(6)">6</button>
-<button onclick="createBoard(7)">7</button>
-<button onclick="createBoard(8)">8</button>
-<button onclick="createBoard(9)">9</button>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+
+</select>
+
+
+<br><br>
+
+<button onclick="createBoard()">
+Create Board
+</button>
+
 
 </div>
+
 
 
 <div id="editor"></div>
 
 
 <div id="board"></div>
-
-
-</div>
 
 
 
@@ -156,7 +134,11 @@ let choices=[];
 
 
 
-function createBoard(number){
+function createBoard(){
+
+
+let number=
+document.getElementById("numberChoices").value;
 
 
 choices=[];
@@ -174,6 +156,10 @@ label:"Choice "+(i+1)
 }
 
 
+
+document.getElementById("setup").classList.add("hidden");
+
+
 renderEditor();
 
 renderBoard();
@@ -183,53 +169,52 @@ renderBoard();
 
 
 
-
 function renderEditor(){
 
 
-let area=document.getElementById("editor");
+let editor=
+document.getElementById("editor");
 
-area.innerHTML="";
+
+editor.innerHTML="";
 
 
 choices.forEach((choice,index)=>{
 
 
-let div=document.createElement("div");
+let box=document.createElement("div");
 
-div.className="editor";
+box.className="editor";
 
 
-div.innerHTML=`
+box.innerHTML=`
 
 <h3>Choice ${index+1}</h3>
 
 
-<input type="file"
+<input 
+type="file"
 accept="image/*"
-capture="environment"
 onchange="addPhoto(event,${index})">
 
 
 <br>
 
 
-<input value="${choice.label}"
+<input
+value="${choice.label}"
 oninput="changeLabel(event,${index})">
 
 
 `;
 
-
-area.appendChild(div);
-
+editor.appendChild(box);
 
 
 });
 
 
 }
-
 
 
 
@@ -258,11 +243,12 @@ reader.readAsDataURL(file);
 
 
 
-
 function changeLabel(event,index){
 
 
-choices[index].label=event.target.value;
+choices[index].label=
+event.target.value;
+
 
 renderBoard();
 
@@ -271,28 +257,20 @@ renderBoard();
 
 
 
-
 function renderBoard(){
 
 
-let board=document.getElementById("board");
+let board=
+document.getElementById("board");
 
 
 board.innerHTML="";
 
 
-
 let amount=choices.length;
 
 
-
-if(amount===1){
-
-board.style.gridTemplateColumns="1fr";
-
-}
-
-else if(amount===2){
+if(amount<=2){
 
 board.style.gridTemplateColumns="repeat(2,1fr)";
 
@@ -312,63 +290,40 @@ board.style.gridTemplateColumns="repeat(3,1fr)";
 
 
 
-
 choices.forEach(choice=>{
 
 
-let div=document.createElement("div");
+let card=document.createElement("div");
 
-
-div.className="choice";
-
-
-div.onclick=function(){
-
-alert(choice.label);
-
-};
-
+card.className="choice";
 
 
 if(choice.photo){
 
-div.innerHTML+=`
-
-<img src="${choice.photo}">
-
-`;
+card.innerHTML=
+`<img src="${choice.photo}">`;
 
 }
 
 else{
 
-div.innerHTML+=`
-
-<div style="font-size:70px">
-📷
-</div>
-
-`;
+card.innerHTML=
+`📷`;
 
 }
 
 
-div.innerHTML+=`
-
-<div>${choice.label}</div>
-
-`;
+card.innerHTML +=
+`<div>${choice.label}</div>`;
 
 
-
-board.appendChild(div);
+board.appendChild(card);
 
 
 });
 
 
 }
-
 
 
 </script>

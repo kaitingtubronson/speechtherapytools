@@ -1,172 +1,198 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Early Communication Board</title>
+
+<title>Early Communicator Board</title>
 
 <style>
+
 body {
-  font-family: Arial, sans-serif;
-  text-align:center;
-  background:#f7f7f7;
-  margin:0;
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#f7f7f7;
+    text-align:center;
 }
 
 h1 {
-  font-size:28px;
+    font-size:28px;
 }
 
 .container {
-  padding:20px;
+    padding:15px;
 }
 
 button {
-  padding:12px 18px;
-  border-radius:12px;
-  border:none;
-  background:#5b7cfa;
-  color:white;
-  font-size:16px;
-  margin:5px;
+    padding:12px;
+    margin:4px;
+    border:none;
+    border-radius:12px;
+    background:#5b7cfa;
+    color:white;
+    font-size:18px;
 }
 
-.board {
-  display:grid;
-  gap:15px;
-  justify-content:center;
-  margin-top:20px;
+
+#board {
+
+    display:grid;
+    gap:15px;
+    width:100%;
+    max-width:900px;
+    margin:auto;
 }
+
 
 .choice {
-  background:white;
-  border-radius:20px;
-  padding:15px;
-  box-shadow:0 2px 8px #ccc;
-  cursor:pointer;
+
+    background:white;
+    border-radius:20px;
+    box-shadow:0 3px 10px #ccc;
+    min-height:180px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    font-size:24px;
+
 }
+
 
 .choice img {
-  width:120px;
-  height:120px;
-  object-fit:cover;
-  border-radius:15px;
+
+    width:130px;
+    height:130px;
+    object-fit:cover;
+    border-radius:15px;
+
 }
 
-.choice p {
-  font-size:20px;
-  margin:8px;
+
+.choice:active {
+
+    transform:scale(.95);
+
 }
+
+
 
 .editor {
-  background:white;
-  padding:15px;
-  margin:10px auto;
-  border-radius:15px;
-  max-width:400px;
+
+    background:white;
+    padding:15px;
+    margin:10px auto;
+    border-radius:15px;
+    max-width:400px;
+
 }
+
 
 input {
-  margin:5px;
-  padding:8px;
-  width:90%;
+
+    width:90%;
+    padding:10px;
+    margin:5px;
+
 }
+
 
 .hidden {
-  display:none;
+
+display:none;
+
 }
 
-@media print {
-  button, .editor, h1 {
-    display:none;
-  }
 
-  .choice {
-    box-shadow:none;
-    border:1px solid black;
-  }
-}
+
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
-<h1>Early Communication Board</h1>
 
-<div id="setup">
+<h1>Early Communicator Board</h1>
 
-<h3>Create Board</h3>
 
-<label>Number of choices:</label>
+<h3>Choose number of choices</h3>
 
-<select id="numChoices">
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="4">4</option>
-<option value="6">6</option>
-<option value="9">9</option>
-</select>
 
-<br><br>
+<div>
 
-<button onclick="createBoard()">Create</button>
+<button onclick="createBoard(1)">1</button>
+<button onclick="createBoard(2)">2</button>
+<button onclick="createBoard(3)">3</button>
+<button onclick="createBoard(4)">4</button>
+<button onclick="createBoard(5)">5</button>
+<button onclick="createBoard(6)">6</button>
+<button onclick="createBoard(7)">7</button>
+<button onclick="createBoard(8)">8</button>
+<button onclick="createBoard(9)">9</button>
+
+</div>
+
+
+<div id="editor"></div>
+
+
+<div id="board"></div>
+
 
 </div>
 
-
-<div id="editorArea"></div>
-
-
-<div id="board" class="board"></div>
-
-
-<br>
-
-<button onclick="saveBoard()">Save Board</button>
-
-<button onclick="window.print()">Export PDF</button>
-
-</div>
 
 
 <script>
 
-let boardData=[];
+
+let choices=[];
 
 
-function createBoard(){
 
-let num=document.getElementById("numChoices").value;
+function createBoard(number){
 
-boardData=[];
 
-for(let i=0;i<num;i++){
+choices=[];
 
-boardData.push({
+
+for(let i=0;i<number;i++){
+
+choices.push({
+
 photo:"",
-label:"",
-audio:""
+label:"Choice "+(i+1)
+
 });
 
 }
+
 
 renderEditor();
 
 renderBoard();
 
+
 }
+
+
 
 
 function renderEditor(){
 
-let area=document.getElementById("editorArea");
+
+let area=document.getElementById("editor");
 
 area.innerHTML="";
 
 
-boardData.forEach((item,index)=>{
+choices.forEach((choice,index)=>{
 
 
 let div=document.createElement("div");
@@ -178,168 +204,161 @@ div.innerHTML=`
 
 <h3>Choice ${index+1}</h3>
 
-<input type="file" accept="image/*"
+
+<input type="file"
+accept="image/*"
+capture="environment"
 onchange="addPhoto(event,${index})">
 
-<br>
-
-<input placeholder="Label"
-oninput="addLabel(event,${index})">
-
 
 <br>
 
-<button onclick="startRecording(${index})">
-Record Voice
-</button>
 
-<p id="recordStatus${index}"></p>
+<input value="${choice.label}"
+oninput="changeLabel(event,${index})">
 
 
 `;
 
+
 area.appendChild(div);
+
 
 
 });
 
+
 }
+
 
 
 
 function addPhoto(event,index){
 
+
 let file=event.target.files[0];
+
 
 let reader=new FileReader();
 
+
 reader.onload=function(){
 
-boardData[index].photo=reader.result;
+choices[index].photo=reader.result;
 
 renderBoard();
 
 };
+
 
 reader.readAsDataURL(file);
 
+
 }
 
 
 
-function addLabel(event,index){
 
-boardData[index].label=event.target.value;
+function changeLabel(event,index){
+
+
+choices[index].label=event.target.value;
 
 renderBoard();
 
-}
-
-
-
-let recorder;
-let audioChunks=[];
-let currentRecording;
-
-
-async function startRecording(index){
-
-currentRecording=index;
-
-let stream=await navigator.mediaDevices.getUserMedia({
-audio:true
-});
-
-
-recorder=new MediaRecorder(stream);
-
-audioChunks=[];
-
-
-recorder.ondataavailable=e=>{
-audioChunks.push(e.data);
-};
-
-
-recorder.onstop=()=>{
-
-let blob=new Blob(audioChunks,{
-type:"audio/webm"
-});
-
-
-let url=URL.createObjectURL(blob);
-
-
-boardData[index].audio=url;
-
-
-document.getElementById(
-"recordStatus"+index
-).innerHTML="Recorded ✓";
-
-
-};
-
-
-recorder.start();
-
-
-setTimeout(()=>{
-
-recorder.stop();
-
-},3000);
-
 
 }
+
 
 
 
 function renderBoard(){
 
+
 let board=document.getElementById("board");
+
 
 board.innerHTML="";
 
 
-let cols=Math.ceil(Math.sqrt(boardData.length));
 
-board.style.gridTemplateColumns=
-`repeat(${cols},150px)`;
+let amount=choices.length;
 
 
-boardData.forEach(item=>{
+
+if(amount===1){
+
+board.style.gridTemplateColumns="1fr";
+
+}
+
+else if(amount===2){
+
+board.style.gridTemplateColumns="repeat(2,1fr)";
+
+}
+
+else if(amount<=4){
+
+board.style.gridTemplateColumns="repeat(2,1fr)";
+
+}
+
+else {
+
+board.style.gridTemplateColumns="repeat(3,1fr)";
+
+}
+
+
+
+
+choices.forEach(choice=>{
 
 
 let div=document.createElement("div");
+
 
 div.className="choice";
 
 
 div.onclick=function(){
 
-if(item.audio){
-
-let audio=new Audio(item.audio);
-
-audio.play();
-
-}
+alert(choice.label);
 
 };
 
 
-if(item.photo){
 
-div.innerHTML+=
-`<img src="${item.photo}">`;
+if(choice.photo){
+
+div.innerHTML+=`
+
+<img src="${choice.photo}">
+
+`;
+
+}
+
+else{
+
+div.innerHTML+=`
+
+<div style="font-size:70px">
+📷
+</div>
+
+`;
 
 }
 
 
-div.innerHTML+=
-`<p>${item.label}</p>`;
+div.innerHTML+=`
+
+<div>${choice.label}</div>
+
+`;
+
 
 
 board.appendChild(div);
@@ -352,42 +371,9 @@ board.appendChild(div);
 
 
 
-function saveBoard(){
-
-localStorage.setItem(
-"communicationBoard",
-JSON.stringify(boardData)
-);
-
-
-alert("Board saved on this device");
-
-}
-
-
-function loadBoard(){
-
-let saved=
-localStorage.getItem("communicationBoard");
-
-
-if(saved){
-
-boardData=JSON.parse(saved);
-
-renderEditor();
-
-renderBoard();
-
-}
-
-}
-
-
-loadBoard();
-
-
 </script>
 
+
 </body>
+
 </html>

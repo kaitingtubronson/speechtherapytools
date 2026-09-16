@@ -1231,18 +1231,42 @@ function getChoices(id){
 
 
 function renderChoices(){
-
-  const grid=
-    document.getElementById("choicesGrid");
-
+  const grid=document.getElementById("choicesGrid");
   grid.innerHTML="";
+  if(!activeFeeling) return;
 
-  if(!activeFeeling){
+  getChoices(activeFeeling).forEach(choice=>{
+    const button=document.createElement("button");
 
-    return;
+    button.className="choice";
 
-  }
+    if(selectedChoices.includes(choice.id)){
+      button.classList.add("selected");
+    }
 
+    let visual;
+
+    if(choice.image){
+      visual=`<img src="${choice.image}" style="width:70px;height:70px;object-fit:cover;border-radius:12px" alt="">`;
+    }else{
+      visual=`<div class="icon">${choice.i}</div>`;
+    }
+
+    button.innerHTML=`${visual}<div class="word">${label(choice)}</div><div class="sound">🔊 ${label(choice)}</div>`;
+
+    button.onclick=()=>{
+      if(selectedChoices.includes(choice.id)){
+        selectedChoices=selectedChoices.filter(x=>x!==choice.id);
+      }else{
+        selectedChoices.push(choice.id);
+      }
+
+      renderChoices();
+    };
+
+    grid.appendChild(button);
+  });
+}
   getChoices(activeFeeling).forEach(choice=>{
 
     const button=document.createElement("button");

@@ -1,0 +1,8 @@
+{
+  "name": "Early Communication Choice Board",
+  "short_name": "Early Communicator",
+  "start_url": "early_communicator.html",
+  "display": "standalone",
+  "background_color": "#fffaf0",
+  "theme_color": "#fffaf0"
+}

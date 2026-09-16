@@ -304,6 +304,10 @@ body.child-mode .choice-label {
 
     <div id="editor"></div>
 
+    <button onclick="addChoice()">
+    + Add Choice
+</button>
+
     <button onclick="saveBoard()">
         Save Board
     </button>
@@ -1182,6 +1186,23 @@ function deleteRecording(index){
     choices[index].audio="";
 
 }
+function addChoice(){
+
+    choices.push({
+
+        photo: "",
+
+        label: "",
+
+        audio: ""
+
+    });
+
+
+    renderEditor();
+
+}
+    
 </script>
 
 </body>

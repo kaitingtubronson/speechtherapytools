@@ -305,6 +305,13 @@ footer{
   .icon{font-size:44px}
 }
 </style>
+  <link rel="manifest" href="feelings-manifest.json">
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("feelings-service-worker.js");
+}
+</script>
 </head>
 
 <body>

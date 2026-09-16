@@ -1,411 +1,1065 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Early Communicator Board</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
 
 body {
-font-family: Arial, sans-serif;
-background:#f7f7f7;
-text-align:center;
-padding:15px;
-margin:0;
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    color: #333;
+    text-align: center;
+}
+
+h1 {
+    font-size: 28px;
+    margin: 10px 0 20px;
+}
+
+h2 {
+    margin-top: 10px;
 }
 
 button {
-padding:12px 18px;
-border:none;
-border-radius:12px;
-background:#5b7cfa;
-color:white;
-font-size:18px;
-margin:8px;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin: 6px;
+    font-size: 17px;
+    cursor: pointer;
+    background: #5b7cfa;
+    color: white;
 }
 
-select,input {
-padding:10px;
-font-size:16px;
-border-radius:8px;
+button.secondary {
+    background: #777;
 }
 
+button.danger {
+    background: #c94c4c;
+}
+
+select,
+input[type="text"] {
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: min(90%, 350px);
+}
 
 .hidden {
-display:none;
+    display: none !important;
 }
 
+/* EDITOR */
 
 .editor {
-
-background:white;
-border-radius:15px;
-padding:15px;
-margin:15px auto;
-max-width:400px;
-
+    background: white;
+    max-width: 450px;
+    margin: 15px auto;
+    padding: 18px;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px #ddd;
 }
 
-
-.preview {
-
-width:120px;
-height:120px;
-object-fit:cover;
-border-radius:15px;
-
+.editor h3 {
+    margin-top: 0;
 }
 
+.photo-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin: 10px auto;
+    display: block;
+}
+
+.photo-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 15px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+    font-size: 55px;
+}
+
+/* BOARD */
 
 #board {
-
-display:grid;
-gap:15px;
-max-width:900px;
-margin:20px auto;
-
+    display: grid;
+    gap: 15px;
+    width: 100%;
+    max-width: 950px;
+    margin: 20px auto;
 }
-
 
 .choice {
-
-background:white;
-border-radius:20px;
-min-height:220px;
-
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-
-font-size:26px;
-
-box-shadow:0 3px 10px #ccc;
-
+    background: white;
+    border-radius: 20px;
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-shadow: 0 3px 10px #ccc;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
+.choice:active {
+    transform: scale(.97);
+}
 
 .choice img {
-
-width:150px;
-height:150px;
-object-fit:cover;
-border-radius:15px;
-
+    width: min(150px, 70%);
+    height: 150px;
+    object-fit: cover;
+    border-radius: 15px;
 }
 
+.choice-label {
+    font-size: 25px;
+    margin-top: 10px;
+}
 
+/* SAVED BOARDS */
+
+.saved-board {
+    background: white;
+    border-radius: 16px;
+    padding: 15px;
+    margin: 12px auto;
+    max-width: 450px;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+.saved-board-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.saved-preview {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.saved-preview img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* CHILD MODE */
+
+body.child-mode {
+    padding: 8px;
+    background: #f7f7f7;
+}
+
+body.child-mode h1,
+body.child-mode #childExit {
+    display: none;
+}
+
+body.child-mode #board {
+    margin-top: 8px;
+    max-width: 1100px;
+}
+
+body.child-mode .choice {
+    min-height: 250px;
+}
+
+body.child-mode .choice img {
+    width: min(220px, 75%);
+    height: 200px;
+}
+
+body.child-mode .choice-label {
+    font-size: 30px;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    #board {
+        gap: 10px;
+    }
+
+    .choice {
+        min-height: 190px;
+    }
+
+    .choice img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .choice-label {
+        font-size: 22px;
+    }
+
+    body.child-mode .choice {
+        min-height: 220px;
+    }
+
+    body.child-mode .choice img {
+        width: 150px;
+        height: 150px;
+    }
+}
 </style>
-
 </head>
 
-
 <body>
-
 
 <h1>Early Communicator Board</h1>
 
 
+<!-- HOME -->
 
-<div id="setup">
+<div id="home">
 
+    <button onclick="showSetup()">
+        Create New Board
+    </button>
 
-<h3>How many choices?</h3>
+    <br>
 
-
-<select id="numberChoices">
-
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-
-</select>
-
-
-<br>
-
-
-<button onclick="createBoard()">
-Create Board
-</button>
-
+    <button onclick="showSavedBoards()">
+        My Saved Boards
+    </button>
 
 </div>
 
 
+<!-- SETUP -->
+
+<div id="setup" class="hidden">
+
+    <h2>How many choices?</h2>
+
+    <select id="numberChoices">
+
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+
+    </select>
+
+    <br><br>
+
+    <button onclick="createBoard()">
+        Create Board
+    </button>
+
+    <button class="secondary" onclick="goHome()">
+        Back
+    </button>
+
+</div>
 
 
-<div id="editor"></div>
+<!-- EDITOR -->
+
+<div id="editorSection" class="hidden">
+
+    <h2>Edit Board</h2>
+
+    <div id="editor"></div>
+
+    <button onclick="saveBoard()">
+        Save Board
+    </button>
+
+    <button onclick="childMode()">
+        Start Communicating
+    </button>
+
+    <button class="secondary" onclick="goHome()">
+        Cancel
+    </button>
+
+</div>
 
 
-<button id="doneButton" 
-class="hidden"
-onclick="childMode()">
+<!-- SAVED BOARDS -->
 
-Done Editing
+<div id="savedSection" class="hidden">
 
-</button>
+    <h2>My Saved Boards</h2>
+
+    <div id="savedBoards"></div>
+
+    <button class="secondary" onclick="goHome()">
+        Back
+    </button>
+
+</div>
 
 
-<div id="board"></div>
+<!-- CHILD BOARD -->
 
+<div id="childSection" class="hidden">
+
+    <div id="board"></div>
+
+    <button
+        id="childExit"
+        class="secondary"
+        onclick="exitChildMode()">
+
+        Exit Child Mode
+
+    </button>
+
+</div>
 
 
 <script>
 
 
-let choices=[];
+let choices = [];
+
+let currentBoardName = "";
 
 
 
-function createBoard(){
+/* -------------------------
+   SCREEN MANAGEMENT
+------------------------- */
 
 
-let amount=
-document.getElementById("numberChoices").value;
+function hideAllSections() {
 
+    document.getElementById("home")
+        .classList.add("hidden");
 
-choices=[];
+    document.getElementById("setup")
+        .classList.add("hidden");
 
+    document.getElementById("editorSection")
+        .classList.add("hidden");
 
-for(let i=0;i<amount;i++){
+    document.getElementById("savedSection")
+        .classList.add("hidden");
 
-choices.push({
-
-photo:"",
-label:""
-
-});
-
-}
-
-
-document.getElementById("setup")
-.classList.add("hidden");
-
-
-document.getElementById("doneButton")
-.classList.remove("hidden");
-
-
-renderEditor();
-
+    document.getElementById("childSection")
+        .classList.add("hidden");
 
 }
 
 
 
-function renderEditor(){
+function goHome() {
 
+    document.body.classList.remove("child-mode");
 
-let editor=document.getElementById("editor");
+    hideAllSections();
 
-
-editor.innerHTML="";
-
-
-choices.forEach((choice,index)=>{
-
-
-let div=document.createElement("div");
-
-div.className="editor";
-
-
-div.innerHTML=`
-
-<h3>Choice ${index+1}</h3>
-
-
-<input 
-type="file"
-accept="image/*"
-onchange="addPhoto(event,${index})">
-
-
-<br>
-
-
-${choice.photo ?
-`<img class="preview" src="${choice.photo}">`
-:
-""}
-
-
-<br>
-
-
-<input 
-placeholder="Word"
-value="${choice.label}"
-oninput="addLabel(event,${index})">
-
-
-`;
-
-
-editor.appendChild(div);
-
-
-});
-
+    document.getElementById("home")
+        .classList.remove("hidden");
 
 }
 
 
 
-function addPhoto(event,index){
+function showSetup() {
 
+    hideAllSections();
 
-let file=event.target.files[0];
-
-
-let reader=new FileReader();
-
-
-reader.onload=function(){
-
-
-choices[index].photo=
-reader.result;
-
-
-renderEditor();
-
-
-};
-
-
-reader.readAsDataURL(file);
-
+    document.getElementById("setup")
+        .classList.remove("hidden");
 
 }
 
 
 
-function addLabel(event,index){
+function showSavedBoards() {
 
+    hideAllSections();
 
-choices[index].label=
-event.target.value;
+    document.getElementById("savedSection")
+        .classList.remove("hidden");
 
-
-}
-
-
-
-function childMode(){
-
-
-document.getElementById("editor")
-.classList.add("hidden");
-
-
-document.getElementById("doneButton")
-.classList.add("hidden");
-
-
-renderBoard();
-
+    renderSavedBoards();
 
 }
 
 
 
-function renderBoard(){
+/* -------------------------
+   CREATE BOARD
+------------------------- */
 
 
-let board=document.getElementById("board");
+function createBoard() {
+
+    const amount =
+        parseInt(
+            document.getElementById("numberChoices").value
+        );
 
 
-board.innerHTML="";
+    choices = [];
+
+    currentBoardName = "";
 
 
-let amount=choices.length;
+    for (let i = 0; i < amount; i++) {
+
+        choices.push({
+
+            photo: "",
+
+            label: ""
+
+        });
+
+    }
 
 
-if(amount<=2){
+    hideAllSections();
 
-board.style.gridTemplateColumns=
-"repeat(2,1fr)";
-
-}
-
-else if(amount<=4){
-
-board.style.gridTemplateColumns=
-"repeat(2,1fr)";
-
-}
-
-else {
-
-board.style.gridTemplateColumns=
-"repeat(3,1fr)";
-
-}
+    document.getElementById("editorSection")
+        .classList.remove("hidden");
 
 
-
-choices.forEach(choice=>{
-
-
-let card=document.createElement("div");
-
-card.className="choice";
-
-
-if(choice.photo){
-
-card.innerHTML=
-`<img src="${choice.photo}">`;
-
-}
-
-else {
-
-card.innerHTML=
-"📷";
+    renderEditor();
 
 }
 
 
-card.innerHTML +=
-`<div>${choice.label}</div>`;
+
+/* -------------------------
+   EDITOR
+------------------------- */
 
 
-card.onclick=function(){
+function renderEditor() {
 
-alert(
-"Communication: "
-+
-choice.label
-);
-
-};
+    const editor =
+        document.getElementById("editor");
 
 
-board.appendChild(card);
+    editor.innerHTML = "";
 
 
-});
+    choices.forEach((choice, index) => {
 
+        const box =
+            document.createElement("div");
+
+
+        box.className = "editor";
+
+
+        let preview;
+
+
+        if (choice.photo) {
+
+            preview =
+                `<img
+                    class="photo-preview"
+                    src="${choice.photo}"
+                >`;
+
+        } else {
+
+            preview =
+                `<div class="photo-placeholder">
+                    📷
+                </div>`;
+
+        }
+
+
+        box.innerHTML = `
+
+            <h3>Choice ${index + 1}</h3>
+
+            ${preview}
+
+            <input
+                type="file"
+                accept="image/*"
+                onchange="addPhoto(event, ${index})"
+            >
+
+            <br><br>
+
+            <input
+                type="text"
+                placeholder="Word (optional)"
+                value="${escapeHtml(choice.label)}"
+                oninput="changeLabel(event, ${index})"
+            >
+
+        `;
+
+
+        editor.appendChild(box);
+
+    });
+
+}
+
+
+
+/* -------------------------
+   PHOTOS
+------------------------- */
+
+
+function addPhoto(event, index) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file) return;
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function() {
+
+        choices[index].photo =
+            reader.result;
+
+
+        renderEditor();
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+
+/* -------------------------
+   LABEL
+------------------------- */
+
+
+function changeLabel(event, index) {
+
+    choices[index].label =
+        event.target.value;
+
+}
+
+
+
+/* -------------------------
+   SAVE BOARD
+------------------------- */
+
+
+function saveBoard() {
+
+    let name =
+        prompt(
+            "Name this board:"
+        );
+
+
+    if (!name) return;
+
+
+    name = name.trim();
+
+
+    if (!name) return;
+
+
+    const saved =
+        getSavedBoards();
+
+
+    const board = {
+
+        name: name,
+
+        choices: choices,
+
+        savedAt: new Date().toISOString()
+
+    };
+
+
+    /*
+       If a board with the same name
+       already exists, replace it.
+    */
+
+    const existingIndex =
+        saved.findIndex(
+            b => b.name === name
+        );
+
+
+    if (existingIndex >= 0) {
+
+        saved[existingIndex] = board;
+
+    } else {
+
+        saved.push(board);
+
+    }
+
+
+    try {
+
+        localStorage.setItem(
+            "earlyCommunicatorBoards",
+            JSON.stringify(saved)
+        );
+
+
+        currentBoardName = name;
+
+
+        alert(
+            "Board saved on this device."
+        );
+
+
+    } catch (error) {
+
+        alert(
+            "The board could not be saved. " +
+            "The photos may be too large. " +
+            "Try smaller photos."
+        );
+
+    }
+
+}
+
+
+
+/* -------------------------
+   LOAD SAVED BOARDS
+------------------------- */
+
+
+function getSavedBoards() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                "earlyCommunicatorBoards"
+            );
+
+
+        return saved
+            ? JSON.parse(saved)
+            : [];
+
+    } catch (error) {
+
+        return [];
+
+    }
+
+}
+
+
+
+function renderSavedBoards() {
+
+    const container =
+        document.getElementById("savedBoards");
+
+
+    container.innerHTML = "";
+
+
+    const saved =
+        getSavedBoards();
+
+
+    if (saved.length === 0) {
+
+        container.innerHTML = `
+            <p>
+                No saved boards yet.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    saved.forEach((board, index) => {
+
+        const card =
+            document.createElement("div");
+
+
+        card.className = "saved-board";
+
+
+        let previews = "";
+
+
+        board.choices
+            .filter(c => c.photo)
+            .slice(0, 4)
+            .forEach(c => {
+
+                previews +=
+                    `<img src="${c.photo}">`;
+
+            });
+
+
+        card.innerHTML = `
+
+            <div class="saved-board-title">
+                ${escapeHtml(board.name)}
+            </div>
+
+            <div class="saved-preview">
+                ${previews}
+            </div>
+
+            <button onclick="openSavedBoard(${index})">
+                Open
+            </button>
+
+            <button
+                class="danger"
+                onclick="deleteSavedBoard(${index})">
+
+                Delete
+
+            </button>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+
+/* -------------------------
+   OPEN BOARD
+------------------------- */
+
+
+function openSavedBoard(index) {
+
+    const saved =
+        getSavedBoards();
+
+
+    if (!saved[index]) return;
+
+
+    currentBoardName =
+        saved[index].name;
+
+
+    choices =
+        saved[index].choices;
+
+
+    hideAllSections();
+
+
+    document.getElementById("editorSection")
+        .classList.remove("hidden");
+
+
+    renderEditor();
+
+}
+
+
+
+/* -------------------------
+   DELETE BOARD
+------------------------- */
+
+
+function deleteSavedBoard(index) {
+
+    const saved =
+        getSavedBoards();
+
+
+    if (!saved[index]) return;
+
+
+    const confirmed =
+        confirm(
+            "Delete this saved board?"
+        );
+
+
+    if (!confirmed) return;
+
+
+    saved.splice(index, 1);
+
+
+    localStorage.setItem(
+        "earlyCommunicatorBoards",
+        JSON.stringify(saved)
+    );
+
+
+    renderSavedBoards();
+
+}
+
+
+
+/* -------------------------
+   CHILD MODE
+------------------------- */
+
+
+function childMode() {
+
+    document.body.classList.add("child-mode");
+
+
+    hideAllSections();
+
+
+    document.getElementById("childSection")
+        .classList.remove("hidden");
+
+
+    renderBoard();
+
+}
+
+
+
+/* -------------------------
+   CHILD BOARD
+------------------------- */
+
+
+function renderBoard() {
+
+    const board =
+        document.getElementById("board");
+
+
+    board.innerHTML = "";
+
+
+    const amount =
+        choices.length;
+
+
+    /*
+       Keep buttons large.
+       We are intentionally not
+       making tiny 3-across buttons
+       for lower choice counts.
+    */
+
+    if (amount === 1) {
+
+        board.style.gridTemplateColumns =
+            "1fr";
+
+    }
+
+    else if (amount === 2) {
+
+        board.style.gridTemplateColumns =
+            "repeat(2, 1fr)";
+
+    }
+
+    else if (amount === 3) {
+
+        board.style.gridTemplateColumns =
+            "repeat(2, 1fr)";
+
+    }
+
+    else if (amount === 4) {
+
+        board.style.gridTemplateColumns =
+            "repeat(2, 1fr)";
+
+    }
+
+    else {
+
+        board.style.gridTemplateColumns =
+            "repeat(3, 1fr)";
+
+    }
+
+
+    choices.forEach(choice => {
+
+        const card =
+            document.createElement("div");
+
+
+        card.className = "choice";
+
+
+        if (choice.photo) {
+
+            card.innerHTML =
+                `<img src="${choice.photo}">`;
+
+        } else {
+
+            card.innerHTML =
+                `<div style="font-size:70px">
+                    📷
+                </div>`;
+
+        }
+
+
+        if (choice.label) {
+
+            card.innerHTML +=
+                `<div class="choice-label">
+                    ${escapeHtml(choice.label)}
+                </div>`;
+
+        }
+
+
+        card.onclick = function() {
+
+            /*
+               For now, clicking the
+               communication button gives
+               visual feedback.
+
+               Voice/audio can be added
+               later.
+            */
+
+            card.style.transform =
+                "scale(.94)";
+
+
+            setTimeout(() => {
+
+                card.style.transform =
+                    "scale(1)";
+
+            }, 120);
+
+        };
+
+
+        board.appendChild(card);
+
+    });
+
+}
+
+
+
+/* -------------------------
+   EXIT CHILD MODE
+------------------------- */
+
+
+function exitChildMode() {
+
+    document.body.classList.remove("child-mode");
+
+
+    hideAllSections();
+
+
+    document.getElementById("editorSection")
+        .classList.remove("hidden");
+
+
+    renderEditor();
+
+}
+
+
+
+/* -------------------------
+   SECURITY / TEXT HELPER
+------------------------- */
+
+
+function escapeHtml(text) {
+
+    if (!text) return "";
+
+
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
 </script>
 
-
 </body>
-
 </html>

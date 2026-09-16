@@ -6,1619 +6,332 @@
 <meta name="theme-color" content="#f6f2ed">
 <title>Feelings & My Choices</title>
 <style>
-:root{
-  --bg:#f6f2ed;
-  --card:#fffdfa;
-  --ink:#263238;
-  --muted:#68737a;
-  --accent:#557c72;
-  --soft:#e2eee9;
-  --line:#dce2df;
-  --shadow:0 5px 20px rgba(38,50,56,.08)
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.app{
-  max-width:1100px;
-  margin:auto;
-  padding:18px;
-}
-header{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:var(--shadow);
-  margin-bottom:16px;
-}
-.header-row{
-  display:flex;
-  justify-content:space-between;
-  gap:16px;
-  align-items:flex-start;
-}
-h1{
-  margin:0;
-  font-size:32px;
-  line-height:1.1;
-}
-.subtitle{
-  margin:7px 0 0;
-  color:var(--muted);
-  font-size:16px;
-}
-.lang{
-  min-width:150px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:9px 12px;
-  background:white;
-}
-.tabs{
-  display:flex;
-  gap:8px;
-  margin-bottom:16px;
-}
-.tab{
-  flex:1;
-  border:1px solid var(--line);
-  background:var(--card);
-  border-radius:14px;
-  padding:13px 12px;
-  font-weight:700;
-  color:var(--ink);
-}
-.tab.active{
-  background:var(--accent);
-  color:white;
-  border-color:var(--accent);
-}
-.panel{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:18px;
-  box-shadow:var(--shadow);
-  margin-bottom:16px;
-}
-.panel-title{
-  font-size:20px;
-  font-weight:800;
-  margin-bottom:5px;
-}
-.panel-subtitle{
-  color:var(--muted);
-  margin-bottom:16px;
-}
-.feelings-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
-  gap:12px;
-}
-.feeling-card{
-  min-height:125px;
-  border:2px solid var(--line);
-  background:white;
-  border-radius:18px;
-  padding:13px 8px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:7px;
-  transition:.15s;
-}
-.feeling-card:hover{
-  transform:translateY(-1px);
-}
-.feeling-card.selected{
-  border-color:var(--accent);
-  background:var(--soft);
-}
-.emoji{
-  font-size:48px;
-  line-height:1;
-}
-.feeling-label{
-  font-weight:750;
-  text-align:center;
-}
-.selected-area{
-  margin-top:18px;
-  padding-top:16px;
-  border-top:1px solid var(--line);
-}
-.selected-list{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-.selected-chip,.feeling-chip{
-  border:1px solid var(--line);
-  background:white;
-  border-radius:999px;
-  padding:8px 12px;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  font-weight:700;
-}
-.selected-chip{
-  background:var(--soft);
-  border-color:#bfd4cc;
-}
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:16px;
-}
-.primary,.secondary,.danger{
-  border:0;
-  border-radius:12px;
-  padding:11px 16px;
-  font-weight:750;
-}
-.primary{
-  background:var(--accent);
-  color:white;
-}
-.secondary{
-  background:#edf1ef;
-  color:var(--ink);
-}
-.danger{
-  background:#f1e5e2;
-  color:#74463d;
-}
-.choices-feeling-tabs{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-bottom:16px;
-}
-.feeling-chip.active{
-  background:var(--accent);
-  color:white;
-  border-color:var(--accent);
-}
-.choices-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:12px;
-}
-.choice-card{
-  min-height:145px;
-  border:2px solid var(--line);
-  border-radius:18px;
-  background:white;
-  padding:12px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  transition:.15s;
-}
-.choice-card.selected{
-  border-color:var(--accent);
-  background:var(--soft);
-}
-.choice-icon{
-  font-size:48px;
-  line-height:1;
-  margin-bottom:8px;
-}
-.choice-card img{
-  width:76px;
-  height:76px;
-  object-fit:cover;
-  border-radius:14px;
-  display:block;
-  margin:0 auto 8px;
-}
-.choice-label{
-  font-weight:750;
-}
-.empty{
-  padding:22px;
-  text-align:center;
-  color:var(--muted);
-  border:1px dashed var(--line);
-  border-radius:14px;
-}
-.settings-section{
-  margin-top:20px;
-  padding-top:18px;
-  border-top:1px solid var(--line);
-}
-.settings-section:first-child{
-  margin-top:0;
-  padding-top:0;
-  border-top:0;
-}
-.settings-title{
-  font-size:17px;
-  font-weight:800;
-  margin-bottom:5px;
-}
-.settings-help{
-  color:var(--muted);
-  font-size:14px;
-  margin-bottom:12px;
-}
-.check-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:8px;
-}
-.check-item{
-  border:1px solid var(--line);
-  background:white;
-  border-radius:12px;
-  padding:10px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.choice-settings{
-  display:grid;
-  gap:12px;
-}
-.choice-setting{
-  border:1px solid var(--line);
-  background:white;
-  border-radius:15px;
-  padding:12px;
-}
-.choice-setting-header{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:10px;
-  font-weight:800;
-}
-.choice-setting-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:7px;
-}
-.choice-setting-item{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  padding:7px;
-  border-radius:9px;
-  background:#f7f8f7;
-}
-.custom-list{
-  display:grid;
-  gap:10px;
-}
-.custom-item{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  border:1px solid var(--line);
-  background:white;
-  border-radius:14px;
-  padding:10px;
-}
-.custom-thumb{
-  width:64px;
-  height:64px;
-  border-radius:12px;
-  object-fit:cover;
-  flex:none;
-}
-.custom-info{
-  flex:1;
-  min-width:0;
-}
-.custom-name{
-  font-weight:800;
-}
-.custom-scope{
-  font-size:13px;
-  color:var(--muted);
-  margin-top:3px;
-}
-.radio-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:14px;
-  margin-top:8px;
-}
-.radio-row label{
-  font-weight:650;
-}
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(20,30,28,.42);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:1000;
-}
-.modal-backdrop.open{display:flex}
-.modal{
-  width:min(650px,100%);
-  max-height:92vh;
-  overflow:auto;
-  background:var(--card);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 20px 70px rgba(0,0,0,.25);
-}
-.modal h2{
-  margin:0 0 5px;
-}
-.modal-help{
-  color:var(--muted);
-  margin-bottom:16px;
-}
-.field{
-  margin-bottom:14px;
-}
-.field label{
-  display:block;
-  font-weight:750;
-  margin-bottom:6px;
-}
-.field input[type=text],
-.field input[type=file]{
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:11px;
-  padding:10px;
-  background:white;
-}
-.field input[type=text]{
-  margin-bottom:7px;
-}
-.photo-picker{
-  display:none;
-  margin-top:10px;
-}
-.photo-picker.open{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-  gap:8px;
-}
-.photo-feeling{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  border:1px solid var(--line);
-  background:white;
-  border-radius:10px;
-  padding:8px;
-}
-.modal-actions{
-  display:flex;
-  justify-content:flex-end;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:18px;
-}
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:22px;
-  transform:translateX(-50%);
-  background:#263238;
-  color:white;
-  padding:11px 16px;
-  border-radius:999px;
-  opacity:0;
-  pointer-events:none;
-  transition:.2s;
-  z-index:2000;
-}
-.toast.show{opacity:1}
-footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding:10px 4px 20px;
-}
-@media(max-width:600px){
-  .app{padding:10px}
-  header{padding:15px}
-  .header-row{flex-direction:column}
-  .lang{width:100%}
-  h1{font-size:28px}
-  .feelings-grid{
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-  }
-  .feeling-card{
-    min-height:105px;
-    padding:8px 4px;
-  }
-  .emoji{font-size:38px}
-  .panel{padding:13px}
-  .choices-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-}
+:root{--bg:#f6f2ed;--card:#fffdfa;--ink:#263238;--muted:#68737a;--accent:#557c72;--soft:#e2eee9;--line:#dce2df;--shadow:0 5px 20px rgba(38,50,56,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,select,input{font:inherit}button{cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:rgba(246,242,237,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:15px 16px}
+.head{max-width:1000px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+h1{margin:0;font-size:clamp(22px,4vw,30px)}.sub{font-size:13px;color:var(--muted)}
+.lang{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:9px 11px;font-weight:700}
+main{max-width:1000px;margin:auto;padding:20px 16px 50px}
+.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:18px}.tab{border:1px solid var(--line);background:var(--card);padding:10px 16px;border-radius:13px;font-weight:800}.tab.active{background:var(--accent);color:white;border-color:var(--accent)}
+.prompt{text-align:center;font-weight:800;font-size:clamp(24px,5vw,34px);margin:8px 0 14px}
+.selection{min-height:48px;background:var(--soft);border-radius:15px;padding:11px;text-align:center;font-weight:700;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.feeling,.choice{border:2px solid transparent;background:var(--card);border-radius:20px;box-shadow:var(--shadow);min-height:145px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:7px}
+.feeling.selected,.choice.selected{border-color:var(--accent);background:var(--soft)}
+.bigicon{font-size:55px;line-height:1}.word{font-weight:800;font-size:18px}.hint{font-size:11px;color:var(--muted)}
+.actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:18px}
+.action{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;font-weight:800}.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.hidden{display:none!important}
+.feelingBar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:13px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 12px;font-weight:800}.chip.active{outline:2px solid var(--accent)}
+.notice{text-align:center;color:var(--muted);font-size:13px;margin:8px auto 18px;max-width:700px}
+.settings{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:20px}
+.settingBlock{margin-bottom:22px}.settingBlock:last-child{margin-bottom:0}.settingTitle{font-size:18px;font-weight:850;margin-bottom:4px}.settingHint{font-size:12px;color:var(--muted);margin-bottom:12px}
+.checkgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px}.check{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px;cursor:pointer}.check input{accent-color:var(--accent)}
+.helpSection{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}.helpTitle{font-weight:850;margin-bottom:9px}
+.customRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.smallBtn{border:1px dashed var(--accent);background:var(--soft);border-radius:11px;padding:9px 12px;font-weight:800}
+.customItem{border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;margin-top:7px;background:#fff}.customItem img{width:48px;height:48px;object-fit:cover;border-radius:9px}.customItem .grow{flex:1}.remove{border:0;background:transparent;font-size:18px}
+.modal{position:fixed;inset:0;background:rgba(20,30,30,.45);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50}.modalCard{background:var(--card);border-radius:20px;max-width:430px;width:100%;padding:20px;box-shadow:0 15px 50px rgba(0,0,0,.2)}.modalCard h2{margin-top:0}.field{margin:10px 0}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}.field input{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}.preview{width:100%;height:170px;object-fit:contain;border:1px dashed var(--line);border-radius:12px;background:#f4f4f2;margin-top:8px}
+footer{text-align:center;color:var(--muted);font-size:11px;margin-top:30px}
+@media(max-width:500px){.grid{grid-template-columns:repeat(2,1fr)}.feeling,.choice{min-height:132px}.bigicon{font-size:48px}}
 </style>
 </head>
-
 <body>
-<div class="app">
-
 <header>
-  <div class="header-row">
-    <div>
-      <h1 id="appTitle">Feelings</h1>
-      <div class="subtitle" id="appSubtitle">Choose the feelings that fit.</div>
-    </div>
-
-    <select class="lang" id="languageSelect" aria-label="Language">
-      <option value="en">English</option>
-      <option value="es">Español</option>
-      <option value="zh">中文</option>
-      <option value="pt">Português</option>
-    </select>
-  </div>
+<div class="head">
+  <div><h1 id="title">Feelings</h1><div class="sub" id="subtitle">Choose the feelings that fit.</div></div>
+  <select class="lang" id="language"><option value="en">English</option><option value="es">Español</option><option value="zh">中文</option><option value="pt">Português</option></select>
+</div>
 </header>
 
+<main>
 <div class="tabs">
-  <button class="tab active" id="feelingsTab" onclick="showTab('feelings')">
-    😊 Feelings
-  </button>
-  <button class="tab" id="choicesTab" onclick="showTab('choices')">
-    ✨ My Choices
-  </button>
+  <button class="tab active" id="feelTab" onclick="showTab('feelings')">😊 <span id="feelTabText">Feelings</span></button>
+  <button class="tab" id="choiceTab" onclick="showTab('choices')">✨ <span id="choiceTabText">My Choices</span></button>
 </div>
 
-<section id="feelingsPanel" class="panel">
-  <div class="panel-title" id="feelingsTitle">How do you feel?</div>
-  <div class="panel-subtitle" id="feelingsSubtitle">
-    You can choose more than one.
-  </div>
-
-  <div class="feelings-grid" id="feelingsGrid"></div>
-
-  <div class="selected-area">
-    <div class="panel-title" style="font-size:16px" id="selectedTitle">
-      My feelings
-    </div>
-
-    <div class="selected-list" id="selectedList"></div>
-
-    <div class="actions">
-      <button class="secondary" onclick="clearFeelings()" id="clearFeelingsBtn">
-        Clear
-      </button>
-      <button class="primary" onclick="sayFeelings()" id="sayFeelingsBtn">
-        🔊 Say my feelings
-      </button>
-      <button class="primary" onclick="showTab('choices')" id="myChoicesBtn">
-        ✨ My Choices
-      </button>
-    </div>
-  </div>
-</section>
-
-<section id="choicesPanel" class="panel" style="display:none">
-  <div class="panel-title" id="choicesTitle">My Choices</div>
-  <div class="panel-subtitle" id="choicesSubtitle">
-    Choose what you want to do or try.
-  </div>
-
-  <div class="choices-feeling-tabs" id="choiceFeelingTabs"></div>
-  <div class="choices-grid" id="choicesGrid"></div>
-
+<section id="feelingsScreen">
+  <div class="prompt" id="feelPrompt">How are you feeling?</div>
+  <div class="selection" id="selection">Tap one or more feelings.</div>
+  <div class="grid" id="feelingsGrid"></div>
   <div class="actions">
-    <button class="secondary" onclick="clearChoices()" id="clearChoicesBtn">
-      Clear choices
-    </button>
-    <button class="primary" onclick="sayChoices()" id="sayChoicesBtn">
-      🔊 Say my choices
-    </button>
+    <button class="action" onclick="clearFeelings()" id="clearFeel">Clear</button>
+    <button class="action primary" onclick="speakFeelings()" id="sayFeel">🔊 Say my feelings</button>
+    <button class="action primary" onclick="showTab('choices')" id="toChoices">✨ My Choices</button>
   </div>
 </section>
 
-<section class="panel">
-  <button
-    class="secondary"
-    style="width:100%"
-    onclick="toggleSettings()"
-    id="settingsButton"
-  >
-    ⚙️ Adult Settings
-  </button>
-
-  <div id="settingsPanel" style="display:none">
-
-    <div class="settings-section">
-      <div class="settings-title" id="displayFeelingsTitle">
-        Feelings to display
-      </div>
-
-      <div class="settings-help" id="displayFeelingsHelp">
-        Choose exactly which feelings you want this child to see.
-      </div>
-
-      <div class="check-grid" id="feelingsSettingsGrid"></div>
-    </div>
-
-    <div class="settings-section">
-      <div class="settings-title" id="choicesForFeelingTitle">
-        Choices for each feeling
-      </div>
-
-      <div class="settings-help" id="choicesForFeelingHelp">
-        Keep the list short if too many choices feel overwhelming.
-      </div>
-
-      <div class="choice-settings" id="choiceSettings"></div>
-    </div>
-
-    <div class="settings-section">
-      <div class="settings-title" id="personalChoicesTitle">
-        Personal choices
-      </div>
-
-      <div class="settings-help" id="personalChoicesHelp">
-        Add a real photo, such as headphones, a stuffed animal, a calm corner, or a favorite activity.
-      </div>
-
-      <button class="primary" onclick="openPhotoModal()" id="addPhotoButton">
-        📷 Add photo choice
-      </button>
-
-      <div style="height:12px"></div>
-
-      <div class="custom-list" id="customChoicesList"></div>
-    </div>
-
-    <div class="settings-section">
-      <button class="danger" onclick="endSession()" id="endSessionButton">
-        End Session / Clear
-      </button>
-    </div>
-
+<section id="choicesScreen" class="hidden">
+  <div class="prompt" id="choicePrompt">What do I want?</div>
+  <div class="notice" id="choiceNotice">Choose something you would like to do, try, or ask for.</div>
+  <div class="feelingBar" id="feelingBar"></div>
+  <div class="grid" id="choicesGrid"></div>
+  <div class="actions">
+    <button class="action" onclick="clearHelp()" id="clearHelp">Clear</button>
+    <button class="action primary" onclick="speakHelp()" id="sayHelp">🔊 Say my choices</button>
   </div>
 </section>
 
-<footer id="privacyFooter">
-  Session photos and selections are temporary. The app does not upload them.
-</footer>
-
-</div>
-
-<div class="modal-backdrop" id="photoModal">
-  <div class="modal">
-
-    <h2 id="photoModalTitle">Add a personal choice</h2>
-
-    <div class="modal-help" id="photoModalHelp">
-      Add a photo from this device. The photo stays in this app only for the current session.
+<section id="settingsScreen" class="hidden">
+  <div class="settings">
+    <div class="settingBlock">
+      <div class="settingTitle" id="feelingsToShowTitle">Feelings to display</div>
+      <div class="settingHint" id="feelingsToShowHint">Choose the specific feelings this board should show. The child can select as many as they want.</div>
+      <div class="checkgrid" id="feelingChecks"></div>
     </div>
-
-    <div class="field">
-      <label id="photoLabel">Photo</label>
-      <input
-        type="file"
-        id="photoInput"
-        accept="image/*"
-        capture="environment"
-      >
+    <div class="settingBlock">
+      <div class="settingTitle" id="choicesTitle">Choices for each feeling</div>
+      <div class="settingHint" id="choicesHint">Choose only the individual choices you want available for each feeling.</div>
+      <div id="choiceSetup"></div>
     </div>
-
-    <div class="field">
-      <label id="englishLabel">English label</label>
-      <input type="text" id="labelEn" placeholder="Example: My headphones">
-    </div>
-
-    <div class="field">
-      <label id="spanishLabel">Spanish label</label>
-      <input type="text" id="labelEs" placeholder="Example: Mis audífonos">
-    </div>
-
-    <div class="field">
-      <label id="mandarinLabel">Mandarin label</label>
-      <input type="text" id="labelZh" placeholder="Example: 我的耳机">
-    </div>
-
-    <div class="field">
-      <label id="portugueseLabel">Portuguese label</label>
-      <input type="text" id="labelPt" placeholder="Example: Meus fones">
-    </div>
-
-    <div class="field">
-      <label id="spokenLabel">Spoken text (optional)</label>
-      <input type="text" id="spokenEn" placeholder="English spoken label">
-      <input type="text" id="spokenEs" placeholder="Spanish spoken label">
-      <input type="text" id="spokenZh" placeholder="Mandarin spoken label">
-      <input type="text" id="spokenPt" placeholder="Portuguese spoken label">
-    </div>
-
-    <div class="field">
-      <label id="photoScopeLabel">Add this choice to</label>
-
-      <div class="radio-row">
-        <label>
-          <input
-            type="radio"
-            name="photoScope"
-            value="all"
-            checked
-            onchange="updatePhotoFeelingPicker()"
-          >
-          <span id="allFeelingsRadio">All feelings</span>
-        </label>
-
-        <label>
-          <input
-            type="radio"
-            name="photoScope"
-            value="selected"
-            onchange="updatePhotoFeelingPicker()"
-          >
-          <span id="selectedFeelingsRadio">Selected feelings</span>
-        </label>
+    <div class="settingBlock">
+      <div class="settingTitle" id="customTitle">Personal choices</div>
+      <div class="settingHint" id="customHint">Add a personal photo and label for a choice. The photo stays temporary in this session.</div>
+      <div class="customRow">
+        <button class="smallBtn" onclick="openCustomModal()" id="addPhotoBtn">📷 Add photo choice</button>
       </div>
-
-      <div class="photo-picker" id="photoFeelingPicker"></div>
+      <div id="customList"></div>
     </div>
-
-    <div class="modal-actions">
-      <button class="secondary" onclick="closePhotoModal()" id="cancelPhotoButton">
-        Cancel
-      </button>
-
-      <button class="primary" onclick="savePhotoChoice()" id="savePhotoButton">
-        Save choice
-      </button>
+    <div class="actions">
+      <button class="action primary" onclick="closeSettings()" id="doneSettings">Done</button>
+      <button class="action" onclick="endSession()" id="endSession">🔒 End Session / Clear</button>
     </div>
+  </div>
+</section>
 
+<div class="actions">
+  <button class="action" onclick="toggleSettings()" id="settingsBtn">⚙️ Settings</button>
+</div>
+<footer id="footer">Session photos and selections are temporary. The app does not upload them. Photos remain in the device's Photos app unless you delete them there.</footer>
+</main>
+
+<div class="modal hidden" id="customModal">
+  <div class="modalCard">
+    <h2 id="modalTitle">Add a personal choice</h2>
+    <div class="field"><label id="photoLabel">Photo</label><input type="file" id="photoInput" accept="image/*" capture="environment"></div>
+    <img id="photoPreview" class="preview hidden" alt="">
+    <div class="field"><label id="labelEn">English label</label><input id="customEn" placeholder="e.g., My headphones"></div>
+    <div class="field"><label id="labelEs">Spanish label</label><input id="customEs" placeholder="Optional"></div>
+    <div class="field"><label id="labelZh">Mandarin label</label><input id="customZh" placeholder="Optional"></div>
+    <div class="field"><label id="labelPt">Portuguese label</label><input id="customPt" placeholder="Optional"></div>
+    <div class="field"><label id="spokenLabel">Spoken word(s) if different</label><input id="customSpeak" placeholder="Optional"></div>
+    <div class="actions"><button class="action" onclick="closeCustomModal()" id="cancelModal">Cancel</button><button class="action primary" onclick="saveCustom()" id="saveModal">Save choice</button></div>
   </div>
 </div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-const feelings = [
-  {id:"happy",    e:"😊", en:"Happy",    es:"Feliz",       zh:"开心",       pt:"Feliz"},
-  {id:"sad",      e:"😢", en:"Sad",      es:"Triste",      zh:"难过",       pt:"Triste"},
-  {id:"angry",    e:"😡", en:"Angry",    es:"Enojado/a",   zh:"生气",       pt:"Bravo/a"},
-  {id:"worried",  e:"😟", en:"Worried",  es:"Preocupado/a",zh:"担心",       pt:"Preocupado/a"},
-  {id:"scared",   e:"😨", en:"Scared",   es:"Asustado/a",  zh:"害怕",       pt:"Assustado/a"},
-  {id:"frustrated",e:"😤",en:"Frustrated",es:"Frustrado/a",zh:"挫折",       pt:"Frustrado/a"},
-  {id:"confused", e:"😕", en:"Confused", es:"Confundido/a",zh:"困惑",       pt:"Confuso/a"},
-  {id:"tired",    e:"😴", en:"Tired",    es:"Cansado/a",   zh:"累",         pt:"Cansado/a"},
-  {id:"excited",  e:"🤩", en:"Excited",  es:"Emocionado/a",zh:"兴奋",      pt:"Animado/a"},
-  {id:"calm",     e:"😌", en:"Calm",     es:"Tranquilo/a", zh:"平静",       pt:"Calmo/a"},
-  {id:"proud",    e:"🥹", en:"Proud",    es:"Orgulloso/a", zh:"自豪",       pt:"Orgulhoso/a"},
-  {id:"silly",    e:"😜", en:"Silly",    es:"Travieso/a",  zh:"调皮",       pt:"Bobo/a"}
-];
-
-const choices = [
-  {id:"break",    i:"🛋️", en:"Break",          es:"Descanso",       zh:"休息",       pt:"Pausa"},
-  {id:"quiet",    i:"🤫",  en:"Quiet",          es:"Silencio",       zh:"安静",       pt:"Silêncio"},
-  {id:"movement", i:"🏃",  en:"Movement",       es:"Movimiento",     zh:"活动",       pt:"Movimento"},
-  {id:"dance",    i:"💃",  en:"Dance",          es:"Bailar",         zh:"跳舞",       pt:"Dançar"},
-  {id:"comfort",  i:"🤗",  en:"Comfort",        es:"Consuelo",       zh:"安慰",       pt:"Conforto"},
-  {id:"help",     i:"🙋",  en:"Ask for help",   es:"Pedir ayuda",    zh:"请求帮助",   pt:"Pedir ajuda"},
-  {id:"talk",     i:"💬",  en:"Talk",           es:"Hablar",         zh:"说一说",     pt:"Conversar"},
-  {id:"aac",      i:"📱",  en:"AAC",            es:"CAA",            zh:"辅助沟通",   pt:"CAA"},
-  {id:"music",    i:"🎵",  en:"Music",          es:"Música",         zh:"音乐",       pt:"Música"},
-  {id:"draw",     i:"🎨",  en:"Draw",           es:"Dibujar",        zh:"画画",       pt:"Desenhar"},
-  {id:"water",    i:"💧",  en:"Water",          es:"Agua",           zh:"喝水",       pt:"Água"},
-  {id:"sensory",  i:"👐",  en:"Sensory activity",es:"Actividad sensorial",zh:"感官活动",pt:"Atividade sensorial"},
-  {id:"play",     i:"🧸",  en:"Play",           es:"Jugar",          zh:"玩",         pt:"Brincar"},
-  {id:"space",    i:"🌿",  en:"Have some space",es:"Tener espacio",  zh:"自己待一会儿",pt:"Ter um espaço"},
-  {id:"celebrate",i:"🎉",  en:"Celebrate",      es:"Celebrar",       zh:"庆祝",       pt:"Comemorar"},
-  {id:"keep",     i:"💪",  en:"Keep going",     es:"Seguir adelante",zh:"继续",       pt:"Continuar"}
-];
-
-const defaultHelp = {
-  happy:["celebrate","play","dance","talk"],
-  sad:["comfort","quiet","talk","music","draw","help"],
-  angry:["break","movement","dance","quiet","help","aac"],
-  worried:["quiet","talk","help","draw","break"],
-  scared:["comfort","quiet","help","talk","aac"],
-  frustrated:["break","movement","dance","help","quiet","aac"],
-  confused:["help","talk","break","quiet","aac"],
-  tired:["break","quiet","water","comfort"],
-  excited:["movement","dance","play","celebrate","quiet"],
-  calm:["play","music","draw","keep"],
-  proud:["celebrate","talk","keep"],
-  silly:["play","movement","dance","celebrate","quiet"]
+const feelings={
+happy:{e:"😊",en:"Happy",es:"Feliz",zh:"开心",pt:"Feliz"},
+sad:{e:"😢",en:"Sad",es:"Triste",zh:"难过",pt:"Triste"},
+angry:{e:"😡",en:"Angry",es:"Enojado/a",zh:"生气",pt:"Bravo/a"},
+worried:{e:"😟",en:"Worried",es:"Preocupado/a",zh:"担心",pt:"Preocupado/a"},
+scared:{e:"😨",en:"Scared",es:"Asustado/a",zh:"害怕",pt:"Assustado/a"},
+frustrated:{e:"😤",en:"Frustrated",es:"Frustrado/a",zh:"挫败",pt:"Frustrado/a"},
+confused:{e:"😕",en:"Confused",es:"Confundido/a",zh:"困惑",pt:"Confuso/a"},
+tired:{e:"😴",en:"Tired",es:"Cansado/a",zh:"累",pt:"Cansado/a"},
+excited:{e:"🤩",en:"Excited",es:"Emocionado/a",zh:"兴奋",pt:"Animado/a"},
+calm:{e:"😌",en:"Calm",es:"Tranquilo/a",zh:"平静",pt:"Calmo/a"},
+proud:{e:"🥹",en:"Proud",es:"Orgulloso/a",zh:"自豪",pt:"Orgulhoso/a"},
+silly:{e:"😜",en:"Silly",es:"Juguetón/a",zh:"调皮",pt:"Brincalhão/Brincalhona"}
+};
+const choices={
+break:{i:"🛋️",en:"Take a break",es:"Tomar un descanso",zh:"休息一下",pt:"Fazer uma pausa"},
+quiet:{i:"🤫",en:"Quiet space",es:"Lugar tranquilo",zh:"安静的地方",pt:"Lugar tranquilo"},
+movement:{i:"🏃",en:"Move my body",es:"Mover mi cuerpo",zh:"动一动身体",pt:"Mexer o corpo"},
+dance:{i:"💃",en:"Dance",es:"Bailar",zh:"跳舞",pt:"Dançar"},
+comfort:{i:"🤗",en:"Get comfort",es:"Recibir consuelo",zh:"获得安慰",pt:"Receber conforto"},
+help:{i:"🙋",en:"Ask for help",es:"Pedir ayuda",zh:"请求帮助",pt:"Pedir ajuda"},
+talk:{i:"💬",en:"Talk about it",es:"Hablar de ello",zh:"说一说",pt:"Falar sobre isso"},
+aac:{i:"📱",en:"Use AAC",es:"Usar CAA",zh:"使用辅助沟通",pt:"Usar CAA"},
+music:{i:"🎵",en:"Listen to music",es:"Escuchar música",zh:"听音乐",pt:"Ouvir música"},
+draw:{i:"🎨",en:"Draw",es:"Dibujar",zh:"画画",pt:"Desenhar"},
+water:{i:"💧",en:"Get water",es:"Tomar agua",zh:"喝水",pt:"Beber água"},
+sensory:{i:"👐",en:"Sensory activity",es:"Actividad sensorial",zh:"感官活动",pt:"Atividade sensorial"},
+play:{i:"🧸",en:"Play",es:"Jugar",zh:"玩一玩",pt:"Brincar"},
+space:{i:"🌿",en:"Have some space",es:"Tener espacio",zh:"自己待一会儿",pt:"Ficar um pouco sozinho"},
+celebrate:{i:"🎉",en:"Celebrate",es:"Celebrar",zh:"庆祝",pt:"Comemorar"},
+keep:{i:"💪",en:"Keep going",es:"Seguir adelante",zh:"继续",pt:"Continuar"}
+};
+const defaults={
+happy:["celebrate","play","dance","talk"],
+sad:["comfort","quiet","talk","music","draw","talk"],
+angry:["break","movement","dance","quiet","talk"],
+worried:["quiet","talk","talk","draw","break"],
+scared:["comfort","quiet","talk","talk"],
+frustrated:["break","movement","dance","talk","quiet"],
+confused:["talk","talk","break","quiet"],
+tired:["break","quiet","water","comfort"],
+excited:["movement","dance","play","celebrate","quiet"],
+calm:["play","music","draw","keep"],
+proud:["celebrate","talk","keep"],
+silly:["play","movement","dance","celebrate","quiet"]
+};
+const ui={
+en:{title:"Feelings",subtitle:"Choose the feelings that fit.",feelings:"Feelings",myChoices:"My Choices",prompt:"How are you feeling?",tap:"Tap one or more feelings.",clear:"Clear",sayFeel:"Say my feelings",toChoices:"My Choices",choicePrompt:"What do I want?",choiceNotice:"Choose something you would like to do, try, or ask for.",sayHelp:"Say my choices",settings:"Settings",show:"Feelings to display",showHint:"Choose the specific feelings this board should show. The child can select as many as they want.",choices:"Choices for each feeling",choicesHint:"Choose only the individual choices you want available for each feeling.",personal:"Personal choices",personalHint:"Add a personal photo and label for a choice. The photo stays temporary in this session.",addPhoto:"📷 Add photo choice",done:"Done",end:"🔒 End Session / Clear",footer:"Session photos and selections are temporary. The app does not upload them. Photos remain in the device's Photos app unless you delete them there.",modal:"Add a personal choice",photo:"Photo",en:"English label",es:"Spanish label",zh:"Mandarin label",pt:"Portuguese label",spoken:"Spoken word(s) if different",cancel:"Cancel",save:"Save choice"},
+es:{title:"Sentimientos",subtitle:"Elige los sentimientos que corresponden.",feelings:"Sentimientos",myChoices:"Mis opciones",prompt:"¿Cómo te sientes?",tap:"Toca uno o más sentimientos.",clear:"Borrar",sayFeel:"Decir mis sentimientos",toChoices:"Mis opciones",choicePrompt:"¿Qué quiero?",choiceNotice:"Elige algo que te gustaría hacer, probar o pedir.",sayHelp:"Decir mis opciones",settings:"Configuración",show:"Sentimientos para mostrar",showHint:"Elige los sentimientos específicos que este tablero mostrará. El niño puede elegir todos los que quiera.",choices:"Opciones para cada sentimiento",choicesHint:"Elige solo las opciones individuales que quieres que estén disponibles para cada sentimiento.",personal:"Opciones personales",personalHint:"Agrega una foto y una etiqueta personal. La foto es temporal durante esta sesión.",addPhoto:"📷 Agregar opción con foto",done:"Listo",end:"🔒 Terminar sesión / Borrar",footer:"Las fotos y selecciones de la sesión son temporales. La aplicación no las sube.",modal:"Agregar una opción personal",photo:"Foto",en:"Etiqueta en inglés",es:"Etiqueta en español",zh:"Etiqueta en mandarín",pt:"Etiqueta en portugués",spoken:"Palabras habladas si son diferentes",cancel:"Cancelar",save:"Guardar opción"},
+zh:{title:"感受",subtitle:"选择符合你现在感受的表情。",feelings:"感受",myChoices:"我的选择",prompt:"你现在感觉怎么样？",tap:"点击一个或多个感受。",clear:"清除",sayFeel:"说出我的感受",toChoices:"我的选择",choicePrompt:"我想要什么？",choiceNotice:"选择你想做、想试试或想请求的事情。",sayHelp:"说出我的选择",settings:"设置",show:"要显示的感受",showHint:"选择这个板上要显示的具体感受。孩子可以选择任意数量。",choices:"每种感受的选择",choicesHint:"选择你想让孩子看到的具体选项。每种感受都可以单独设置。",personal:"个性化选择",personalHint:"添加个人照片和标签。照片只在本次会话中临时使用。",addPhoto:"📷 添加照片选择",done:"完成",end:"🔒 结束会话 / 清除",footer:"会话照片和选择都是临时的。应用不会上传它们。",modal:"添加个性化选择",photo:"照片",en:"英文标签",es:"西班牙文标签",zh:"普通话标签",pt:"葡萄牙文标签",spoken:"如果不同，输入朗读内容",cancel:"取消",save:"保存选择"},
+pt:{title:"Sentimentos",subtitle:"Escolha os sentimentos que combinam.",feelings:"Sentimentos",myChoices:"Minhas escolhas",prompt:"Como você está se sentindo?",tap:"Toque em um ou mais sentimentos.",clear:"Limpar",sayFeel:"Dizer meus sentimentos",toChoices:"Minhas escolhas",choicePrompt:"O que eu quero?",choiceNotice:"Escolha algo que você gostaria de fazer, tentar ou pedir.",sayHelp:"Dizer minhas escolhas",settings:"Configurações",show:"Sentimentos para mostrar",showHint:"Escolha os sentimentos específicos que este quadro deve mostrar. A criança pode escolher quantos quiser.",choices:"Opções para cada sentimento",choicesHint:"Escolha apenas as opções individuais que estarão disponíveis para cada sentimento.",personal:"Escolhas pessoais",personalHint:"Adicione uma foto e um rótulo pessoal. A foto fica temporária nesta sessão.",addPhoto:"📷 Adicionar escolha com foto",done:"Pronto",end:"🔒 Encerrar sessão / Limpar",footer:"As fotos e escolhas da sessão são temporárias. O aplicativo não as envia.",modal:"Adicionar uma escolha pessoal",photo:"Foto",en:"Rótulo em inglês",es:"Rótulo em espanhol",zh:"Rótulo em mandarim",pt:"Rótulo em português",spoken:"Palavras faladas se forem diferentes",cancel:"Cancelar",save:"Salvar escolha"}
 };
 
-const ui = {
-  en:{
-    title:"Feelings",
-    subtitle:"Choose the feelings that fit.",
-    feelingsTab:"😊 Feelings",
-    choicesTab:"✨ My Choices",
-    howFeel:"How do you feel?",
-    chooseMore:"You can choose more than one.",
-    myFeelings:"My feelings",
-    clear:"Clear",
-    sayFeelings:"🔊 Say my feelings",
-    myChoices:"✨ My Choices",
-    choicesSubtitle:"Choose what you want to do or try.",
-    clearChoices:"Clear choices",
-    sayChoices:"🔊 Say my choices",
-    settings:"⚙️ Adult Settings",
-    displayFeelings:"Feelings to display",
-    displayHelp:"Choose exactly which feelings you want this child to see.",
-    choicesForFeeling:"Choices for each feeling",
-    choicesHelp:"Keep the list short if too many choices feel overwhelming.",
-    personalChoices:"Personal choices",
-    personalHelp:"Add a real photo, such as headphones, a stuffed animal, a calm corner, or a favorite activity.",
-    addPhoto:"📷 Add photo choice",
-    endSession:"End Session / Clear",
-    photoTitle:"Add a personal choice",
-    photoHelp:"Add a photo from this device. The photo stays in this app only for the current session.",
-    photo:"Photo",
-    english:"English label",
-    spanish:"Spanish label",
-    mandarin:"Mandarin label",
-    portuguese:"Portuguese label",
-    spoken:"Spoken text (optional)",
-    addTo:"Add this choice to",
-    all:"All feelings",
-    selected:"Selected feelings",
-    cancel:"Cancel",
-    save:"Save choice",
-    noChoices:"No choices are available for this feeling.",
-    chooseFeeling:"Choose a feeling above to see choices.",
-    saved:"Choice saved.",
-    removed:"Choice removed.",
-    sessionCleared:"Session cleared.",
-    selectFeeling:"Please select at least one feeling.",
-    selectPhotoFeelings:"Please select at least one feeling for this photo."
-  },
+let lang="en";
+let visibleFeelings=Object.keys(feelings);
+let selectedFeelings=[];
+let helpByFeeling=JSON.parse(JSON.stringify(defaults));
+let selectedFeeling=null;
+let selectedHelp=[];
+let customChoices=[];
 
-  es:{
-    title:"Sentimientos",
-    subtitle:"Elige los sentimientos que encajan.",
-    feelingsTab:"😊 Sentimientos",
-    choicesTab:"✨ Mis opciones",
-    howFeel:"¿Cómo te sientes?",
-    chooseMore:"Puedes elegir más de uno.",
-    myFeelings:"Mis sentimientos",
-    clear:"Borrar",
-    sayFeelings:"🔊 Decir mis sentimientos",
-    myChoices:"✨ Mis opciones",
-    choicesSubtitle:"Elige lo que quieres hacer o intentar.",
-    clearChoices:"Borrar opciones",
-    sayChoices:"🔊 Decir mis opciones",
-    settings:"⚙️ Configuración para adultos",
-    displayFeelings:"Sentimientos para mostrar",
-    displayHelp:"Elige exactamente qué sentimientos quieres que vea este niño.",
-    choicesForFeeling:"Opciones para cada sentimiento",
-    choicesHelp:"Mantén la lista corta si demasiadas opciones pueden resultar abrumadoras.",
-    personalChoices:"Opciones personales",
-    personalHelp:"Agrega una foto real, como audífonos, un juguete, un rincón tranquilo o una actividad favorita.",
-    addPhoto:"📷 Agregar opción con foto",
-    endSession:"Terminar sesión / Borrar",
-    photoTitle:"Agregar una opción personal",
-    photoHelp:"Agrega una foto de este dispositivo. La foto permanece en esta aplicación solo durante la sesión actual.",
-    photo:"Foto",
-    english:"Etiqueta en inglés",
-    spanish:"Etiqueta en español",
-    mandarin:"Etiqueta en mandarín",
-    portuguese:"Etiqueta en portugués",
-    spoken:"Texto hablado (opcional)",
-    addTo:"Agregar esta opción a",
-    all:"Todos los sentimientos",
-    selected:"Sentimientos seleccionados",
-    cancel:"Cancelar",
-    save:"Guardar opción",
-    noChoices:"No hay opciones disponibles para este sentimiento.",
-    chooseFeeling:"Elige un sentimiento arriba para ver las opciones.",
-    saved:"Opción guardada.",
-    removed:"Opción eliminada.",
-    sessionCleared:"Sesión borrada.",
-    selectFeeling:"Selecciona al menos un sentimiento.",
-    selectPhotoFeelings:"Selecciona al menos un sentimiento para esta foto."
-  },
-
-  zh:{
-    title:"感受",
-    subtitle:"选择符合你现在感受的词。",
-    feelingsTab:"😊 感受",
-    choicesTab:"✨ 我的选择",
-    howFeel:"你感觉怎么样？",
-    chooseMore:"可以选择多个。",
-    myFeelings:"我的感受",
-    clear:"清除",
-    sayFeelings:"🔊 说出我的感受",
-    myChoices:"✨ 我的选择",
-    choicesSubtitle:"选择你想做或想尝试的事情。",
-    clearChoices:"清除选择",
-    sayChoices:"🔊 说出我的选择",
-    settings:"⚙️ 成人设置",
-    displayFeelings:"显示哪些感受",
-    displayHelp:"选择这个孩子需要看到的具体感受。",
-    choicesForFeeling:"每种感受的选择",
-    choicesHelp:"如果太多选择会让孩子感到压力，可以把列表保持得短一些。",
-    personalChoices:"个人选择",
-    personalHelp:"添加真实照片，例如耳机、喜欢的玩偶、安静角落或喜欢的活动。",
-    addPhoto:"📷 添加照片选择",
-    endSession:"结束会话 / 清除",
-    photoTitle:"添加个人选择",
-    photoHelp:"从设备添加一张照片。照片只会在当前会话中保留在这个应用里。",
-    photo:"照片",
-    english:"英语标签",
-    spanish:"西班牙语标签",
-    mandarin:"中文标签",
-    portuguese:"葡萄牙语标签",
-    spoken:"朗读文字（可选）",
-    addTo:"将此选择添加到",
-    all:"所有感受",
-    selected:"选择的感受",
-    cancel:"取消",
-    save:"保存选择",
-    noChoices:"这个感受没有可用的选择。",
-    chooseFeeling:"请先选择一个感受，再查看选择。",
-    saved:"选择已保存。",
-    removed:"选择已删除。",
-    sessionCleared:"会话已清除。",
-    selectFeeling:"请至少选择一个感受。",
-    selectPhotoFeelings:"请至少为这张照片选择一个感受。"
-  },
-
-  pt:{
-    title:"Sentimentos",
-    subtitle:"Escolha os sentimentos que combinam.",
-    feelingsTab:"😊 Sentimentos",
-    choicesTab:"✨ Minhas escolhas",
-    howFeel:"Como você se sente?",
-    chooseMore:"Você pode escolher mais de um.",
-    myFeelings:"Meus sentimentos",
-    clear:"Limpar",
-    sayFeelings:"🔊 Dizer meus sentimentos",
-    myChoices:"✨ Minhas escolhas",
-    choicesSubtitle:"Escolha o que você quer fazer ou experimentar.",
-    clearChoices:"Limpar escolhas",
-    sayChoices:"🔊 Dizer minhas escolhas",
-    settings:"⚙️ Configurações para adultos",
-    displayFeelings:"Sentimentos para mostrar",
-    displayHelp:"Escolha exatamente quais sentimentos esta criança verá.",
-    choicesForFeeling:"Opções para cada sentimento",
-    choicesHelp:"Mantenha a lista curta se muitas opções forem difíceis de escolher.",
-    personalChoices:"Escolhas pessoais",
-    personalHelp:"Adicione uma foto real, como fones de ouvido, um bichinho, um cantinho tranquilo ou uma atividade favorita.",
-    addPhoto:"📷 Adicionar escolha com foto",
-    endSession:"Encerrar sessão / Limpar",
-    photoTitle:"Adicionar uma escolha pessoal",
-    photoHelp:"Adicione uma foto deste dispositivo. A foto fica neste aplicativo somente durante a sessão atual.",
-    photo:"Foto",
-    english:"Etiqueta em inglês",
-    spanish:"Etiqueta em espanhol",
-    mandarin:"Etiqueta em mandarim",
-    portuguese:"Etiqueta em português",
-    spoken:"Texto falado (opcional)",
-    addTo:"Adicionar esta escolha a",
-    all:"Todos os sentimentos",
-    selected:"Sentimentos selecionados",
-    cancel:"Cancelar",
-    save:"Salvar escolha",
-    noChoices:"Não há escolhas disponíveis para este sentimento.",
-    chooseFeeling:"Escolha um sentimento acima para ver as opções.",
-    saved:"Escolha salva.",
-    removed:"Escolha removida.",
-    sessionCleared:"Sessão limpa.",
-    selectFeeling:"Selecione pelo menos um sentimento.",
-    selectPhotoFeelings:"Selecione pelo menos um sentimento para esta foto."
-  }
-};
-
-let state = {
-  lang:"en",
-  visibleFeelings: feelings.map(f=>f.id),
-  selectedFeelings:[],
-  selectedChoices:[],
-  activeChoiceFeeling:null,
-  helpByFeeling: JSON.parse(JSON.stringify(defaultHelp)),
-  customChoices:[]
-};
-
-function t(key){
-  return (ui[state.lang] && ui[state.lang][key]) || ui.en[key] || key;
+function T(k){return ui[lang][k]||ui.en[k]}
+function label(obj){return obj[lang]||obj.en}
+function speak(text){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=lang==="en"?"en-US":lang==="es"?"es-US":lang==="zh"?"zh-CN":"pt-BR";
+  u.rate=.85;speechSynthesis.speak(u);
 }
-
-function getFeeling(id){
-  return feelings.find(f=>f.id===id);
+function renderUI(){
+  document.documentElement.lang=lang==="zh"?"zh-CN":lang;
+  const map={title:"title",subtitle:"subtitle",feelTabText:"feelings",choiceTabText:"myChoices",feelPrompt:"prompt",clearFeel:"clear",sayFeel:"sayFeel",toChoices:"toChoices",choicePrompt:"choicePrompt",choiceNotice:"choiceNotice",clearHelp:"clear",sayHelp:"sayHelp",settingsBtn:"settings",feelingsToShowTitle:"show",feelingsToShowHint:"showHint",choicesTitle:"choices",choicesHint:"choicesHint",customTitle:"personal",customHint:"personalHint",addPhotoBtn:"addPhoto",doneSettings:"done",endSession:"end",footer:"footer",modalTitle:"modal",photoLabel:"photo",labelEn:"en",labelEs:"es",labelZh:"zh",labelPt:"pt",spokenLabel:"spoken",cancelModal:"cancel",saveModal:"save"};
+  Object.entries(map).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.textContent=T(key)});
+  document.getElementById("language").value=lang;
+  renderFeelings();renderChoices();renderSettings();
 }
-
-function getChoice(id){
-  const builtIn = choices.find(c=>c.id===id);
-  if(builtIn) return builtIn;
-  return state.customChoices.find(c=>c.id===id);
-}
-
-function feelingLabel(id){
-  const f=getFeeling(id);
-  return f ? (f[state.lang] || f.en) : "";
-}
-
-function choiceLabel(c){
-  if(!c) return "";
-  return c[state.lang] || c.en || "";
-}
-
-function escapeHtml(value){
-  return String(value || "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-function showTab(tab){
-  const feelingsPanel=document.getElementById("feelingsPanel");
-  const choicesPanel=document.getElementById("choicesPanel");
-
-  if(tab==="feelings"){
-    feelingsPanel.style.display="";
-    choicesPanel.style.display="none";
-    document.getElementById("feelingsTab").classList.add("active");
-    document.getElementById("choicesTab").classList.remove("active");
-  }else{
-    feelingsPanel.style.display="none";
-    choicesPanel.style.display="";
-    document.getElementById("feelingsTab").classList.remove("active");
-    document.getElementById("choicesTab").classList.add("active");
-
-    if(!state.activeChoiceFeeling){
-      state.activeChoiceFeeling=state.selectedFeelings[0] || state.visibleFeelings[0] || null;
-    }
-
-    renderChoiceFeelingTabs();
-    renderChoices();
-  }
-}
-
 function renderFeelings(){
-  const grid=document.getElementById("feelingsGrid");
-
-  const visible=feelings.filter(f=>state.visibleFeelings.includes(f.id));
-
-  if(!visible.length){
-    grid.innerHTML=`<div class="empty">${escapeHtml(t("selectFeeling"))}</div>`;
-    return;
-  }
-
-  grid.innerHTML=visible.map(f=>{
-    const selected=state.selectedFeelings.includes(f.id);
-
-    return `
-      <button
-        class="feeling-card ${selected?"selected":""}"
-        onclick="toggleFeeling('${f.id}')"
-        aria-pressed="${selected}"
-      >
-        <div class="emoji">${f.e}</div>
-        <div class="feeling-label">${escapeHtml(f[state.lang] || f.en)}</div>
-      </button>
-    `;
-  }).join("");
-
-  renderSelectedFeelings();
-}
-
-function toggleFeeling(id){
-  if(state.selectedFeelings.includes(id)){
-    state.selectedFeelings=state.selectedFeelings.filter(x=>x!==id);
-  }else{
-    state.selectedFeelings.push(id);
-  }
-
-  state.activeChoiceFeeling=id;
+  const g=document.getElementById("feelingsGrid");g.innerHTML="";
+  visibleFeelings.forEach(id=>{
+    const d=feelings[id],b=document.createElement("button");
+    b.className="feeling"+(selectedFeelings.includes(id)?" selected":"");
+    b.innerHTML=`<div class="bigicon">${d.e}</div><div class="word">${label(d)}</div><div class="hint">🔊 ${label(d)}</div>`;
+    b.onclick=()=>{
+  const wasSelected=selectedFeelings.includes(id);
+  if(wasSelected) selectedFeelings=selectedFeelings.filter(x=>x!==id);
+  else selectedFeelings.push(id);
+  selectedFeeling=selectedFeelings[0]||null;
+  selectedHelp=[];
+  speak(label(d));
   renderFeelings();
-  renderChoiceFeelingTabs();
+  updateSelection();
   renderChoices();
+};
+    g.appendChild(b);
+  });
+  updateSelection();
 }
-
-function renderSelectedFeelings(){
-  const list=document.getElementById("selectedList");
-
-  if(!state.selectedFeelings.length){
-    list.innerHTML=`<div class="empty" style="width:100%">${escapeHtml(t("selectFeeling"))}</div>`;
-    return;
-  }
-
-  list.innerHTML=state.selectedFeelings.map(id=>{
-    const f=getFeeling(id);
-
-    return `
-      <button class="selected-chip" onclick="toggleFeeling('${id}')">
-        ${f.e} ${escapeHtml(f[state.lang] || f.en)} ×
-      </button>
-    `;
-  }).join("");
+function updateSelection(){document.getElementById("selection").textContent=selectedFeelings.length?selectedFeelings.map(id=>label(feelings[id])).join(" • "):T("tap")}
+function clearFeelings(){selectedFeelings=[];selectedFeeling=null;selectedHelp=[];renderFeelings();renderChoices()}
+function speakFeelings(){if(selectedFeelings.length)speak(selectedFeelings.map(id=>label(feelings[id])).join(", "))}
+function showTab(tab){
+  document.getElementById("feelingsScreen").classList.toggle("hidden",tab!=="feelings");
+  document.getElementById("choicesScreen").classList.toggle("hidden",tab!=="choices");
+  document.getElementById("settingsScreen").classList.add("hidden");
+  document.getElementById("feelTab").classList.toggle("active",tab==="feelings");
+  document.getElementById("choiceTab").classList.toggle("active",tab==="choices");
+  if(tab==="choices")renderChoices();
 }
-
-function clearFeelings(){
-  state.selectedFeelings=[];
-  state.selectedChoices=[];
-  renderFeelings();
-  renderChoiceFeelingTabs();
-  renderChoices();
-}
-
-function speak(text, lang){
-  if(!("speechSynthesis" in window)) return;
-
-  window.speechSynthesis.cancel();
-
-  const utterance=new SpeechSynthesisUtterance(text);
-
-  const voices={
-    en:"en-US",
-    es:"es-US",
-    zh:"zh-CN",
-    pt:"pt-BR"
-  };
-
-  utterance.lang=voices[lang] || "en-US";
-  utterance.rate=.88;
-  utterance.pitch=1;
-
-  window.speechSynthesis.speak(utterance);
-}
-
-function sayFeelings(){
-  if(!state.selectedFeelings.length){
-    speak(t("selectFeeling"),state.lang);
-    return;
-  }
-
-  const labels=state.selectedFeelings.map(id=>feelingLabel(id));
-  speak(labels.join(", "),state.lang);
-}
-
-function renderChoiceFeelingTabs(){
-  const box=document.getElementById("choiceFeelingTabs");
-
-  let ids=state.selectedFeelings.filter(id=>state.visibleFeelings.includes(id));
-
-  if(!ids.length){
-    ids=state.visibleFeelings.slice();
-  }
-
-  if(!ids.length){
-    box.innerHTML="";
-    return;
-  }
-
-  if(!state.activeChoiceFeeling || !ids.includes(state.activeChoiceFeeling)){
-    state.activeChoiceFeeling=ids[0];
-  }
-
-  box.innerHTML=ids.map(id=>{
-    const f=getFeeling(id);
-
-    return `
-      <button
-        class="feeling-chip ${state.activeChoiceFeeling===id?"active":""}"
-        onclick="selectChoiceFeeling('${id}')"
-      >
-        ${f.e} ${escapeHtml(f[state.lang] || f.en)}
-      </button>
-    `;
-  }).join("");
-}
-
-function selectChoiceFeeling(id){
-  state.activeChoiceFeeling=id;
-  state.selectedChoices=[];
-  renderChoiceFeelingTabs();
-  renderChoices();
-}
-
-function getChoicesForFeeling(fid){
-  const ids=state.helpByFeeling[fid] || [];
-
-  const customIds=state.customChoices
-    .filter(c=>{
-      if(c.appliesToAll) return true;
-      return Array.isArray(c.appliesTo) && c.appliesTo.includes(fid);
-    })
-    .map(c=>c.id);
-
-  const allIds=[...new Set([...ids,...customIds])];
-
-  return allIds.map(id=>getChoice(id)).filter(Boolean);
-}
-
 function renderChoices(){
-  const grid=document.getElementById("choicesGrid");
-
-  const fid=state.activeChoiceFeeling;
-
-  if(!fid){
-    grid.innerHTML=`<div class="empty">${escapeHtml(t("chooseFeeling"))}</div>`;
-    return;
-  }
-
-  const list=getChoicesForFeeling(fid);
-
-  if(!list.length){
-    grid.innerHTML=`<div class="empty">${escapeHtml(t("noChoices"))}</div>`;
-    return;
-  }
-
-  grid.innerHTML=list.map(c=>{
-    const selected=state.selectedChoices.includes(c.id);
-
-    const visual=c.image
-      ? `<img src="${c.image}" alt="">`
-      : `<div class="choice-icon">${escapeHtml(c.i || "📷")}</div>`;
-
-    return `
-      <button
-        class="choice-card ${selected?"selected":""}"
-        onclick="toggleChoice('${c.id}')"
-        aria-pressed="${selected}"
-      >
-        ${visual}
-        <div class="choice-label">${escapeHtml(choiceLabel(c))}</div>
-      </button>
-    `;
-  }).join("");
+  const bar=document.getElementById("feelingBar"),g=document.getElementById("choicesGrid");bar.innerHTML="";g.innerHTML="";
+  const fs=selectedFeelings.length?selectedFeelings:visibleFeelings;
+  if(!selectedFeeling||!fs.includes(selectedFeeling))selectedFeeling=fs[0]||null;
+  fs.forEach(fid=>{const c=document.createElement("button");c.className="chip"+(fid===selectedFeeling?" active":"");c.textContent=feelings[fid].e+" "+label(feelings[fid]);c.onclick=()=>{selectedFeeling=fid;selectedHelp=[];renderChoices()};bar.appendChild(c)});
+  if(!selectedFeeling){g.innerHTML='<div class="notice">Choose a feeling first.</div>';return}
+  const ids=helpByFeeling[selectedFeeling]||[];
+  ids.forEach(cid=>{
+    const d=choices[cid]||customChoices.find(x=>x.id===cid);if(!d)return;
+    const icon=d.i||"📷",txt=d[lang]||d.en;
+    const b=document.createElement("button");b.className="choice"+(selectedHelp.includes(cid)?" selected":"");
+    b.innerHTML=`<div class="bigicon">${icon}</div><div class="word">${txt}</div><div class="hint">🔊 ${txt}</div>`;
+    b.onclick=()=>{selectedHelp.includes(cid)?selectedHelp=selectedHelp.filter(x=>x!==cid):selectedHelp.push(cid);speak(d.speak&&d.speak[lang]?d.speak[lang]:txt);renderChoices()};
+    g.appendChild(b);
+  });
 }
-
-function toggleChoice(id){
-  if(state.selectedChoices.includes(id)){
-    state.selectedChoices=state.selectedChoices.filter(x=>x!==id);
-  }else{
-    state.selectedChoices.push(id);
-  }
-
-  renderChoices();
-}
-
-function clearChoices(){
-  state.selectedChoices=[];
-  renderChoices();
-}
-
-function sayChoices(){
-  if(!state.selectedChoices.length){
-    speak(t("noChoices"),state.lang);
-    return;
-  }
-
-  const labels=state.selectedChoices
-    .map(id=>getChoice(id))
-    .filter(Boolean)
-    .map(c=>choiceLabel(c));
-
-  speak(labels.join(", "),state.lang);
-}
-
+function clearHelp(){selectedHelp=[];renderChoices()}
+function speakHelp(){if(selectedHelp.length){speak(selectedHelp.map(cid=>{const d=choices[cid]||customChoices.find(x=>x.id===cid);return d.speak&&d.speak[lang]?d.speak[lang]:(d[lang]||d.en)}).join(", "))}}
 function toggleSettings(){
-  const panel=document.getElementById("settingsPanel");
-
-  panel.style.display=panel.style.display==="none" ? "" : "none";
+  document.getElementById("settingsScreen").classList.toggle("hidden");
+  document.getElementById("feelingsScreen").classList.add("hidden");document.getElementById("choicesScreen").classList.add("hidden");
+  document.getElementById("feelTab").classList.remove("active");document.getElementById("choiceTab").classList.remove("active");
+  renderSettings();
 }
-
+function closeSettings(){showTab("feelings")}
 function renderSettings(){
-  const grid=document.getElementById("feelingsSettingsGrid");
-
-  grid.innerHTML=feelings.map(f=>{
-    const checked=state.visibleFeelings.includes(f.id);
-
-    return `
-      <label class="check-item">
-        <input
-          type="checkbox"
-          ${checked?"checked":""}
-          onchange="toggleVisibleFeeling('${f.id}',this.checked)"
-        >
-        <span>${f.e} ${escapeHtml(f[state.lang] || f.en)}</span>
-      </label>
-    `;
-  }).join("");
-
-  renderChoiceSettings();
-  renderCustomChoices();
+  const fc=document.getElementById("feelingChecks");fc.innerHTML="";
+  Object.entries(feelings).forEach(([id,d])=>{
+    const l=document.createElement("label");l.className="check";l.innerHTML=`<input type="checkbox" ${visibleFeelings.includes(id)?"checked":""}> <span>${d.e} ${label(d)}</span>`;
+    l.querySelector("input").onchange=e=>{if(e.target.checked){if(!visibleFeelings.includes(id))visibleFeelings.push(id)}else visibleFeelings=visibleFeelings.filter(x=>x!==id);selectedFeelings=selectedFeelings.filter(x=>visibleFeelings.includes(x));selectedFeeling=selectedFeelings[0]||visibleFeelings[0]||null;renderFeelings();renderChoices();renderSettings()};
+    fc.appendChild(l);
+  });
+  const setup=document.getElementById("choiceSetup");setup.innerHTML="";
+  visibleFeelings.forEach(fid=>{
+    const wrap=document.createElement("div");wrap.className="helpSection";wrap.innerHTML=`<div class="helpTitle">${feelings[fid].e} ${label(feelings[fid])}</div>`;
+    const cg=document.createElement("div");cg.className="checkgrid";
+    Object.entries(choices).forEach(([cid,d])=>{
+      const l=document.createElement("label");l.className="check";l.innerHTML=`<input type="checkbox" ${helpByFeeling[fid].includes(cid)?"checked":""}> <span>${d.i} ${label(d)}</span>`;
+      l.querySelector("input").onchange=e=>{if(e.target.checked){if(!helpByFeeling[fid].includes(cid))helpByFeeling[fid].push(cid)}else helpByFeeling[fid]=helpByFeeling[fid].filter(x=>x!==cid);renderChoices()};
+      cg.appendChild(l);
+    });
+    customChoices.forEach(d=>{
+      const l=document.createElement("label");l.className="check";l.innerHTML=`<input type="checkbox" ${helpByFeeling[fid].includes(d.id)?"checked":""}> <span>${d.i} ${d[lang]||d.en}</span>`;
+      l.querySelector("input").onchange=e=>{if(e.target.checked){if(!helpByFeeling[fid].includes(d.id))helpByFeeling[fid].push(d.id)}else helpByFeeling[fid]=helpByFeeling[fid].filter(x=>x!==d.id);renderChoices()};
+      cg.appendChild(l);
+    });
+    wrap.appendChild(cg);setup.appendChild(wrap);
+  });
+  const cl=document.getElementById("customList");cl.innerHTML="";
+  customChoices.forEach(d=>{const row=document.createElement("div");row.className="customItem";row.innerHTML=`<img src="${d.image}" alt=""><div class="grow"><strong>${d.en}</strong><div class="hint">${d.es||""}</div></div><button class="remove" onclick="removeCustom('${d.id}')">×</button>`;cl.appendChild(row)});
 }
 
-function toggleVisibleFeeling(id,checked){
-  if(checked){
-    if(!state.visibleFeelings.includes(id)){
-      state.visibleFeelings.push(id);
-    }
-  }else{
-    state.visibleFeelings=state.visibleFeelings.filter(x=>x!==id);
-    state.selectedFeelings=state.selectedFeelings.filter(x=>x!==id);
-
-    if(state.activeChoiceFeeling===id){
-      state.activeChoiceFeeling=state.selectedFeelings[0] || state.visibleFeelings[0] || null;
-    }
-  }
-
-  renderFeelings();
-  renderChoiceFeelingTabs();
-  renderChoices();
-  renderSettings();
+function getPhotoScope(){
+  const el = document.querySelector('input[name="photoScope"]:checked');
+  return el ? el.value : "all";
 }
 
-function renderChoiceSettings(){
-  const box=document.getElementById("choiceSettings");
-
-  const visible=feelings.filter(f=>state.visibleFeelings.includes(f.id));
-
-  box.innerHTML=visible.map(f=>{
-    const enabled=state.helpByFeeling[f.id] || [];
-
-    const builtIns=choices.map(c=>{
-      const checked=enabled.includes(c.id);
-
-      return `
-        <label class="choice-setting-item">
-          <input
-            type="checkbox"
-            ${checked?"checked":""}
-            onchange="toggleBuiltInChoice('${f.id}','${c.id}',this.checked)"
-          >
-          <span>${c.i} ${escapeHtml(c[state.lang] || c.en)}</span>
-        </label>
-      `;
-    }).join("");
-
-    const customs=state.customChoices.map(c=>{
-      const applies=c.appliesToAll || (c.appliesTo||[]).includes(f.id);
-
-      return `
-        <label class="choice-setting-item">
-          <input
-            type="checkbox"
-            ${applies?"checked":""}
-            onchange="toggleCustomChoiceForFeeling('${c.id}','${f.id}',this.checked)"
-          >
-          <span>📷 ${escapeHtml(c[state.lang] || c.en || "Photo")}</span>
-        </label>
-      `;
-    }).join("");
-
-    return `
-      <div class="choice-setting">
-        <div class="choice-setting-header">
-          ${f.e} ${escapeHtml(f[state.lang] || f.en)}
-        </div>
-
-        <div class="choice-setting-grid">
-          ${builtIns}
-          ${customs}
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-function toggleBuiltInChoice(fid,cid,checked){
-  if(!state.helpByFeeling[fid]){
-    state.helpByFeeling[fid]=[];
-  }
-
-  if(checked){
-    if(!state.helpByFeeling[fid].includes(cid)){
-      state.helpByFeeling[fid].push(cid);
-    }
-  }else{
-    state.helpByFeeling[fid]=state.helpByFeeling[fid].filter(x=>x!==cid);
-  }
-
-  renderChoices();
-}
-
-function toggleCustomChoiceForFeeling(cid,fid,checked){
-  const c=state.customChoices.find(x=>x.id===cid);
-  if(!c) return;
-
-  c.appliesToAll=false;
-
-  if(!Array.isArray(c.appliesTo)){
-    c.appliesTo=[];
-  }
-
-  if(checked){
-    if(!c.appliesTo.includes(fid)){
-      c.appliesTo.push(fid);
-    }
-  }else{
-    c.appliesTo=c.appliesTo.filter(x=>x!==fid);
-  }
-
-  renderChoiceSettings();
-  renderChoices();
-}
-
-function renderCustomChoices(){
-  const box=document.getElementById("customChoicesList");
-
-  if(!state.customChoices.length){
-    box.innerHTML="";
-    return;
-  }
-
-  box.innerHTML=state.customChoices.map(c=>{
-    let scope=t("all");
-
-    if(!c.appliesToAll){
-      const names=(c.appliesTo||[])
-        .map(id=>feelingLabel(id))
-        .join(", ");
-
-      scope=names || t("selected");
-    }
-
-    return `
-      <div class="custom-item">
-        <img class="custom-thumb" src="${c.image}" alt="">
-        <div class="custom-info">
-          <div class="custom-name">
-            ${escapeHtml(c[state.lang] || c.en || "Photo choice")}
-          </div>
-          <div class="custom-scope">${escapeHtml(scope)}</div>
-        </div>
-
-        <button
-          class="danger"
-          onclick="removeCustomChoice('${c.id}')"
-        >
-          ×
-        </button>
-      </div>
-    `;
-  }).join("");
-}
-
-function removeCustomChoice(id){
-  state.customChoices=state.customChoices.filter(c=>c.id!==id);
-  state.selectedChoices=state.selectedChoices.filter(x=>x!==id);
-
-  renderSettings();
-  renderChoices();
-
-  showToast(t("removed"));
-}
-
-function openPhotoModal(){
-  document.getElementById("photoModal").classList.add("open");
-
-  document.getElementById("photoInput").value="";
-  document.getElementById("labelEn").value="";
-  document.getElementById("labelEs").value="";
-  document.getElementById("labelZh").value="";
-  document.getElementById("labelPt").value="";
-  document.getElementById("spokenEn").value="";
-  document.getElementById("spokenEs").value="";
-  document.getElementById("spokenZh").value="";
-  document.getElementById("spokenPt").value="";
-
-  const all=document.querySelector('input[name="photoScope"][value="all"]');
-
-  if(all){
-    all.checked=true;
-  }
-
-  updatePhotoFeelingPicker();
-}
-
-function closePhotoModal(){
-  document.getElementById("photoModal").classList.remove("open");
+function labelForFeeling(fid){
+  const f = feelings.find(x=>x.id===fid);
+  if(!f) return "";
+  const lang = state.lang || "en";
+  return f[lang] || f.e || f.en || "";
 }
 
 function updatePhotoFeelingPicker(){
-  const picker=document.getElementById("photoFeelingPicker");
-
-  const selected=document.querySelector(
-    'input[name="photoScope"]:checked'
-  );
-
-  const isSelected=selected && selected.value==="selected";
-
-  picker.classList.toggle("open",isSelected);
-
-  if(!isSelected){
-    picker.innerHTML="";
-    return;
-  }
-
-  picker.innerHTML=feelings
-    .filter(f=>state.visibleFeelings.includes(f.id))
-    .map(f=>`
-      <label class="photo-feeling">
-        <input type="checkbox" value="${f.id}">
-        <span>${f.e} ${escapeHtml(f[state.lang] || f.en)}</span>
-      </label>
+  const box = document.getElementById("photoFeelingPicker");
+  if(!box) return;
+  const selected = getPhotoScope() === "selected";
+  box.style.display = selected ? "grid" : "none";
+  if(selected){
+    box.innerHTML = feelings.map(f => `
+      <label><input type="checkbox" value="${f.id}"> ${escapeHtml(f.e)} ${escapeHtml(labelForFeeling(f.id))}</label>
     `).join("");
+  }
 }
-
-document.getElementById("photoInput").addEventListener("change",function(){
-  if(!this.files || !this.files[0]) return;
-
-  const file=this.files[0];
-
-  const reader=new FileReader();
-
-  reader.onload=function(){
-    window.pendingPhotoData=reader.result;
-  };
-
-  reader.readAsDataURL(file);
+document.addEventListener("change", e => {
+  if(e.target && e.target.name === "photoScope") updatePhotoFeelingPicker();
 });
 
-function savePhotoChoice(){
-  if(!window.pendingPhotoData){
-    showToast(t("photo"));
-    return;
-  }
-
-  const scope=document.querySelector(
-    'input[name="photoScope"]:checked'
-  );
-
-  const appliesToAll=!scope || scope.value==="all";
-
-  let appliesTo=[];
-
-  if(!appliesToAll){
-    appliesTo=Array.from(
-      document.querySelectorAll("#photoFeelingPicker input:checked")
-    ).map(x=>x.value);
-
-    if(!appliesTo.length){
-      showToast(t("selectPhotoFeelings"));
-      return;
-    }
-  }
-
-  const id="photo_"+Date.now()+"_"+Math.random().toString(36).slice(2);
-
-  const custom={
-    id:id,
-    image:window.pendingPhotoData,
-
-    en:document.getElementById("labelEn").value.trim(),
-    es:document.getElementById("labelEs").value.trim(),
-    zh:document.getElementById("labelZh").value.trim(),
-    pt:document.getElementById("labelPt").value.trim(),
-
-    spokenEn:document.getElementById("spokenEn").value.trim(),
-    spokenEs:document.getElementById("spokenEs").value.trim(),
-    spokenZh:document.getElementById("spokenZh").value.trim(),
-    spokenPt:document.getElementById("spokenPt").value.trim(),
-
-    appliesToAll:appliesToAll,
-    appliesTo:appliesTo
-  };
-
-  if(!custom.en && !custom.es && !custom.zh && !custom.pt){
-    custom.en="My choice";
-  }
-
-  state.customChoices.push(custom);
-
-  window.pendingPhotoData=null;
-
-  closePhotoModal();
-  renderSettings();
-  renderChoices();
-
-  showToast(t("saved"));
+function openCustomModal(){
+  const allRadio = document.querySelector(\'input[name="photoScope"][value="all"]\');
+  if(allRadio) allRadio.checked = true;
+  updatePhotoFeelingPicker();document.getElementById("customModal").classList.remove("hidden")}
+function closeCustomModal(){document.getElementById("customModal").classList.add("hidden");document.getElementById("photoInput").value="";document.getElementById("photoPreview").classList.add("hidden")}
+document.getElementById("photoInput").onchange=e=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=ev=>{const im=document.getElementById("photoPreview");im.src=ev.target.result;im.classList.remove("hidden")};r.readAsDataURL(f)}};
+function saveCustom(){
+  const f=document.getElementById("photoInput").files[0],en=document.getElementById("customEn").value.trim();if(!f||!en){alert("Please add a photo and an English label.");return}
+  const r=new FileReader();r.onload=ev=>{
+    const id="custom_"+Date.now(),d={id,i:"",image:ev.target.result,en,es:document.getElementById("customEs").value.trim()||en,zh:document.getElementById("customZh").value.trim()||en,pt:document.getElementById("customPt").value.trim()||en,speak:{en:document.getElementById("customSpeak").value.trim()||en}};
+    d.speak.es=d.es;d.speak.zh=d.zh;d.speak.pt=d.pt;
+    customChoices.push(d);visibleFeelings.forEach(fid=>{if(!helpByFeeling[fid])helpByFeeling[fid]=[]});
+    closeCustomModal();renderSettings();
+  };r.readAsDataURL(f);
 }
-
+function removeCustom(id){customChoices=customChoices.filter(x=>x.id!==id);Object.keys(helpByFeeling).forEach(fid=>helpByFeeling[fid]=helpByFeeling[fid].filter(x=>x!==id));selectedHelp=selectedHelp.filter(x=>x!==id);renderSettings();renderChoices()}
 function endSession(){
-  state.visibleFeelings=feelings.map(f=>f.id);
-  state.selectedFeelings=[];
-  state.selectedChoices=[];
-  state.activeChoiceFeeling=feelings[0].id;
-  state.helpByFeeling=JSON.parse(JSON.stringify(defaultHelp));
-  state.customChoices=[];
-
-  renderAll();
-
-  document.getElementById("settingsPanel").style.display="none";
-
-  showToast(t("sessionCleared"));
+  selectedFeelings=[];selectedFeeling=null;selectedHelp=[];customChoices=[];visibleFeelings=Object.keys(feelings);helpByFeeling=JSON.parse(JSON.stringify(defaults));
+  closeCustomModal();document.getElementById("settingsScreen").classList.add("hidden");renderUI();showTab("feelings");
 }
-
-function showToast(message){
-  const toast=document.getElementById("toast");
-
-  toast.textContent=message;
-  toast.classList.add("show");
-
-  clearTimeout(window.toastTimer);
-
-  window.toastTimer=setTimeout(()=>{
-    toast.classList.remove("show");
-  },1800);
-}
-
-function applyLanguage(){
-  const x=ui[state.lang] || ui.en;
-
-  document.documentElement.lang=state.lang;
-
-  document.getElementById("appTitle").textContent=x.title;
-  document.getElementById("appSubtitle").textContent=x.subtitle;
-
-  document.getElementById("feelingsTab").textContent=x.feelingsTab;
-  document.getElementById("choicesTab").textContent=x.choicesTab;
-
-  document.getElementById("feelingsTitle").textContent=x.howFeel;
-  document.getElementById("feelingsSubtitle").textContent=x.chooseMore;
-  document.getElementById("selectedTitle").textContent=x.myFeelings;
-  document.getElementById("clearFeelingsBtn").textContent=x.clear;
-  document.getElementById("sayFeelingsBtn").textContent=x.sayFeelings;
-  document.getElementById("myChoicesBtn").textContent=x.myChoices;
-
-  document.getElementById("choicesTitle").textContent=x.myChoices;
-  document.getElementById("choicesSubtitle").textContent=x.choicesSubtitle;
-  document.getElementById("clearChoicesBtn").textContent=x.clearChoices;
-  document.getElementById("sayChoicesBtn").textContent=x.sayChoices;
-
-  document.getElementById("settingsButton").textContent=x.settings;
-  document.getElementById("displayFeelingsTitle").textContent=x.displayFeelings;
-  document.getElementById("displayFeelingsHelp").textContent=x.displayHelp;
-  document.getElementById("choicesForFeelingTitle").textContent=x.choicesForFeeling;
-  document.getElementById("choicesForFeelingHelp").textContent=x.choicesHelp;
-  document.getElementById("personalChoicesTitle").textContent=x.personalChoices;
-  document.getElementById("personalChoicesHelp").textContent=x.personalHelp;
-  document.getElementById("addPhotoButton").textContent=x.addPhoto;
-  document.getElementById("endSessionButton").textContent=x.endSession;
-
-  document.getElementById("photoModalTitle").textContent=x.photoTitle;
-  document.getElementById("photoModalHelp").textContent=x.photoHelp;
-  document.getElementById("photoLabel").textContent=x.photo;
-  document.getElementById("englishLabel").textContent=x.english;
-  document.getElementById("spanishLabel").textContent=x.spanish;
-  document.getElementById("mandarinLabel").textContent=x.mandarin;
-  document.getElementById("portugueseLabel").textContent=x.portuguese;
-  document.getElementById("spokenLabel").textContent=x.spoken;
-  document.getElementById("photoScopeLabel").textContent=x.addTo;
-  document.getElementById("allFeelingsRadio").textContent=x.all;
-  document.getElementById("selectedFeelingsRadio").textContent=x.selected;
-  document.getElementById("cancelPhotoButton").textContent=x.cancel;
-  document.getElementById("savePhotoButton").textContent=x.save;
-
-  document.getElementById("privacyFooter").textContent=
-    "Session photos and selections are temporary. The app does not upload them.";
-
-  renderAll();
-}
-
-function renderAll(){
-  renderFeelings();
-  renderChoiceFeelingTabs();
-  renderChoices();
-  renderSettings();
-}
-
-document.getElementById("languageSelect").addEventListener("change",function(){
-  state.lang=this.value;
-  renderAll();
-});
-
-state.activeChoiceFeeling=state.visibleFeelings[0];
-
-renderAll();
+document.getElementById("language").onchange=e=>{lang=e.target.value;selectedHelp=[];renderUI()};
+renderUI();
 </script>
 </body>
 </html>

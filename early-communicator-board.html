@@ -308,9 +308,6 @@ body.child-mode .choice-label {
         Save Board
     </button>
 
-   <button onclick="saveBoard()">
-    Save Board
-</button>
 
 <button onclick="childMode()">
     Start Communicating
@@ -1081,7 +1078,16 @@ function escapeHtml(text) {
 
 }
 
+function exitToHome(){
 
+    document.body.classList.remove("child-mode");
+
+    hideAllSections();
+
+    document.getElementById("home")
+        .classList.remove("hidden");
+
+}
 </script>
 
 </body>

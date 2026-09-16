@@ -1,0 +1,8 @@
+{
+  "name": "Feelings & Regulation Choice Board",
+  "short_name": "Feelings Board",
+  "start_url": "feelings.html",
+  "display": "standalone",
+  "background_color": "#fffaf0",
+  "theme_color": "#fffaf0"
+}

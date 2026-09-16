@@ -362,11 +362,7 @@ footer{
       Clear
     </button>
 
-    <button class="action primary"
-      onclick="speakSelectedFeelings()"
-      id="sayFeelings">
-      🔊 Say my feelings
-    </button>
+    
 
     <button class="action primary"
       onclick="showChoices()"
@@ -403,11 +399,7 @@ footer{
       Clear
     </button>
 
-    <button class="action primary"
-      onclick="speakSelectedChoices()"
-      id="sayChoices">
-      🔊 Say my choices
-    </button>
+   
 
   </div>
 
@@ -1069,7 +1061,7 @@ function toggleFeeling(id){
   renderChoiceTabs();
   renderChoices();
 
-  speak(label(feelings[id]));
+ 
 }
 
 
@@ -1306,7 +1298,7 @@ if(selectedChoices.includes(choice.id)){
 
       renderChoices();
 
-      speak(label(choice));
+      
 
     };
 

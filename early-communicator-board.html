@@ -368,6 +368,11 @@ let choices = [];
 
 let currentBoardName = "";
 
+let mediaRecorder;
+
+let audioChunks = [];
+
+let recordingIndex = null;
 
 
 /* -------------------------
@@ -452,14 +457,15 @@ function createBoard() {
 
 
     for (let i = 0; i < amount; i++) {
+choices.push({
 
-        choices.push({
+    photo: "",
 
-            photo: "",
+    label: "",
 
-            label: ""
+    audio: ""
 
-        });
+});
 
     }
 
@@ -540,6 +546,20 @@ function renderEditor() {
                 value="${escapeHtml(choice.label)}"
                 oninput="changeLabel(event, ${index})"
             >
+
+            <br>
+
+<button onclick="startRecording(${index})">
+🎙 Record Voice
+</button>
+
+<button onclick="playRecording(${index})">
+▶ Play
+</button>
+
+<button onclick="deleteRecording(${index})">
+🗑 Remove
+</button>
 
         `;
 
@@ -992,29 +1012,17 @@ function renderBoard() {
         }
 
 
-        card.onclick = function() {
+    card.onclick=function(){
 
-            /*
-               For now, clicking the
-               communication button gives
-               visual feedback.
+    if(choice.audio){
 
-               Voice/audio can be added
-               later.
-            */
+        let sound = new Audio(choice.audio);
 
-            card.style.transform =
-                "scale(.94)";
+        sound.play();
 
+    }
 
-            setTimeout(() => {
-
-                card.style.transform =
-                    "scale(1)";
-
-            }, 120);
-
-        };
+};
 
 
         board.appendChild(card);
@@ -1086,6 +1094,86 @@ function exitToHome(){
 
     document.getElementById("home")
         .classList.remove("hidden");
+
+}
+
+    async function startRecording(index){
+
+    recordingIndex = index;
+
+    const stream =
+        await navigator.mediaDevices.getUserMedia({
+            audio:true
+        });
+
+
+    mediaRecorder =
+        new MediaRecorder(stream);
+
+
+    audioChunks = [];
+
+
+    mediaRecorder.ondataavailable = event => {
+
+        audioChunks.push(event.data);
+
+    };
+
+
+    mediaRecorder.onstop = () => {
+
+        const audioBlob =
+            new Blob(audioChunks, {
+                type:"audio/webm"
+            });
+
+
+        choices[index].audio =
+            URL.createObjectURL(audioBlob);
+
+
+        alert("Voice saved!");
+
+    };
+
+
+    mediaRecorder.start();
+
+
+    alert("Recording... press OK when finished");
+
+
+    setTimeout(()=>{
+
+        mediaRecorder.stop();
+
+    },3000);
+
+}
+
+
+
+function playRecording(index){
+
+    if(choices[index].audio){
+
+        const audio =
+            new Audio(
+                choices[index].audio
+            );
+
+        audio.play();
+
+    }
+
+}
+
+
+
+function deleteRecording(index){
+
+    choices[index].audio="";
 
 }
 </script>

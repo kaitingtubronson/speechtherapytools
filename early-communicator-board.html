@@ -1203,8 +1203,12 @@ function addChoice(){
     renderEditor();
 
 }
-    
+    <script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("early-communicator-service-worker.js");
+}
 </script>
+
 
 </body>
 </html>

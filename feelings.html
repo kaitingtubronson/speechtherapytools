@@ -1247,10 +1247,11 @@ function renderChoices(){
 
     const button=document.createElement("button");
 
-    button.className=
-      "choice"+
-      (selectedChoices.includes(choice.id)
-        ?" selected":"");
+   button.className="choice";
+
+if(selectedChoices.includes(choice.id)){
+  button.classList.add("selected");
+}
 
     let visual;
 

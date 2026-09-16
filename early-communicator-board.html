@@ -1128,9 +1128,15 @@ function exitToHome(){
                 type:"audio/webm"
             });
 
+let reader = new FileReader();
 
-        choices[index].audio =
-            URL.createObjectURL(audioBlob);
+reader.onloadend = function(){
+
+    choices[index].audio = reader.result;
+
+};
+
+reader.readAsDataURL(audioBlob);
 
 
         alert("Voice saved!");

@@ -36,7 +36,12 @@
 <body>
 <main class="app">
   <section id="setup" class="card">
-    <div class="eyebrow">Clinician setup</div><h1>Make My Answer Bigger</h1>
+    <div class="eyebrow">Clinician setup</div><div class="row" style="margin:10px 0">
+  <button class="mini-button" onclick="changeLanguage('en')">English</button>
+  <button class="mini-button" onclick="changeLanguage('zh')">中文（繁體）</button>
+</div>
+                                           
+                                           <h1>Make My Answer Bigger</h1>
     <p class="sub">Choose what the learner sees. Keep it to two or three buttons when fewer choices will help.</p>
     <div class="section"><h2>1. Pick the detail buttons</h2><div id="categoryChecks" class="choice-grid"></div></div>
     <div class="section"><h2>2. How many details will make it grow?</h2><p class="sub">Choose a comfortable goal for this learner today.</p><div class="choice-grid"><label class="goal-choice"><input type="radio" name="detailGoal" value="1" checked><span class="goal-number">1</span><strong>One detail</strong></label><label class="goal-choice"><input type="radio" name="detailGoal" value="2"><span class="goal-number">2</span><strong>Two details</strong></label><label class="goal-choice"><input type="radio" name="detailGoal" value="3"><span class="goal-number">3</span><strong>Three details</strong></label></div></div>
@@ -65,6 +70,49 @@
 <div class="footer-note">Works offline • No information leaves this device</div>
 
 <script>
+  const appLanguage = {
+  en: {
+    name: "English",
+    title: "Make My Answer Bigger",
+    setup: "Clinician setup",
+    intro: "Choose what the learner sees. Keep it to two or three buttons when fewer choices will help.",
+    start: "Start activity →",
+    help: "Help your listener understand more",
+    question: "What detail can we add?",
+    answer: "MY ANSWER",
+    bigger: "Now give your bigger answer",
+    add: "✨ I added a detail!",
+    reset: "Start over",
+    who: "Who?",
+    where: "Where?",
+    when: "When?",
+    what: "What?",
+    why: "Why / How?",
+    feelings: "Thoughts / Feelings"
+  },
+
+  zh: {
+    name: "中文（繁體）",
+    title: "讓我的回答更豐富",
+    setup: "治療師設定",
+    intro: "選擇孩子看到的內容。需要時可以減少選項。",
+    start: "開始活動 →",
+    help: "幫助聽的人了解更多",
+    question: "我們可以加入什麼細節？",
+    answer: "我的回答",
+    bigger: "現在說出更完整的回答",
+    add: "✨ 我加入了一個細節！",
+    reset: "重新開始",
+    who: "誰？",
+    where: "哪裡？",
+    when: "什麼時候？",
+    what: "發生什麼事？",
+    why: "為什麼／如何？",
+    feelings: "想法／感受"
+  }
+};
+
+let currentLanguage = "en";
 const categories={
  who:{icon:'👤',label:'Who?',question:'Who was there?',prompts:['a family member','a friend','a teacher','someone who helped','someone else']},
  where:{icon:'📍',label:'Where?',question:'Where did it happen?',prompts:['at home','at school','outside','in the community','another place']},
@@ -112,7 +160,17 @@ function puffSvg(stage){
  return `<svg viewBox="0 0 150 160" role="img" aria-label="Puff growth stage ${stage+1}">${halo}${ears}${wings}<ellipse cx="75" cy="143" rx="45" ry="9" fill="#315f57" opacity=".12"/><circle cx="75" cy="91" r="${r}" fill="#9bcfc9" stroke="#315f57" stroke-width="4"/><circle cx="61" cy="83" r="4" fill="#263b36"/><circle cx="89" cy="83" r="4" fill="#263b36"/><path d="M65 98 Q75 108 85 98" fill="none" stroke="#263b36" stroke-width="4" stroke-linecap="round"/>${stage>=2?`<circle cx="49" cy="98" r="6" fill="#e88975" opacity=".55"/><circle cx="101" cy="98" r="6" fill="#e88975" opacity=".55"/>`:''}</svg>`;
 }
 function avatarSvg(stage,type=state.avatar){return type==='nova'?novaSvg(stage):type==='puff'?puffSvg(stage):sprigSvg(stage)}
+function changeLanguage(lang){
+  currentLanguage = lang;
 
+  const t = appLanguage[lang];
+
+  document.querySelector("#setup h1").textContent = t.title;
+  document.querySelector("#setup .eyebrow").textContent = t.setup;
+  document.querySelector("#startButton").textContent = t.start;
+
+  renderSetup();
+}
 function renderSetup(){
  $('categoryChecks').innerHTML=Object.entries(categories).map(([key,c])=>`<label class="check"><input type="checkbox" value="${key}" ${state.enabled.includes(key)?'checked':''}><span class="icon">${c.icon}</span><strong>${c.label}</strong><span class="tiny">${c.question}</span></label>`).join('');
  $('avatarChoices').innerHTML=Object.entries(avatars).map(([key,a])=>`<button class="avatar-choice ${state.avatar===key?'selected':''}" data-avatar="${key}"><div class="avatar-preview">${avatarSvg(1,key)}</div><strong>${a.name}</strong></button>`).join('');

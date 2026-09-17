@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#315f57">
+  <title>Make My Answer Bigger</title>
+  <style>
+    :root{--ink:#24322f;--green:#315f57;--mint:#dcefe9;--cream:#fffaf0;--gold:#e7ad46;--coral:#dc775f;--paper:#fff;--line:#d8e1dd;--shadow:0 12px 30px rgba(36,50,47,.12)}
+    *{box-sizing:border-box} body{margin:0;font-family:ui-rounded,"Avenir Next",Avenir,"Trebuchet MS",Arial,sans-serif;background:linear-gradient(145deg,#f7efe1,#edf5f1);color:var(--ink);min-height:100vh}
+    button,input,textarea{font:inherit} button{touch-action:manipulation}.app{max-width:980px;margin:auto;min-height:100vh;padding:18px}.card{background:rgba(255,255,255,.96);border:1px solid rgba(49,95,87,.12);border-radius:28px;box-shadow:var(--shadow);padding:clamp(20px,4vw,38px)}
+    h1{font-size:clamp(2rem,6vw,3.65rem);line-height:1;margin:.1em 0;color:var(--green);letter-spacing:-.04em}h2{font-size:clamp(1.45rem,4vw,2.2rem);margin:.2em 0 .55em}p{font-size:1.05rem;line-height:1.5}.eyebrow{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#6a827c}.sub{color:#526a64;margin:.5rem 0 1.4rem}
+    .hidden{display:none!important}.row{display:flex;gap:12px;flex-wrap:wrap}.primary,.secondary,.ghost{border:0;border-radius:16px;padding:14px 20px;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;box-shadow:0 6px 0 #234a43}.primary:active{transform:translateY(3px);box-shadow:0 3px 0 #234a43}.secondary{background:var(--gold);color:#2f2717}.ghost{background:#eef4f1;color:var(--green)}
+    .choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:12px}.check,.avatar-choice,.goal-choice{position:relative;border:2px solid var(--line);background:#fff;border-radius:20px;padding:15px;text-align:center;cursor:pointer;min-height:115px}.check input,.goal-choice input{position:absolute;opacity:0}.check:has(input:checked),.goal-choice:has(input:checked),.avatar-choice.selected{border-color:var(--green);background:var(--mint);box-shadow:inset 0 0 0 2px #fff}.icon{display:block;font-size:2.3rem;margin-bottom:4px}.check strong,.avatar-choice strong,.goal-choice strong{display:block}.goal-choice{min-height:90px}.goal-number{display:block;font-size:2rem;font-weight:900;color:var(--green)}.avatar-preview{height:105px}.avatar-preview svg{width:100%;height:100%}.tiny{font-size:.82rem;color:#657770}.section{margin:24px 0}.field{width:100%;border:2px solid var(--line);border-radius:16px;padding:14px 16px;background:#fff;color:var(--ink)}textarea.field{min-height:84px;resize:vertical}.setup-note{background:#fff6dd;border-radius:16px;padding:12px 15px;color:#5f512c}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.mini-button{border:0;background:#edf3f0;color:var(--green);border-radius:999px;padding:9px 13px;font-weight:800;cursor:pointer}.play-layout{display:grid;grid-template-columns:minmax(180px,.7fr) minmax(0,2fr);gap:22px}.character-stage{background:radial-gradient(circle at 50% 35%,#fff 0,#f4fbf7 55%,#e2efe9 100%);border-radius:24px;min-height:270px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:15px}.character-face{width:150px;height:160px;line-height:1;filter:drop-shadow(0 10px 8px rgba(36,50,47,.16));transition:transform .38s cubic-bezier(.2,1.5,.4,1)}.character-face svg{width:100%;height:100%;overflow:visible}.character-name{font-weight:900;color:var(--green);margin-top:8px}.stage-name{font-size:.82rem;color:#6b7f79;margin-top:2px}.spark{position:absolute;font-size:24px;animation:pop .7s ease-out forwards;pointer-events:none}@keyframes pop{0%{transform:translate(0,15px) scale(.2);opacity:0}45%{opacity:1}100%{transform:translate(var(--x),-75px) scale(1.2);opacity:0}}
+    .progress-label{margin-top:14px;font-size:.87rem;color:#60746f}.progress{width:80%;height:10px;background:#dbe7e2;border-radius:999px;overflow:hidden;margin-top:6px}.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--coral));transition:width .35s}
+    .speech{background:#fff;border:2px solid var(--line);border-radius:22px;padding:16px;margin-bottom:16px;position:relative}.speech:before{content:"";position:absolute;left:-12px;top:35px;width:20px;height:20px;background:#fff;border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}.answer-label{font-weight:900;color:var(--green);font-size:.9rem}.answer-text{font-size:1.18rem;margin-top:5px;white-space:pre-wrap}.detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}.detail-button{border:2px solid var(--line);background:#fff;border-radius:18px;padding:13px 9px;cursor:pointer;color:var(--ink);font-weight:900}.detail-button .icon{font-size:1.9rem}.detail-button.active{background:var(--mint);border-color:var(--green)}
+    .prompt-panel{margin-top:16px;background:#f6faf8;border:2px solid #dfebe6;border-radius:22px;padding:18px}.prompt-head{display:flex;align-items:center;gap:10px}.prompt-head .icon{margin:0}.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.chip{border:2px solid #d9e4df;background:#fff;border-radius:999px;padding:10px 14px;cursor:pointer;color:var(--ink);font-weight:750}.chip.selected{border-color:var(--coral);background:#fff0eb}.selected-cues{margin:16px 0 0;padding:13px;border-radius:16px;background:#fff7e5}.cue-tag{display:inline-flex;gap:5px;align-items:center;background:#fff;border:1px solid #ecd9aa;border-radius:999px;padding:7px 10px;margin:4px;font-size:.9rem}.cue-tag button{border:0;background:transparent;cursor:pointer;color:#855;font-weight:900}.celebrate{position:fixed;inset:0;display:grid;place-items:center;background:rgba(31,52,47,.32);z-index:5;padding:20px}.celebrate-box{max-width:480px;text-align:center;background:#fff;border-radius:28px;padding:30px;box-shadow:0 25px 60px rgba(0,0,0,.24);animation:arrive .4s ease-out}.celebrate-char{font-size:100px}.celebrate h2{color:var(--green)}@keyframes arrive{from{transform:scale(.65) rotate(-3deg);opacity:0}to{transform:scale(1);opacity:1}}
+    .footer-note{text-align:center;color:#6a7d78;font-size:.83rem;margin:16px}.custom-wrap{margin-top:10px}.status{min-height:1.4em;font-weight:800;color:var(--coral);margin:8px 0}.edit-box{background:#fffaf0;border-radius:18px;padding:14px;margin-top:16px}
+    @media(max-width:700px){.app{padding:10px}.card{border-radius:22px;padding:19px}.play-layout{grid-template-columns:1fr}.character-stage{min-height:220px}.character-face{width:125px;height:135px}.speech:before{display:none}.detail-grid{grid-template-columns:repeat(3,1fr)}.detail-button{font-size:.86rem}.topbar{align-items:flex-start}}
+    .celebration-scene{position:relative;height:215px;max-width:320px;margin:auto;isolation:isolate}
+    .celebration-scene .character-face{position:absolute;bottom:14px;left:50%;margin-left:-75px!important;z-index:2}
+    .celebration-effects{position:absolute;inset:0;pointer-events:none}
+    .celebration-effects svg{width:100%;height:100%}
+    .star-burst{transform-box:fill-box;transform-origin:center;animation:star-reveal 1.6s ease-out both}
+    @keyframes star-reveal{from{opacity:0;transform:scale(.1) rotate(-60deg)}60%{opacity:1;transform:scale(1.2) rotate(10deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+    .rainbow-arc{stroke-dasharray:400;stroke-dashoffset:400;animation:rainbow-reveal 1.4s ease-out forwards}
+    @keyframes rainbow-reveal{to{stroke-dashoffset:0}}
+    .celebration-dance .character-face{animation:happy-dance .65s ease-in-out 3}
+    @keyframes happy-dance{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-18px) rotate(-10deg)}75%{transform:translateY(-18px) rotate(10deg)}}
+    .celebration-rainbow .character-face{animation:arrive .7s ease-out}
+    .celebration-stars .character-face{animation:arrive .6s ease-out}
+    @media(prefers-reduced-motion:reduce){.star-burst,.rainbow-arc,.celebration-scene .character-face{animation:none!important}.rainbow-arc{stroke-dashoffset:0}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <section id="setup" class="card">
+    <div class="eyebrow">Clinician setup</div><h1>Make My Answer Bigger</h1>
+    <p class="sub">Choose what the learner sees. Keep it to two or three buttons when fewer choices will help.</p>
+    <div class="section"><h2>1. Pick the detail buttons</h2><div id="categoryChecks" class="choice-grid"></div></div>
+    <div class="section"><h2>2. How many details will make it grow?</h2><p class="sub">Choose a comfortable goal for this learner today.</p><div class="choice-grid"><label class="goal-choice"><input type="radio" name="detailGoal" value="1" checked><span class="goal-number">1</span><strong>One detail</strong></label><label class="goal-choice"><input type="radio" name="detailGoal" value="2"><span class="goal-number">2</span><strong>Two details</strong></label><label class="goal-choice"><input type="radio" name="detailGoal" value="3"><span class="goal-number">3</span><strong>Three details</strong></label></div></div>
+    <div class="section"><h2>3. Pick one growing friend</h2><div id="avatarChoices" class="choice-grid"></div></div>
+    <div class="section"><h2>4. Add the learner's first answer</h2><textarea id="startingAnswer" class="field" placeholder="Example: I went swimming.">I went swimming.</textarea></div>
+    <div id="setupStatus" class="status" aria-live="polite"></div>
+    <button id="startButton" class="primary">Start activity →</button>
+  </section>
+
+  <section id="activity" class="card hidden">
+    <div class="topbar"><div><div class="eyebrow">Help your listener understand more</div><h2>What detail can we add?</h2></div><div class="row"><button id="soundButton" class="mini-button" aria-pressed="true">🔊 Sound on</button><button id="settingsButton" class="mini-button">⚙ Setup</button></div></div>
+    <div class="play-layout">
+      <div id="characterStage" class="character-stage"><div id="characterFace" class="character-face"></div><div id="characterName" class="character-name">Sprig</div><div id="stageName" class="stage-name">Ready to grow</div><div id="progressLabel" class="progress-label">Your idea is growing</div><div class="progress"><i id="progressFill"></i></div></div>
+      <div>
+        <div class="speech"><div class="answer-label">MY ANSWER</div><div id="answerDisplay" class="answer-text"></div></div>
+        <div id="detailButtons" class="detail-grid"></div>
+        <div id="promptPanel" class="prompt-panel hidden"></div>
+        <div id="selectedCues" class="selected-cues hidden"><strong>Ideas I want to remember:</strong><div id="cueList"></div></div>
+        <div class="edit-box"><div class="answer-label">Now give your bigger answer</div><p style="margin:.35rem 0 .7rem">Say it out loud. Typing it below is optional.</p><textarea id="biggerAnswer" class="field" placeholder="Optional: type the new answer here"></textarea><div id="answerStatus" class="status" aria-live="polite"></div><div class="row" style="margin-top:10px"><button id="updateButton" class="secondary">✨ I added a detail!</button><button id="resetButton" class="ghost">Start over</button></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="celebrate" class="celebrate hidden" role="dialog" aria-modal="true" aria-labelledby="celebrationTitle"><div class="celebrate-box"><div id="celebrationScene" class="celebration-scene"><div id="celebrationEffects" class="celebration-effects" aria-hidden="true"></div><div id="celebrateChar" class="character-face"></div></div><h2 id="celebrationTitle">Ta-da! Look how your idea grew!</h2><p id="finalAnswer"></p><p><strong>You added more for your listener to picture!</strong></p><div class="row" style="justify-content:center"><button id="keepGoingButton" class="primary">Add another detail</button><button id="newAnswerButton" class="ghost">Try a new answer</button></div></div></div>
+<div class="footer-note">Works offline • No information leaves this device</div>
+
+<script>
+const categories={
+ who:{icon:'👤',label:'Who?',question:'Who was there?',prompts:['a family member','a friend','a teacher','someone who helped','someone else']},
+ where:{icon:'📍',label:'Where?',question:'Where did it happen?',prompts:['at home','at school','outside','in the community','another place']},
+ when:{icon:'🕒',label:'When?',question:'When did it happen?',prompts:['this morning','after school','yesterday','on the weekend','another time']},
+ what:{icon:'➡️',label:'What?',question:'What happened?',prompts:['what happened first','what happened next','what someone did','what changed','another action']},
+ why:{icon:'🔎',label:'Why / How?',question:'Why or how did it happen?',prompts:['because…','so…','by…','the reason was…','my own idea']},
+ feelings:{icon:'💭',label:'Thoughts / Feelings',question:'What did someone think or feel?',prompts:['happy','excited','surprised','worried','frustrated','another feeling']}
+};
+const avatars={sprig:{name:'Sprig'},nova:{name:'Nova'},puff:{name:'Puff'}};
+let state={enabled:['who','where','feelings'],avatar:'sprig',goal:1,active:null,cues:[],growth:0,sound:true};
+const $=id=>document.getElementById(id);
+let audioContext=null;
+function audio(){if(!audioContext)audioContext=new (window.AudioContext||window.webkitAudioContext)();if(audioContext.state==='suspended')audioContext.resume();return audioContext}
+function tone(frequency,duration=.12,delay=0,volume=.045,type='sine'){
+ if(!state.sound)return;const ctx=audio(),osc=ctx.createOscillator(),gain=ctx.createGain(),start=ctx.currentTime+delay;osc.type=type;osc.frequency.setValueAtTime(frequency,start);gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(volume,start+.018);gain.gain.exponentialRampToValueAtTime(.0001,start+duration);osc.connect(gain).connect(ctx.destination);osc.start(start);osc.stop(start+duration+.02)
+}
+function growSound(){
+ [[392,.16,0],[494,.16,.1],[587,.18,.2],[784,.32,.32]].forEach(([f,d,t])=>tone(f,d,t,.05,'triangle'));
+ tone(392,.48,.32,.022,'sine');tone(587,.48,.32,.018,'sine')
+}
+function celebrateSound(){
+ [[523,.18,0],[659,.18,.12],[784,.18,.24],[1047,.3,.38],[988,.16,.68],[1047,.48,.82]].forEach(([f,d,t])=>tone(f,d,t,.052,'triangle'));
+ [523,659,784,1047].forEach((f,i)=>tone(f,.72,1.12,.026-(i*.003),'sine'))
+}
+function toggleSound(){state.sound=!state.sound;$('soundButton').textContent=state.sound?'🔊 Sound on':'🔇 Sound off';$('soundButton').setAttribute('aria-pressed',String(state.sound))}
+
+function sprigSvg(stage){
+ const leaf=stage>=1?`<g><path d="M75 67 C55 54 50 34 58 24 C76 28 83 45 75 67Z" fill="#79ae72"/><path d="M75 67 C91 51 104 46 115 52 C109 69 93 77 75 67Z" fill="#4f8d68"/><path d="M75 69 C75 54 75 42 70 31" fill="none" stroke="#315f57" stroke-width="5" stroke-linecap="round"/></g>`:'';
+ const leaves=stage>=2?`<g><ellipse cx="43" cy="84" rx="22" ry="12" transform="rotate(24 43 84)" fill="#86bc72"/><ellipse cx="108" cy="88" rx="23" ry="12" transform="rotate(-24 108 88)" fill="#6aa46f"/></g>`:'';
+ const flower=stage>=3?`<g transform="translate(75 18)"><circle r="9" cy="-8" fill="#ef9c83"/><circle r="9" cx="8" fill="#f3b36a"/><circle r="9" cx="-8" fill="#e98278"/><circle r="7" fill="#f4cf63"/></g>`:'';
+ const bodyY=[83,76,68,61][stage],bodyH=[47,58,69,76][stage];
+ return `<svg viewBox="0 0 150 160" role="img" aria-label="Sprig growth stage ${stage+1}">${flower}${leaf}${leaves}<ellipse cx="75" cy="143" rx="45" ry="9" fill="#315f57" opacity=".12"/><rect x="35" y="${bodyY}" width="80" height="${bodyH}" rx="38" fill="${stage>=3?'#d8a765':'#d9b37a'}"/><circle cx="61" cy="${bodyY+25}" r="4" fill="#263b36"/><circle cx="89" cy="${bodyY+25}" r="4" fill="#263b36"/><path d="M65 ${bodyY+39} Q75 ${bodyY+47} 85 ${bodyY+39}" fill="none" stroke="#263b36" stroke-width="4" stroke-linecap="round"/>${stage>=2?`<circle cx="50" cy="${bodyY+38}" r="6" fill="#e98a78" opacity=".55"/><circle cx="100" cy="${bodyY+38}" r="6" fill="#e98a78" opacity=".55"/>`:''}</svg>`;
+}
+function novaSvg(stage){
+ const rays=stage>=2?`<g fill="#f6c85f" opacity=".9"><path d="M75 7l7 24H68z"/><path d="M133 55l-23 8 4-15z"/><path d="M17 55l23 8-4-15z"/></g>`:'';
+ const crown=stage>=3?`<path d="M53 34l9-21 13 15 14-15 8 23z" fill="#e78d6b" stroke="#315f57" stroke-width="3" stroke-linejoin="round"/>`:'';
+ const size=[31,39,47,53][stage];
+ return `<svg viewBox="0 0 150 160" role="img" aria-label="Nova growth stage ${stage+1}">${rays}${crown}<ellipse cx="75" cy="143" rx="45" ry="9" fill="#315f57" opacity=".12"/><path d="M75 ${75-size} L86 ${62-size/3} L${75+size} 67 L94 86 L99 ${75+size} L75 105 L51 ${75+size} L56 86 L${75-size} 67 L64 ${62-size/3}Z" fill="${stage>=2?'#f5c85e':'#f0b95a'}" stroke="#315f57" stroke-width="4" stroke-linejoin="round"/><circle cx="62" cy="75" r="4" fill="#263b36"/><circle cx="88" cy="75" r="4" fill="#263b36"/><path d="M64 89 Q75 99 86 89" fill="none" stroke="#263b36" stroke-width="4" stroke-linecap="round"/>${stage>=1?`<circle cx="50" cy="88" r="6" fill="#e88975" opacity=".6"/><circle cx="100" cy="88" r="6" fill="#e88975" opacity=".6"/>`:''}</svg>`;
+}
+function puffSvg(stage){
+ const ears=stage>=1?`<path d="M45 65 Q25 25 58 42Z" fill="#a8d7d1" stroke="#315f57" stroke-width="4"/><path d="M105 65 Q125 25 92 42Z" fill="#a8d7d1" stroke="#315f57" stroke-width="4"/>`:'';
+ const wings=stage>=2?`<path d="M35 90 Q4 72 16 112 Q27 126 43 106Z" fill="#d8eee9" stroke="#315f57" stroke-width="4"/><path d="M115 90 Q146 72 134 112 Q123 126 107 106Z" fill="#d8eee9" stroke="#315f57" stroke-width="4"/>`:'';
+ const halo=stage>=3?`<ellipse cx="75" cy="25" rx="31" ry="9" fill="none" stroke="#e7ad46" stroke-width="7"/>`:'';
+ const r=[36,42,48,53][stage];
+ return `<svg viewBox="0 0 150 160" role="img" aria-label="Puff growth stage ${stage+1}">${halo}${ears}${wings}<ellipse cx="75" cy="143" rx="45" ry="9" fill="#315f57" opacity=".12"/><circle cx="75" cy="91" r="${r}" fill="#9bcfc9" stroke="#315f57" stroke-width="4"/><circle cx="61" cy="83" r="4" fill="#263b36"/><circle cx="89" cy="83" r="4" fill="#263b36"/><path d="M65 98 Q75 108 85 98" fill="none" stroke="#263b36" stroke-width="4" stroke-linecap="round"/>${stage>=2?`<circle cx="49" cy="98" r="6" fill="#e88975" opacity=".55"/><circle cx="101" cy="98" r="6" fill="#e88975" opacity=".55"/>`:''}</svg>`;
+}
+function avatarSvg(stage,type=state.avatar){return type==='nova'?novaSvg(stage):type==='puff'?puffSvg(stage):sprigSvg(stage)}
+
+function renderSetup(){
+ $('categoryChecks').innerHTML=Object.entries(categories).map(([key,c])=>`<label class="check"><input type="checkbox" value="${key}" ${state.enabled.includes(key)?'checked':''}><span class="icon">${c.icon}</span><strong>${c.label}</strong><span class="tiny">${c.question}</span></label>`).join('');
+ $('avatarChoices').innerHTML=Object.entries(avatars).map(([key,a])=>`<button class="avatar-choice ${state.avatar===key?'selected':''}" data-avatar="${key}"><div class="avatar-preview">${avatarSvg(1,key)}</div><strong>${a.name}</strong></button>`).join('');
+ document.querySelectorAll('[data-avatar]').forEach(b=>b.onclick=()=>{state.avatar=b.dataset.avatar;renderSetup()});
+}
+function start(){
+ state.enabled=[...document.querySelectorAll('#categoryChecks input:checked')].map(x=>x.value);
+ state.goal=Number(document.querySelector('input[name="detailGoal"]:checked').value);
+ if(!state.enabled.length){$('setupStatus').textContent='Choose at least one detail button.';return}
+ $('setupStatus').textContent='';state.active=null;state.cues=[];state.growth=0;
+ $('answerDisplay').textContent=$('startingAnswer').value.trim()||'Tell me your answer.';$('biggerAnswer').value='';
+ $('characterFace').innerHTML=avatarSvg(0);$('characterName').textContent=avatars[state.avatar].name;
+ $('detailButtons').innerHTML=state.enabled.map(key=>{let c=categories[key];return `<button class="detail-button" data-key="${key}"><span class="icon">${c.icon}</span>${c.label}</button>`}).join('');
+ document.querySelectorAll('.detail-button').forEach(b=>b.onclick=()=>openCategory(b.dataset.key));
+ updateGrowth();updateCues();$('promptPanel').classList.add('hidden');$('setup').classList.add('hidden');$('activity').classList.remove('hidden');
+}
+function openCategory(key){
+ state.active=key;$('answerStatus').textContent='';document.querySelectorAll('.detail-button').forEach(b=>b.classList.toggle('active',b.dataset.key===key));
+ let c=categories[key];$('promptPanel').innerHTML=`<div class="prompt-head"><span class="icon">${c.icon}</span><div><strong>${c.question}</strong><div class="tiny">Tap any ideas that might help. You can pick more than one.</div></div></div><div class="chips">${c.prompts.map((p,i)=>`<button class="chip ${state.cues.some(x=>x.key===key&&x.text===p)?'selected':''}" data-i="${i}">${p}</button>`).join('')}<button class="chip" data-custom="1">✏️ my own words</button></div><div id="customWrap" class="custom-wrap hidden"><input id="customInput" class="field" placeholder="Type a word or short idea"><button id="addCustom" class="secondary" style="margin-top:8px">Add idea</button></div>`;
+ $('promptPanel').classList.remove('hidden');$('promptPanel').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>toggleCue(key,c.prompts[+b.dataset.i]));
+ $('promptPanel').querySelector('[data-custom]').onclick=()=>{$('customWrap').classList.remove('hidden');$('customInput').focus()};
+ $('addCustom').onclick=()=>{let v=$('customInput').value.trim();if(v){toggleCue(key,v);$('customInput').value=''}};
+}
+function toggleCue(key,text){let i=state.cues.findIndex(x=>x.key===key&&x.text===text);if(i>=0)state.cues.splice(i,1);else state.cues.push({key,text});updateCues();openCategory(key)}
+function updateCues(){
+ $('selectedCues').classList.toggle('hidden',!state.cues.length);$('cueList').innerHTML=state.cues.map((x,i)=>`<span class="cue-tag">${categories[x.key].icon} ${escapeHtml(x.text)} <button aria-label="Remove" data-remove="${i}">×</button></span>`).join('');
+ document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{state.cues.splice(+b.dataset.remove,1);updateCues();if(state.active)openCategory(state.active)});
+}
+function grow(amount){state.growth+=amount;updateGrowth()}
+function updateGrowth(){let stage=state.growth===0?0:Math.min(3,Math.ceil((state.growth/state.goal)*3));$('characterFace').innerHTML=avatarSvg(stage);$('characterFace').style.transform='scale(1)';$('stageName').textContent=state.growth>=state.goal?'Fully grown!':state.growth===0?'Ready to grow':'Growing stronger!';$('progressLabel').textContent=state.growth===0?`${state.goal} ${state.goal===1?'detail':'details'} will make your idea grow`:`${Math.min(state.growth,state.goal)} of ${state.goal} ${state.goal===1?'detail':'details'} added`;$('progressFill').style.width=`${Math.min(100,state.growth/state.goal*100)}%`}
+function sparkle(){let box=$('characterStage').getBoundingClientRect();for(let i=0;i<5;i++){let s=document.createElement('span');s.className='spark';s.textContent=i%2?'✨':'⭐';s.style.left=(box.width*.35+Math.random()*box.width*.3)+'px';s.style.top=(box.height*.55)+'px';s.style.setProperty('--x',(-50+Math.random()*100)+'px');$('characterStage').appendChild(s);setTimeout(()=>s.remove(),750)}}
+function updateAnswer(){if(!state.active){$('answerStatus').textContent='Choose a detail first, then give your answer.';return}let v=$('biggerAnswer').value.trim();if(v){$('answerDisplay').textContent=v;$('biggerAnswer').value=''}grow(1);sparkle();growSound();$('answerStatus').textContent=v?'Your new answer was saved.':'Great answering out loud!';state.active=null;document.querySelectorAll('.detail-button').forEach(b=>b.classList.remove('active'));$('promptPanel').classList.add('hidden');$('updateButton').textContent='🌟 Your idea grew!';setTimeout(()=>$('updateButton').textContent='✨ I added a detail!',1100);if(state.growth>=state.goal)setTimeout(finish,650)}
+let celebrationBag=[],lastCelebration=null;
+function nextCelebration(){
+ if(!celebrationBag.length){
+  celebrationBag=['stars','rainbow','dance'];
+  for(let i=celebrationBag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[celebrationBag[i],celebrationBag[j]]=[celebrationBag[j],celebrationBag[i]]}
+  if(celebrationBag[0]===lastCelebration)[celebrationBag[0],celebrationBag[1]]=[celebrationBag[1],celebrationBag[0]];
+ }
+ lastCelebration=celebrationBag.shift();return lastCelebration;
+}
+function celebrationArt(kind){
+ if(kind==='rainbow')return '<svg viewBox="0 0 320 215">'+['#e8877e','#efb962','#f3d879','#8cbd9c','#7bb5ce'].map((color,i)=>`<path class="rainbow-arc" d="M${30+i*11} 145 A${130-i*11} ${130-i*11} 0 0 1 ${290-i*11} 145" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round" style="animation-delay:${i*.07}s"/>`).join('')+'</svg>';
+ if(kind==='dance')return '<svg viewBox="0 0 320 215"><ellipse cx="160" cy="195" rx="98" ry="12" fill="#dcefe9"/><g fill="#315f57" font-size="36"><text x="30" y="92">♪</text><text x="252" y="68">♫</text></g><g fill="#e7ad46"><circle cx="49" cy="130" r="5"/><circle cx="278" cy="113" r="5"/></g></svg>';
+ return '<svg viewBox="0 0 320 215">'+[[40,75,1],[92,31,.75],[160,15,.7],[237,33,.8],[280,88,1],[37,150,.65],[284,160,.6]].map(([x,y,s],i)=>`<g transform="translate(${x} ${y}) scale(${s})"><path class="star-burst" style="animation-delay:${i*.08}s" d="M0 -17 L5 -5 L18 -5 L8 3 L12 16 L0 8 L-12 16 L-8 3 L-18 -5 L-5 -5Z" fill="${i%2?'#eaa18a':'#efc65c'}"/></g>`).join('')+'</svg>';
+}
+function finish(){let v=$('biggerAnswer').value.trim()||$('answerDisplay').textContent;$('finalAnswer').textContent='“'+v+'”';const kind=nextCelebration();$('celebrationScene').className='celebration-scene celebration-'+kind;$('celebrationEffects').innerHTML=celebrationArt(kind);$('celebrateChar').innerHTML=avatarSvg(3);$('celebrate').classList.remove('hidden');celebrateSound()}
+function resetActivity(){$('startingAnswer').value='';$('activity').classList.add('hidden');$('setup').classList.remove('hidden');renderSetup();window.scrollTo(0,0)}
+function escapeHtml(s){return s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+$('startButton').onclick=start;$('soundButton').onclick=toggleSound;$('settingsButton').onclick=()=>{$('activity').classList.add('hidden');$('setup').classList.remove('hidden')};$('updateButton').onclick=updateAnswer;$('resetButton').onclick=resetActivity;$('keepGoingButton').onclick=()=>{$('celebrate').classList.add('hidden')};$('newAnswerButton').onclick=()=>{$('celebrate').classList.add('hidden');resetActivity()};renderSetup();
+</script>
+</body>
+</html>

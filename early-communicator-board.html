@@ -1213,5 +1213,17 @@ function addChoice(){
     Visit my website
   </a>
 </footer>
+    <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register(
+      "./early-communicator-sw.js",
+      { scope: "./early-communicator-board.html" }
+    ).catch((error) => {
+      console.error("Offline setup failed:", error);
+    });
+  });
+}
+</script>
 </body>
 </html>

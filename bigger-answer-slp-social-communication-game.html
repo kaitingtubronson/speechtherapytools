@@ -164,5 +164,17 @@ function resetActivity(){$('startingAnswer').value='';$('activity').classList.ad
 function escapeHtml(s){return s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 $('startButton').onclick=start;$('soundButton').onclick=toggleSound;$('settingsButton').onclick=()=>{$('activity').classList.add('hidden');$('setup').classList.remove('hidden')};$('updateButton').onclick=updateAnswer;$('resetButton').onclick=resetActivity;$('keepGoingButton').onclick=()=>{$('celebrate').classList.add('hidden')};$('newAnswerButton').onclick=()=>{$('celebrate').classList.add('hidden');resetActivity()};renderSetup();
 </script>
+
+  <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./bigger-answer-sw.js", {
+      scope: "./bigger-answer-slp-social-communication-game.html"
+    }).catch((error) => {
+      console.error("Offline setup failed:", error);
+    });
+  });
+}
+</script>
 </body>
 </html>

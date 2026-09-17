@@ -38,7 +38,9 @@
   <section id="setup" class="card">
     <div class="eyebrow">Clinician setup</div><div class="row" style="margin:10px 0">
   <button class="mini-button" onclick="changeLanguage('en')">English</button>
+  <button class="mini-button" onclick="changeLanguage('es')">Español</button>
   <button class="mini-button" onclick="changeLanguage('zh')">中文（繁體）</button>
+  <button class="mini-button" onclick="changeLanguage('pt')">Português</button>
 </div>
                                            
                                            <h1>Make My Answer Bigger</h1>
@@ -69,20 +71,12 @@
 <div id="celebrate" class="celebrate hidden" role="dialog" aria-modal="true" aria-labelledby="celebrationTitle"><div class="celebrate-box"><div id="celebrationScene" class="celebration-scene"><div id="celebrationEffects" class="celebration-effects" aria-hidden="true"></div><div id="celebrateChar" class="character-face"></div></div><h2 id="celebrationTitle">Ta-da! Look how your idea grew!</h2><p id="finalAnswer"></p><p><strong>You added more for your listener to picture!</strong></p><div class="row" style="justify-content:center"><button id="keepGoingButton" class="primary">Add another detail</button><button id="newAnswerButton" class="ghost">Try a new answer</button></div></div></div>
 <div class="footer-note">Works offline • No information leaves this device</div>
 
-<script>
-  const appLanguage = {
+<script>const appLanguage = {
   en: {
     name: "English",
     title: "Make My Answer Bigger",
     setup: "Clinician setup",
-    intro: "Choose what the learner sees. Keep it to two or three buttons when fewer choices will help.",
     start: "Start activity →",
-    help: "Help your listener understand more",
-    question: "What detail can we add?",
-    answer: "MY ANSWER",
-    bigger: "Now give your bigger answer",
-    add: "✨ I added a detail!",
-    reset: "Start over",
     who: "Who?",
     where: "Where?",
     when: "When?",
@@ -91,24 +85,43 @@
     feelings: "Thoughts / Feelings"
   },
 
+  es: {
+    name: "Español",
+    title: "Haz mi respuesta más grande",
+    setup: "Configuración del terapeuta",
+    start: "Comenzar actividad →",
+    who: "¿Quién?",
+    where: "¿Dónde?",
+    when: "¿Cuándo?",
+    what: "¿Qué pasó?",
+    why: "¿Por qué / Cómo?",
+    feelings: "Pensamientos / Sentimientos"
+  },
+
   zh: {
     name: "中文（繁體）",
     title: "讓我的回答更豐富",
     setup: "治療師設定",
-    intro: "選擇孩子看到的內容。需要時可以減少選項。",
     start: "開始活動 →",
-    help: "幫助聽的人了解更多",
-    question: "我們可以加入什麼細節？",
-    answer: "我的回答",
-    bigger: "現在說出更完整的回答",
-    add: "✨ 我加入了一個細節！",
-    reset: "重新開始",
     who: "誰？",
     where: "哪裡？",
     when: "什麼時候？",
     what: "發生什麼事？",
     why: "為什麼／如何？",
     feelings: "想法／感受"
+  },
+
+  pt: {
+    name: "Português",
+    title: "Deixe minha resposta maior",
+    setup: "Configuração do terapeuta",
+    start: "Começar atividade →",
+    who: "Quem?",
+    where: "Onde?",
+    when: "Quando?",
+    what: "O que aconteceu?",
+    why: "Por quê / Como?",
+    feelings: "Pensamentos / Sentimentos"
   }
 };
 

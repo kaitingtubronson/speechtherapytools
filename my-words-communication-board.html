@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#162b43"><title>My Words</title>
+<meta name="description" content="Choose one to six large speaking buttons in English, Spanish, Portuguese, Traditional Chinese, and Simplified Chinese.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23162b43'/%3E%3Cpath d='M8 16h16M16 8v16' stroke='white' stroke-width='4'/%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:#162b43;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:1000px;margin:auto;padding:20px;min-height:100svh;display:flex;flex-direction:column;gap:18px}header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}h1{font-size:1.4rem;letter-spacing:-.03em;margin:0}select{font:inherit;font-size:1rem;color:#162b43;border:1px solid #98a7b7;background:white;border-radius:12px;padding:12px;max-width:100%;min-height:48px}.board{display:grid;grid-template-columns:1fr 1fr;gap:18px;flex:1;min-height:65svh}.word{border:3px solid var(--edge);border-radius:26px;background:var(--bg);color:#162b43;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px 12px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;font:inherit;box-shadow:0 5px 0 var(--edge);transition:transform .1s}.word:active,.word.selected{transform:translateY(4px);box-shadow:0 1px 0 var(--edge);outline:4px solid #162b43;outline-offset:-9px}.word:focus-visible,select:focus-visible{outline:4px solid #164ecb;outline-offset:4px}.icon{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:clamp(3.4rem,9vw,6.5rem);line-height:1.2}.label{font-weight:750;font-size:clamp(1.5rem,4.5vw,2.6rem);line-height:1.18;text-align:center;overflow-wrap:anywhere}.like{--bg:#e0f4e6;--edge:#4b9462}.dislike{--bg:#fff0d4;--edge:#bd8431}.stop{--bg:#ffe2e2;--edge:#c95a61}.more{--bg:#dfeeff;--edge:#547fb0}footer{text-align:center;min-height:2.8em;font-size:1rem;line-height:1.4;color:#47566a}#message{font-weight:650}#notice{margin:4px 0 0;font-size:1rem}@media(max-width:420px){main{padding:14px;gap:14px}.board{gap:14px}.word{border-radius:20px;padding:18px 8px}}@media(prefers-reduced-motion:reduce){.word{transition:none}}@media print{main{min-height:0}.board{min-height:650px}select,footer{display:none}.word{box-shadow:none;break-inside:avoid}}
+.word[hidden]{display:none}.go{--bg:#d9f6ed;--edge:#24866d}.done{--bg:#eee5ff;--edge:#8962b4}.board[data-count="1"]{grid-template-columns:1fr}.controls{background:white;border:1px solid #98a7b7;border-radius:12px;padding:12px 16px}.controls summary{cursor:pointer;font-size:1rem;min-height:24px}.choices{display:flex;flex-wrap:wrap;gap:10px 22px;padding-top:12px}.choices label{display:flex;align-items:center;gap:8px;min-height:44px;font-size:1.05rem}.choices input{width:24px;height:24px;accent-color:#162b43}#minimum{font-size:1rem;margin:10px 0 0;color:#47566a}@media print{.controls{display:none}}
+</style>
+</head>
+<body><main>
+<header><h1 id="title">My words</h1><select id="language" aria-label="Language"><option value="en">English</option><option value="es">Español</option><option value="pt">Português</option><option value="zhTW">繁體中文</option><option value="zhCN">简体中文</option></select></header>
+<details class="controls"><summary><span id="chooseTitle">Choose buttons</span> · <span id="count">6 / 6</span></summary><div class="choices" id="choices"></div><p id="minimum">Keep at least one button selected.</p></details>
+<section class="board" aria-label="Communication board" id="board">
+<button type="button" class="word like" data-word="0"><span class="icon" aria-hidden="true">👍</span><span class="label">I like it</span></button>
+<button type="button" class="word dislike" data-word="1"><span class="icon" aria-hidden="true">👎</span><span class="label">I don’t like it</span></button>
+<button type="button" class="word stop" data-word="2"><span class="icon" aria-hidden="true">✋</span><span class="label">Stop</span></button>
+<button type="button" class="word more" data-word="3"><span class="icon" aria-hidden="true">➕</span><span class="label">More</span></button>
+<button type="button" class="word go" data-word="4"><span class="icon" aria-hidden="true">▶️</span><span class="label">Go</span></button>
+<button type="button" class="word done" data-word="5"><span class="icon" aria-hidden="true">✅</span><span class="label">All done</span></button>
+</section>
+<footer><div id="message" role="status" aria-live="polite">Tap a picture to speak.</div><p id="notice" role="status"></p></footer>
+</main>
+<script>
+'use strict';
+const translations={
+ en:{lang:'en-US',title:'My words',board:'Communication board',language:'Language',words:['I like it','I don’t like it','Stop','More'],hint:'Tap a picture to speak.',noVoice:'An English voice may need to be enabled on this device.',error:'Speech is unavailable. You can still point to the pictures.'},
+ es:{lang:'es-MX',title:'Mis palabras',board:'Tablero de comunicación',language:'Idioma',words:['Me gusta','No me gusta','Para','Más'],hint:'Toca una imagen para hablar.',noVoice:'Puede que necesites activar una voz en español en este dispositivo.',error:'La voz no está disponible. Puedes señalar las imágenes.'},
+ pt:{lang:'pt-BR',title:'Minhas palavras',board:'Prancha de comunicação',language:'Idioma',words:['Eu gosto','Eu não gosto','Pare','Mais'],hint:'Toque em uma imagem para falar.',noVoice:'Talvez seja necessário ativar uma voz em português neste dispositivo.',error:'A voz não está disponível. Você pode apontar para as imagens.'},
+ zhTW:{lang:'zh-TW',title:'我想說',board:'溝通板',language:'語言',words:['我喜歡','我不喜歡','停','還要'],hint:'點一下圖片，就會說出來。',noVoice:'這台裝置可能需要啟用國語語音。',error:'目前無法播放語音，你仍然可以指圖片。'},
+ zhCN:{lang:'zh-CN',title:'我想说',board:'沟通板',language:'语言',words:['我喜欢','我不喜欢','停','还要'],hint:'点一下图片，就会说出来。',noVoice:'这台设备可能需要启用普通话语音。',error:'目前无法播放语音，你仍然可以指图片。'}
+};
+const extras={en:['Go','Choose buttons','Keep at least one button selected.'],es:['Vamos','Elegir botones','Mantén al menos un botón seleccionado.'],pt:['Vamos','Escolher botões','Mantenha pelo menos um botão selecionado.'],zhTW:['開始','選擇按鈕','請至少選擇一個按鈕。'],zhCN:['开始','选择按钮','请至少选择一个按钮。']};
+const doneWords={en:'All done',es:'Terminé',pt:'Terminei',zhTW:'完成了',zhCN:'完成了'};
+for(const key of Object.keys(translations))translations[key].words.push(extras[key][0],doneWords[key]);
+let visible=[0,1,2,3,4,5];
+try{const saved=JSON.parse(localStorage.getItem('myWordsVisible'));if(Array.isArray(saved)&&saved.length>0&&saved.length<=6&&saved.every(i=>Number.isInteger(i)&&i>=0&&i<6)&&new Set(saved).size===saved.length)visible=saved;}catch{}
+const select=document.getElementById('language'),buttons=[...document.querySelectorAll('.word')],message=document.getElementById('message'),notice=document.getElementById('notice');
+const checks=buttons.map((b,i)=>{const label=document.createElement('label'),input=document.createElement('input'),text=document.createElement('span');input.type='checkbox';input.checked=visible.includes(i);input.addEventListener('change',()=>{if(!input.checked&&visible.length===1){input.checked=true;return;}visible=input.checked?[...visible,i].sort((a,b)=>a-b):visible.filter(x=>x!==i);renderVisibility();});label.append(input,text);document.getElementById('choices').append(label);return {input,text};});
+function renderVisibility(){buttons.forEach((b,i)=>b.hidden=!visible.includes(i));checks.forEach(({input},i)=>{input.checked=visible.includes(i);input.disabled=visible.length===1&&input.checked;});document.getElementById('count').textContent=visible.length+' / 6';document.getElementById('board').dataset.count=String(visible.length);try{localStorage.setItem('myWordsVisible',JSON.stringify(visible));}catch{}}
+function translateChoices(){document.getElementById('chooseTitle').textContent=extras[current][1];document.getElementById('minimum').textContent=extras[current][2];checks.forEach(({text},i)=>text.textContent=translations[current].words[i]);renderVisibility();}
+let current='en',timer,speaking=null,sequence=0;
+const synth=window.speechSynthesis;
+function getVoice(){if(!synth)return null;const code=translations[current].lang.toLowerCase(),voices=synth.getVoices();return voices.find(v=>v.lang.toLowerCase()===code)||voices.find(v=>v.lang.toLowerCase().split('-')[0]===code.split('-')[0])||null;}
+function refreshNotice(){notice.textContent=!synth?translations[current].error:(synth.getVoices().length&&!getVoice()?translations[current].noVoice:'');}
+function setLanguage(key){if(!Object.hasOwn(translations,key))throw new Error('Unsupported language');sequence++;if(synth)synth.cancel();current=key;select.value=key;const t=translations[key];document.documentElement.lang=t.lang;document.title=t.title;document.getElementById('title').textContent=t.title;document.getElementById('board').setAttribute('aria-label',t.board);select.setAttribute('aria-label',t.language);buttons.forEach((b,i)=>{b.querySelector('.label').textContent=t.words[i];b.classList.remove('selected');});message.textContent=t.hint;refreshNotice();try{localStorage.setItem('fourWordsLanguage',key);}catch{}}
+function say(index){const t=translations[current];message.textContent=t.words[index];buttons.forEach((b,i)=>b.classList.toggle('selected',i===index));clearTimeout(timer);timer=setTimeout(()=>buttons.forEach(b=>b.classList.remove('selected')),700);const id=++sequence;if(!synth){notice.textContent=t.error;return;}synth.cancel();speaking=new SpeechSynthesisUtterance(t.words[index]);speaking.lang=t.lang;speaking.rate=.85;const voice=getVoice();if(voice)speaking.voice=voice;speaking.onerror=e=>{if(id===sequence&&!['canceled','interrupted'].includes(e.error))notice.textContent=t.error;};speaking.onend=()=>{if(id===sequence)speaking=null;};synth.speak(speaking);}
+const originalSetLanguage=setLanguage;setLanguage=function(key){originalSetLanguage(key);translateChoices();};
+select.addEventListener('change',()=>setLanguage(select.value));buttons.forEach((b,i)=>b.addEventListener('click',()=>say(i)));
+if(synth)synth.addEventListener('voiceschanged',refreshNotice);
+try{const saved=localStorage.getItem('fourWordsLanguage');if(saved&&Object.hasOwn(translations,saved))current=saved;}catch{}
+setLanguage(current);
+if(document.modelContext?.registerTool){const lifecycle=new AbortController();try{Promise.resolve(document.modelContext.registerTool({name:'set_board_language',description:'Change the visible communication board language without speaking a message.',inputSchema:{type:'object',properties:{language:{type:'string',enum:Object.keys(translations)}},required:['language'],additionalProperties:false},annotations:{readOnlyHint:false},execute(input){if(!input||!Object.hasOwn(translations,input.language))throw new Error('Unsupported language');setLanguage(input.language);return {language:current,words:translations[current].words};}},{signal:lifecycle.signal})).catch(()=>{});}catch{}window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});}
+</script></body></html>

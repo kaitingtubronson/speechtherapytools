@@ -67,10 +67,12 @@ button{font-family:inherit;-webkit-appearance:none;appearance:none;touch-action:
   <div class="language-field">
     <label id="languageLabel" for="language">Language</label>
     <select id="language">
-      <option value="en">English</option>
-      <option value="es">Español</option>
-      <option value="zh">中文</option>
-      <option value="pt">Português</option>
+  <option value="en">English</option>
+  <option value="es">Español</option>
+  <option value="zh">简体中文</option>
+  <option value="zh-TW">繁體中文</option>
+  <option value="pt">Português</option>
+</select>
     </select>
   </div>
   <div class="field">
@@ -136,6 +138,20 @@ var translations={
     proud:"我为你感到骄傲！",earned:"做得好！你获得了一枚代币！⭐",keep:"继续",
     close:"关闭",trial:"尝试"
   },
+  "zh-TW":{
+    language:"語言",
+    title:"😊 代幣獎勵板",
+    trials:"嘗試次數",
+    reset:"重置代幣",
+    working:"我正在努力獲得",
+    photo:"📷 選擇 / 拍攝獎勵照片",
+    saved:"獎勵照片保存在此裝置。",
+    proud:"我為你感到驕傲！",
+    earned:"做得好！你獲得了一枚代幣！⭐",
+    keep:"繼續",
+    close:"關閉",
+    trial:"嘗試"
+},
   pt:{
     language:"Idioma",title:"😊 Quadro de Recompensas",trials:"Número de tentativas",reset:"Redefinir fichas",
     working:"Estou trabalhando para",photo:"📷 Escolher / Tirar foto da recompensa",
@@ -149,7 +165,10 @@ function tr(key){return translations[language][key]}
 
 function applyLanguage(){
   var d=translations[language];
-  document.documentElement.lang=language==="zh"?"zh":language;
+document.documentElement.lang =
+    language==="zh-TW" ? "zh-TW" :
+    language==="zh" ? "zh" :
+    language;
   document.getElementById("languageLabel").textContent=d.language;
   document.getElementById("appTitle").textContent=d.title;
   document.getElementById("trialsLabel").textContent=d.trials;

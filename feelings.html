@@ -370,11 +370,7 @@ if ("serviceWorker" in navigator) {
 
     
 
-    <button class="action primary"
-      onclick="showChoices()"
-      id="goChoices">
-      ✨ My Choices
-    </button>
+
 
   </div>
 
@@ -427,17 +423,16 @@ if ("serviceWorker" in navigator) {
       <p id="displayHelp">
         Choose exactly which feelings you want the child to see.
       </p>
-<div class="actions">
-  <button class="action" onclick="selectAllFeelings()">Select All</button>
-  <button class="action" onclick="clearAllFeelings()">Unselect All</button>
-</div>
 
-<div class="actions">
-  <button class="action" onclick="selectAllFeelings()">Select All</button>
-  <button class="action" onclick="clearAllFeelings()">Unselect All</button>
-</div>
+
+
 
 <div class="check-grid" id="feelingSettings"></div>
+
+<div class="actions">
+  <button type="button" class="action" id="selectAllFeelingsButton" onclick="selectAllFeelings()">Select All</button>
+  <button type="button" class="action" id="clearAllFeelingsButton" onclick="clearAllFeelings()">Unselect All</button>
+</div>
 
     </div>
 
@@ -894,6 +889,8 @@ how:"How are you feeling?",
 choose:"You can choose more than one.",
 tap:"Tap a feeling.",
 clear:"Clear",
+selectAll:"Select All",
+unselectAll:"Unselect All",
 sayFeelings:"🔊 Say my feelings",
 choicesPrompt:"My Choices",
 choicesInstruction:"Choose what you want to do, try, or request.",
@@ -920,6 +917,8 @@ how:"¿Cómo te sientes?",
 choose:"Puedes elegir más de uno.",
 tap:"Toca un sentimiento.",
 clear:"Borrar",
+selectAll:"Seleccionar todo",
+unselectAll:"Deseleccionar todo",
 sayFeelings:"🔊 Decir mis sentimientos",
 choicesPrompt:"Mis opciones",
 choicesInstruction:"Elige lo que quieres hacer, intentar o pedir.",
@@ -946,6 +945,8 @@ how:"你感觉怎么样？",
 choose:"可以选择多个。",
 tap:"点击一个感受。",
 clear:"清除",
+selectAll:"全选",
+unselectAll:"取消全选",
 sayFeelings:"🔊 说出我的感受",
 choicesPrompt:"我的选择",
 choicesInstruction:"选择你想做、想尝试或想请求的事情。",
@@ -971,6 +972,8 @@ photoTitle:"添加个人选择"
   choose:"可以選擇多個。",
   tap:"點擊一個感受。",
   clear:"清除",
+  selectAll:"全選",
+  unselectAll:"取消全選",
   sayFeelings:"🔊 說出我的感受",
   choicesPrompt:"我的選擇",
   choicesInstruction:"選擇你想做、想嘗試或想請求的事情。",
@@ -996,6 +999,8 @@ how:"Como você se sente?",
 choose:"Você pode escolher mais de um.",
 tap:"Toque em um sentimento.",
 clear:"Limpar",
+selectAll:"Selecionar tudo",
+unselectAll:"Desmarcar tudo",
 sayFeelings:"🔊 Dizer meus sentimentos",
 choicesPrompt:"Minhas escolhas",
 choicesInstruction:"Escolha o que você quer fazer, tentar ou pedir.",
@@ -1388,6 +1393,44 @@ function speakSelectedChoices(){
 
 }
 
+function setPhotoForFeeling(photo,fid,enabled){
+  if(photo.all){
+    if(enabled) return;
+    photo.all=false;
+    photo.feelings=Object.keys(feelings);
+  }
+  if(enabled){
+    if(!photo.feelings.includes(fid)) photo.feelings.push(fid);
+  }else{
+    photo.feelings=photo.feelings.filter(id=>id!==fid);
+  }
+}
+
+function refreshChoiceSelection(){
+  const available=activeFeeling
+    ? getChoices(activeFeeling).map(choice=>choice.id)
+    : [];
+  selectedChoices=selectedChoices.filter(id=>available.includes(id));
+}
+
+function setAllChoicesForFeeling(fid,enabled){
+  if(!Object.prototype.hasOwnProperty.call(feelings,fid)) return;
+  choicesByFeeling[fid]=enabled ? Object.keys(choices) : [];
+  customPhotos.forEach(photo=>setPhotoForFeeling(photo,fid,enabled));
+  refreshChoiceSelection();
+  renderChoiceSettings();
+  renderPhotoList();
+  renderChoices();
+}
+
+function selectAllChoices(fid){
+  setAllChoicesForFeeling(fid,true);
+}
+
+function clearAllChoices(fid){
+  setAllChoicesForFeeling(fid,false);
+}
+
 function selectAllFeelings(){
 
   visibleFeelings = Object.keys(feelings);
@@ -1505,6 +1548,8 @@ function renderFeelingSettings(){
 
       renderFeelings();
       renderChoiceTabs();
+      refreshChoiceSelection();
+      renderChoiceSettings();
       renderChoices();
 
     };
@@ -1540,6 +1585,10 @@ function renderChoiceSettings(){
       <div class="check-grid"
         style="margin-top:9px"
         id="choices-${fid}">
+      </div>
+      <div class="actions">
+        <button type="button" class="action" onclick="selectAllChoices('${fid}')">${T("selectAll")}</button>
+        <button type="button" class="action" onclick="clearAllChoices('${fid}')">${T("unselectAll")}</button>
       </div>
     `;
 
@@ -1577,6 +1626,7 @@ function renderChoiceSettings(){
 
         }
 
+        refreshChoiceSelection();
         renderChoices();
 
       };
@@ -1603,26 +1653,10 @@ function renderChoiceSettings(){
 
       check.querySelector("input").onchange=e=>{
 
-        if(photo.all){
-
-          photo.all=false;
-          photo.feelings=[];
-
-        }
-
-        if(e.target.checked){
-
-          if(!photo.feelings.includes(fid))
-            photo.feelings.push(fid);
-
-        }else{
-
-          photo.feelings=
-            photo.feelings.filter(x=>x!==fid);
-
-        }
-
+        setPhotoForFeeling(photo,fid,e.target.checked);
+        refreshChoiceSelection();
         renderChoiceSettings();
+        renderPhotoList();
         renderChoices();
 
       };
@@ -1923,19 +1957,21 @@ function updateLanguage(){
   document.getElementById("feelingsInstruction").textContent=T("choose");
 
   document.getElementById("clearFeelings").textContent=T("clear");
-  document.getElementById("sayFeelings").textContent=T("sayFeelings");
-  document.getElementById("goChoices").textContent=T("myChoices");
+
+
 
   document.getElementById("choicesPrompt").textContent=T("choicesPrompt");
   document.getElementById("choicesInstruction").textContent=T("choicesInstruction");
 
   document.getElementById("clearChoices").textContent=T("clear");
-  document.getElementById("sayChoices").textContent=T("sayChoices");
+
 
   document.getElementById("settingsButton").textContent=T("settings");
 
   document.getElementById("displayTitle").textContent=T("display");
   document.getElementById("displayHelp").textContent=T("displayHelp");
+  document.getElementById("selectAllFeelingsButton").textContent=T("selectAll");
+  document.getElementById("clearAllFeelingsButton").textContent=T("unselectAll");
 
   document.getElementById("choiceSettingsTitle").textContent=T("choiceSettings");
   document.getElementById("choiceSettingsHelp").textContent=T("choiceHelp");

@@ -320,11 +320,13 @@ if ("serviceWorker" in navigator) {
       <div class="subtitle" id="subtitle">Choose the feelings that fit.</div>
     </div>
 
-    <select id="language">
-      <option value="en">English</option>
-      <option value="es">Español</option>
-      <option value="zh">中文</option>
-      <option value="pt">Português</option>
+   <select id="language">
+  <option value="en">English</option>
+  <option value="es">Español</option>
+  <option value="zh">简体中文</option>
+  <option value="zh-TW">繁體中文</option>
+  <option value="pt">Português</option>
+</select>
     </select>
   </div>
 </header>
@@ -425,8 +427,17 @@ if ("serviceWorker" in navigator) {
       <p id="displayHelp">
         Choose exactly which feelings you want the child to see.
       </p>
+<div class="actions">
+  <button class="action" onclick="selectAllFeelings()">Select All</button>
+  <button class="action" onclick="clearAllFeelings()">Unselect All</button>
+</div>
 
-      <div class="check-grid" id="feelingSettings"></div>
+<div class="actions">
+  <button class="action" onclick="selectAllFeelings()">Select All</button>
+  <button class="action" onclick="clearAllFeelings()">Unselect All</button>
+</div>
+
+<div class="check-grid" id="feelingSettings"></div>
 
     </div>
 
@@ -939,7 +950,31 @@ done:"完成",
 end:"🔒 结束会话 / 清除",
 photoTitle:"添加个人选择"
 },
-
+"zh-TW":{
+  title:"感受",
+  subtitle:"選擇符合你感受的詞。",
+  feelings:"感受",
+  myChoices:"我的選擇",
+  how:"你感覺怎麼樣？",
+  choose:"可以選擇多個。",
+  tap:"點擊一個感受。",
+  clear:"清除",
+  sayFeelings:"🔊 說出我的感受",
+  choicesPrompt:"我的選擇",
+  choicesInstruction:"選擇你想做、想嘗試或想請求的事情。",
+  sayChoices:"🔊 說出我的選擇",
+  settings:"⚙️ 設定",
+  display:"顯示哪些感受",
+  displayHelp:"選擇你希望孩子看到的具體感受。",
+  choiceSettings:"每種感受的選擇",
+  choiceHelp:"只選擇你希望出現在每種感受下面的選項。",
+  personal:"個人選擇",
+  personalHelp:"添加真實照片，例如耳機、玩偶、安靜角落或喜歡的活動。",
+  addPhoto:"📷 添加照片選擇",
+  done:"完成",
+  end:"🔒 結束會話 / 清除",
+  photoTitle:"添加個人選擇"
+},
 pt:{
 title:"Sentimentos",
 subtitle:"Escolha os sentimentos que combinam.",
@@ -989,12 +1024,13 @@ function speak(words){
 
   speechSynthesis.cancel();
 
-  const voiceLanguage={
-    en:"en-US",
-    es:"es-US",
-    zh:"zh-CN",
-    pt:"pt-BR"
-  };
+const voiceLanguage={
+  en:"en-US",
+  es:"es-US",
+  zh:"zh-CN",
+  "zh-TW":"zh-TW",
+  pt:"pt-BR"
+};
 
   const utterance=new SpeechSynthesisUtterance(words);
 
@@ -1340,7 +1376,32 @@ function speakSelectedChoices(){
 
 }
 
+function selectAllFeelings(){
 
+  visibleFeelings = Object.keys(feelings);
+
+  renderSettings();
+  renderFeelings();
+  renderChoiceTabs();
+  renderChoices();
+
+}
+
+
+function clearAllFeelings(){
+
+  visibleFeelings = [];
+
+  selectedFeelings = [];
+  activeFeeling = null;
+  selectedChoices = [];
+
+  renderSettings();
+  renderFeelings();
+  renderChoiceTabs();
+  renderChoices();
+
+}
 /* =========================
    SETTINGS
 ========================= */

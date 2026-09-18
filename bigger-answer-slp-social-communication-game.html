@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#315f57"><title>Make My Answer Bigger</title><style>
+    :root{--ink:#24322f;--green:#315f57;--mint:#dcefe9;--cream:#fffaf0;--gold:#e7ad46;--coral:#dc775f;--paper:#fff;--line:#d8e1dd;--shadow:0 12px 30px rgba(36,50,47,.12)}
+    *{box-sizing:border-box} body{margin:0;font-family:ui-rounded,"Avenir Next",Avenir,"Trebuchet MS",Arial,sans-serif;background:linear-gradient(145deg,#f7efe1,#edf5f1);color:var(--ink);min-height:100vh}
+    button,input,textarea{font:inherit} button{touch-action:manipulation}.app{max-width:980px;margin:auto;min-height:100vh;padding:18px}.card{background:rgba(255,255,255,.96);border:1px solid rgba(49,95,87,.12);border-radius:28px;box-shadow:var(--shadow);padding:clamp(20px,4vw,38px)}
+    h1{font-size:clamp(2rem,6vw,3.65rem);line-height:1;margin:.1em 0;color:var(--green);letter-spacing:-.04em}h2{font-size:clamp(1.45rem,4vw,2.2rem);margin:.2em 0 .55em}p{font-size:1.05rem;line-height:1.5}.eyebrow{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#6a827c}.sub{color:#526a64;margin:.5rem 0 1.4rem}
+    .hidden{display:none!important}.row{display:flex;gap:12px;flex-wrap:wrap}.primary,.secondary,.ghost{border:0;border-radius:16px;padding:14px 20px;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;box-shadow:0 6px 0 #234a43}.primary:active{transform:translateY(3px);box-shadow:0 3px 0 #234a43}.secondary{background:var(--gold);color:#2f2717}.ghost{background:#eef4f1;color:var(--green)}
+    .choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:12px}.check,.avatar-choice,.goal-choice{position:relative;border:2px solid var(--line);background:#fff;border-radius:20px;padding:15px;text-align:center;cursor:pointer;min-height:115px}.check input,.goal-choice input{position:absolute;opacity:0}.check:has(input:checked),.goal-choice:has(input:checked),.avatar-choice.selected{border-color:var(--green);background:var(--mint);box-shadow:inset 0 0 0 2px #fff}.icon{display:block;font-size:2.3rem;margin-bottom:4px}.check strong,.avatar-choice strong,.goal-choice strong{display:block}.goal-choice{min-height:90px}.goal-number{display:block;font-size:2rem;font-weight:900;color:var(--green)}.avatar-preview{height:105px}.avatar-preview svg{width:100%;height:100%}.tiny{font-size:.82rem;color:#657770}.section{margin:24px 0}.field{width:100%;border:2px solid var(--line);border-radius:16px;padding:14px 16px;background:#fff;color:var(--ink)}textarea.field{min-height:84px;resize:vertical}.setup-note{background:#fff6dd;border-radius:16px;padding:12px 15px;color:#5f512c}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.mini-button{border:0;background:#edf3f0;color:var(--green);border-radius:999px;padding:9px 13px;font-weight:800;cursor:pointer}.play-layout{display:grid;grid-template-columns:minmax(180px,.7fr) minmax(0,2fr);gap:22px}.character-stage{background:radial-gradient(circle at 50% 35%,#fff 0,#f4fbf7 55%,#e2efe9 100%);border-radius:24px;min-height:270px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:15px}.character-face{width:150px;height:160px;line-height:1;filter:drop-shadow(0 10px 8px rgba(36,50,47,.16));transition:transform .38s cubic-bezier(.2,1.5,.4,1)}.character-face svg{width:100%;height:100%;overflow:visible}.character-name{font-weight:900;color:var(--green);margin-top:8px}.stage-name{font-size:.82rem;color:#6b7f79;margin-top:2px}.spark{position:absolute;font-size:24px;animation:pop .7s ease-out forwards;pointer-events:none}@keyframes pop{0%{transform:translate(0,15px) scale(.2);opacity:0}45%{opacity:1}100%{transform:translate(var(--x),-75px) scale(1.2);opacity:0}}
+    .progress-label{margin-top:14px;font-size:.87rem;color:#60746f}.progress{width:80%;height:10px;background:#dbe7e2;border-radius:999px;overflow:hidden;margin-top:6px}.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--coral));transition:width .35s}
+    .speech{background:#fff;border:2px solid var(--line);border-radius:22px;padding:16px;margin-bottom:16px;position:relative}.speech:before{content:"";position:absolute;left:-12px;top:35px;width:20px;height:20px;background:#fff;border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}.answer-label{font-weight:900;color:var(--green);font-size:.9rem}.answer-text{font-size:1.18rem;margin-top:5px;white-space:pre-wrap}.detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}.detail-button{border:2px solid var(--line);background:#fff;border-radius:18px;padding:13px 9px;cursor:pointer;color:var(--ink);font-weight:900}.detail-button .icon{font-size:1.9rem}.detail-button.active{background:var(--mint);border-color:var(--green)}
+    .prompt-panel{margin-top:16px;background:#f6faf8;border:2px solid #dfebe6;border-radius:22px;padding:18px}.prompt-head{display:flex;align-items:center;gap:10px}.prompt-head .icon{margin:0}.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.chip{border:2px solid #d9e4df;background:#fff;border-radius:999px;padding:10px 14px;cursor:pointer;color:var(--ink);font-weight:750}.chip.selected{border-color:var(--coral);background:#fff0eb}.selected-cues{margin:16px 0 0;padding:13px;border-radius:16px;background:#fff7e5}.cue-tag{display:inline-flex;gap:5px;align-items:center;background:#fff;border:1px solid #ecd9aa;border-radius:999px;padding:7px 10px;margin:4px;font-size:.9rem}.cue-tag button{border:0;background:transparent;cursor:pointer;color:#855;font-weight:900}.celebrate{position:fixed;inset:0;display:grid;place-items:center;background:rgba(31,52,47,.32);z-index:5;padding:20px}.celebrate-box{max-width:480px;text-align:center;background:#fff;border-radius:28px;padding:30px;box-shadow:0 25px 60px rgba(0,0,0,.24);animation:arrive .4s ease-out}.celebrate-char{font-size:100px}.celebrate h2{color:var(--green)}@keyframes arrive{from{transform:scale(.65) rotate(-3deg);opacity:0}to{transform:scale(1);opacity:1}}
+    .footer-note{text-align:center;color:#6a7d78;font-size:.83rem;margin:16px}.custom-wrap{margin-top:10px}.status{min-height:1.4em;font-weight:800;color:var(--coral);margin:8px 0}.edit-box{background:#fffaf0;border-radius:18px;padding:14px;margin-top:16px}
+    @media(max-width:700px){.app{padding:10px}.card{border-radius:22px;padding:19px}.play-layout{grid-template-columns:1fr}.character-stage{min-height:220px}.character-face{width:125px;height:135px}.speech:before{display:none}.detail-grid{grid-template-columns:repeat(3,1fr)}.detail-button{font-size:.86rem}.topbar{align-items:flex-start}}
+    .celebration-scene{position:relative;height:215px;max-width:320px;margin:auto;isolation:isolate}
+    .celebration-scene .character-face{position:absolute;bottom:14px;left:50%;margin-left:-75px!important;z-index:2}
+    .celebration-effects{position:absolute;inset:0;pointer-events:none}
+    .celebration-effects svg{width:100%;height:100%}
+    .star-burst{transform-box:fill-box;transform-origin:center;animation:star-reveal 1.6s ease-out both}
+    @keyframes star-reveal{from{opacity:0;transform:scale(.1) rotate(-60deg)}60%{opacity:1;transform:scale(1.2) rotate(10deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+    .rainbow-arc{stroke-dasharray:400;stroke-dashoffset:400;animation:rainbow-reveal 1.4s ease-out forwards}
+    @keyframes rainbow-reveal{to{stroke-dashoffset:0}}
+    .celebration-dance .character-face{animation:happy-dance .65s ease-in-out 3}
+    @keyframes happy-dance{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-18px) rotate(-10deg)}75%{transform:translateY(-18px) rotate(10deg)}}
+    .celebration-rainbow .character-face{animation:arrive .7s ease-out}
+    .celebration-stars .character-face{animation:arrive .6s ease-out}
+    @media(prefers-reduced-motion:reduce){.star-burst,.rainbow-arc,.celebration-scene .character-face{animation:none!important}.rainbow-arc{stroke-dashoffset:0}}
+  
+html{scroll-behavior:smooth}button,select,input,textarea{-webkit-tap-highlight-color:transparent}button:focus-visible,select:focus-visible,.field:focus-visible{outline:3px solid #a2682b;outline-offset:4px}.check:focus-within,.goal-choice:focus-within{outline:3px solid #a2682b;outline-offset:3px}button:disabled{cursor:default;opacity:.68}select{font:inherit}.language-bar{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin:0 3px 15px;font-weight:800;color:var(--green)}.language-bar select{max-width:65%;padding:10px 14px;border:1px solid #becfc8;border-radius:13px;background:#fff;color:var(--green)}.friends-grid{grid-template-columns:repeat(4,1fr)}.avatar-choice{color:var(--ink);padding:10px;transition:background .15s,border-color .15s}.avatar-choice .tiny{display:block;margin-top:3px}.avatar-preview{height:100px}.play-layout{grid-template-columns:minmax(235px,.9fr) minmax(0,2fr);align-items:start}.character-stage{position:relative;min-height:360px;padding:14px 12px 24px;background:radial-gradient(circle at 50% 35%,#fff,var(--friend-color,#e7f3db));align-self:start}.growth-viewport{height:252px;width:100%;position:relative;display:flex;align-items:center;justify-content:center}.growth-halo{position:absolute;width:165px;height:165px;border-radius:50%;border:1px dashed #6c8d7d55;background:#ffffff55;bottom:25px}.growth-viewport .character-face{position:relative;width:160px;height:172px;flex-shrink:0;transform-origin:center 92%;transform:scale(var(--growth-scale,.42));transition:transform 850ms cubic-bezier(.16,1.38,.35,1)}.character-face.bouncing{animation:grow-hop .9s ease-in-out}.character-name{font-size:1.3rem;margin-top:0}.stage-name{font-size:.9rem}.progress-label{text-align:center}.spark{z-index:3;font-size:25px;animation:big-pop 1.1s ease-out forwards}.speech{overflow-wrap:anywhere}.cue-tag{max-width:100%;overflow-wrap:anywhere}.answer-text{overflow-wrap:anywhere}.topbar .row{gap:7px}.topbar .mini-button{min-height:42px}.detail-button,.chip{min-height:48px}.detail-button{overflow-wrap:anywhere}.brand-footer{max-width:900px;margin:24px auto;padding:20px;text-align:center;font-size:14px;line-height:1.7;color:#526a64}.brand-footer a{color:#315f57;font-weight:bold;text-decoration:underline}
+.celebrate{z-index:20;overflow-y:auto;overscroll-behavior:contain;align-items:center;background:rgba(23,43,37,.52);backdrop-filter:blur(5px);padding:18px}.celebrate-box{width:min(100%,520px);max-width:520px;max-height:calc(100dvh - 36px);overflow:auto;padding:20px 26px 25px;animation:arrive .45s ease-out}.celebration-scene{height:250px;width:100%;max-width:400px;border-radius:21px;overflow:hidden;background:var(--scene-bg,#f2f8ed)}.celebration-scene .character-face{height:152px;width:142px;margin-left:-71px!important;bottom:13px;transform-origin:center 80%;filter:drop-shadow(0 7px 5px #24322f22)}.celebration-effects{z-index:1}.celebration-effects svg{overflow:visible}.surprise-title{font-size:1rem;font-weight:900;color:#956527;margin:15px 0 8px}.celebrate h2{font-size:clamp(1.4rem,4vw,2rem);line-height:1.14}.celebration-praise{font-size:.92rem;color:#526a64;margin:10px 0 18px}#finalAnswer{overflow-wrap:anywhere;white-space:pre-wrap;margin:12px 0}.replay{margin-top:17px}.fx-pop{transform-box:fill-box;transform-origin:center;animation:fx-pop .85s both;animation-delay:var(--delay,0s)}.fx-float{animation:fx-float 2.4s ease-in-out 2;animation-delay:var(--delay,0s)}.fx-rise{animation:fx-rise 2.8s ease-out both;animation-delay:var(--delay,0s)}.fx-spin{transform-box:fill-box;transform-origin:center;animation:fx-spin 4s linear 1}.fx-draw{stroke-dasharray:600;stroke-dashoffset:600;animation:fx-draw 1.6s .15s ease-out forwards}.fx-drift{animation:fx-drift 2.7s ease-in-out both}.fx-fall{animation:fx-fall 2.8s ease-out both;animation-delay:var(--delay,0s)}.fx-sway{transform-box:fill-box;transform-origin:top center;animation:fx-sway 1.3s ease-in-out 3}.fx-pulse{transform-box:fill-box;transform-origin:center;animation:fx-pulse 1s ease-in-out 3}.fx-walk{animation:fx-walk 2.7s ease-out both}
+.motion-bounce .character-face{animation:friend-bounce .75s ease-in-out 3}.motion-float .character-face{animation:friend-float 2s ease-in-out 2}.motion-wiggle .character-face{animation:friend-wiggle .6s ease-in-out 4}.motion-fly .character-face{animation:friend-fly 3.2s ease-in-out both}.motion-spin .character-face{animation:friend-spin 1.6s ease-in-out both}.motion-hop .character-face{animation:friend-hop 2.4s ease-in-out both}.motion-swing .character-face{animation:friend-swing 1.5s ease-in-out 3}.motion-land .character-face{animation:friend-land 2.3s ease-out both}.motion-launch .character-face{animation:friend-launch 2.7s ease-in-out both}
+@keyframes grow-hop{0%,100%{translate:0 0;rotate:0deg}40%{translate:0 -24px;rotate:-7deg}65%{translate:0 -8px;rotate:7deg}}@keyframes big-pop{0%{opacity:0;transform:translate(0,0) scale(.2)}25%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.6) rotate(30deg)}}@keyframes fx-pop{from{opacity:0;transform:scale(.1)}65%{opacity:1;transform:scale(1.2)}to{opacity:1;transform:scale(1)}}@keyframes fx-float{0%,100%{translate:0 0}50%{translate:0 -14px}}@keyframes fx-rise{from{opacity:0;translate:0 125px}35%{opacity:1}to{opacity:1;translate:0 0}}@keyframes fx-spin{from{rotate:-90deg}to{rotate:270deg}}@keyframes fx-draw{to{stroke-dashoffset:0}}@keyframes fx-drift{from{opacity:0;translate:-200px 20px}30%{opacity:1}to{opacity:1;translate:0 0}}@keyframes fx-fall{from{opacity:0;translate:0 -140px;rotate:-25deg}25%{opacity:1}to{opacity:1;translate:0 0;rotate:0deg}}@keyframes fx-sway{0%,100%{rotate:-8deg}50%{rotate:8deg}}@keyframes fx-pulse{0%,100%{scale:1}50%{scale:1.17}}@keyframes fx-walk{from{translate:180px 0}to{translate:0 0}}
+@keyframes friend-bounce{0%,100%{transform:translateY(0)}45%{transform:translateY(-25px) rotate(-5deg)}70%{transform:translateY(-8px) rotate(5deg)}}@keyframes friend-float{0%,100%{transform:translateY(-5px)}50%{transform:translateY(-25px) rotate(5deg)}}@keyframes friend-wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}@keyframes friend-fly{0%{transform:translate(0,0)}35%{transform:translate(70px,-60px) rotate(18deg)}70%{transform:translate(-70px,-70px) rotate(-18deg)}100%{transform:translate(0,-20px)}}@keyframes friend-spin{0%{transform:scale(.6) rotate(-30deg)}60%{transform:scale(1.12) rotate(380deg)}100%{transform:scale(1) rotate(360deg)}}@keyframes friend-hop{0%,100%{transform:translateX(0)}25%{transform:translate(-50px,-20px) rotate(-12deg)}70%{transform:translate(45px,-30px) rotate(12deg)}}@keyframes friend-swing{0%,100%{transform:translateX(-28px) rotate(-12deg)}50%{transform:translateX(28px) rotate(12deg)}}@keyframes friend-land{from{transform:translateY(-110px) scale(.75)}75%{transform:translateY(4px) scale(1.05)}to{transform:translateY(0) scale(1)}}@keyframes friend-launch{0%{transform:translateY(0)}25%{transform:translateY(6px)}60%{transform:translateY(-75px) scale(.85)}100%{transform:translateY(-20px)}}
+@media(max-width:700px){.play-layout{grid-template-columns:1fr}.character-stage{min-height:290px;padding-top:0}.growth-viewport{height:225px;max-width:290px}.growth-viewport .character-face{width:150px;height:160px}.growth-halo{bottom:18px}.character-name{font-size:1.15rem}.progress-label{margin-top:7px}.topbar{display:block}.topbar .row{margin:9px 0 0}.topbar h2{margin-top:6px}.celebrate-box{padding:14px 15px 20px}.celebration-scene{height:215px}.celebration-scene .character-face{width:125px;height:134px;margin-left:-62.5px!important}.friends-grid{grid-template-columns:repeat(4,1fr)}.avatar-preview{height:78px}.avatar-choice{padding:9px 3px}.avatar-choice strong{font-size:.9rem}.avatar-choice .tiny{font-size:.7rem}.choice-grid{gap:8px}.celebrate .row{gap:10px}.celebrate .row button{padding:12px 14px}}
+@media(max-width:390px){.friends-grid{grid-template-columns:repeat(2,1fr)}.avatar-preview{height:92px}.goal-choice{padding:12px 6px}.celebrate .row{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.fx-draw{stroke-dashoffset:0}.spark{display:none}.growth-viewport .character-face{transform:scale(var(--growth-scale,.42))}}
+</style></head><body>
+<main class="app">
+ <div class="language-bar"><label for="language" data-t="language"></label><select id="language"><option value="en" lang="en">English</option><option value="es" lang="es">Español</option><option value="pt" lang="pt-BR">Português</option><option value="zh-Hant" lang="zh-Hant">繁體中文</option><option value="zh-Hans" lang="zh-Hans">简体中文</option></select></div>
+ <section id="setup" class="card">
+  <div class="eyebrow" data-t="setup"></div><h1 data-t="title"></h1><p class="sub" data-t="intro"></p>
+  <div class="section"><h2 id="detailHeading" data-t="pickDetails"></h2><div id="categoryChecks" class="choice-grid" role="group" aria-labelledby="detailHeading"></div></div>
+  <div class="section"><h2 id="goalHeading" data-t="pickGoal"></h2><p class="sub" data-t="goalHelp"></p><div id="goalChoices" class="choice-grid" role="group" aria-labelledby="goalHeading"></div></div>
+  <div class="section"><h2 data-t="pickFriend"></h2><p class="sub" data-t="friendHelp"></p><div id="avatarChoices" class="choice-grid friends-grid"></div></div>
+  <div class="section"><h2><label for="startingAnswer" data-t="pickAnswer"></label></h2><textarea id="startingAnswer" class="field" data-placeholder="exampleHint"></textarea></div>
+  <div id="setupStatus" class="status" aria-live="polite"></div><button id="startButton" class="primary" data-t="start"></button>
+ </section>
+ <section id="activity" class="card hidden">
+  <div class="topbar"><div><div class="eyebrow" data-t="listener"></div><h2 id="activityHeading" tabindex="-1" data-t="detailQuestion"></h2></div><div class="row"><button id="soundButton" class="mini-button" aria-pressed="true"></button><button id="settingsButton" class="mini-button" data-t="settings"></button></div></div>
+  <div class="play-layout">
+   <div id="characterStage" class="character-stage"><div class="growth-viewport"><div class="growth-halo"></div><div id="characterFace" class="character-face"></div></div><div id="characterName" class="character-name"></div><div id="stageName" class="stage-name" aria-live="polite"></div><div id="progressLabel" class="progress-label"></div><div id="progressBar" class="progress" role="progressbar" aria-labelledby="progressLabel" aria-valuemin="0"><i id="progressFill"></i></div></div>
+   <div>
+    <div class="speech"><div class="answer-label" data-t="myAnswer"></div><div id="answerDisplay" class="answer-text"></div></div>
+    <div id="detailButtons" class="detail-grid"></div><div id="promptPanel" class="prompt-panel hidden"></div>
+    <div id="selectedCues" class="selected-cues hidden"><strong data-t="remember"></strong><div id="cueList"></div></div>
+    <div class="edit-box"><label class="answer-label" for="biggerAnswer" data-t="bigger"></label><p style="margin:.35rem 0 .7rem" data-t="say"></p><textarea id="biggerAnswer" class="field" data-placeholder="optional"></textarea><div id="answerStatus" class="status" aria-live="polite"></div><div class="row" style="margin-top:10px"><button id="updateButton" class="secondary" data-t="added"></button><button id="resetButton" class="ghost" data-t="reset"></button></div></div>
+   </div>
+  </div>
+ </section>
+</main>
+<div id="celebrate" class="celebrate hidden" role="dialog" aria-modal="true" aria-labelledby="celebrationTitle" aria-describedby="surpriseTitle">
+ <div class="celebrate-box"><div id="celebrationScene" class="celebration-scene"><div id="celebrationEffects" class="celebration-effects" aria-hidden="true"></div><div id="celebrateChar" class="character-face" aria-hidden="true"></div></div><div id="surpriseTitle" class="surprise-title"></div><h2 id="celebrationTitle" data-t="celebrate"></h2><p id="finalAnswer"></p><p class="celebration-praise" data-t="praise"></p><div class="row" style="justify-content:center"><button id="keepGoingButton" class="primary" data-t="keep"></button><button id="newAnswerButton" class="ghost" data-t="newAnswer"></button></div><button id="replayButton" class="mini-button replay" data-t="replay"></button></div>
+</div>
+<div class="footer-note" data-t="footer"></div>
+<footer class="brand-footer"><strong data-t="created"></strong><br><span data-t="services"></span><br><span data-t="languages"></span><br><span data-t="area"></span><br><a href="https://kaitingtubronson.com/" target="_blank" rel="noopener noreferrer" data-t="website"></a></footer>
+<script>
+const locales = {
+ en:{
+ title:'Make My Answer Bigger',language:'Language',setup:'Clinician setup',intro:'Choose what the learner sees. Keep it to two or three buttons when fewer choices will help.',pickDetails:'1. Pick the detail buttons',pickGoal:'2. How many details will make it grow?',goalHelp:'Choose a comfortable goal for this learner today.',goals:['One detail','Two details','Three details'],pickFriend:'3. Pick one growing friend',friendHelp:'Eight little friends. Each has three different surprise endings!',pickAnswer:"4. Add the learner’s first answer",example:'I went swimming.',exampleHint:'Example: I went swimming.',start:'Start activity →',listener:'Help your listener understand more',detailQuestion:'What detail can we add?',soundOn:'🔊 Sound on',soundOff:'🔇 Sound off',settings:'⚙ Setup',myAnswer:'MY ANSWER',remember:'Ideas I want to remember:',bigger:'Now give your bigger answer',say:'Say it out loud. Typing it below is optional.',optional:'Optional: type the new answer here',added:'✨ I added a detail!',reset:'Start over',footer:'Works as a downloaded HTML file • Your answers stay on this device',created:'Created by Kaiting Tu Bronson, M.S., CCC-SLP',services:'Bilingual & Multilingual Speech Therapy Services',languages:'English, Mandarin Chinese, Spanish, Portuguese',area:'Serving Leander, Cedar Park, North Austin, Texas',website:'Visit my website',choose:'Choose at least one detail button.',tell:'Tell me your answer.',cueHelp:'Tap any ideas that might help. You can pick more than one.',own:'✏️ my own words',typeIdea:'Type a word or short idea',addIdea:'Add idea',remove:'Remove idea',ready:'Tiny and ready!',growing:'Getting bigger!',grown:'Look how big I am!',progressZero:'{goal} detail(s) to grow',progress:'{n} of {goal} details added',chooseFirst:'Choose a detail button first, then give your answer.',saved:'Your new answer was saved.',spoken:'Great answering out loud!',grew:'🌟 Your idea grew!',celebrate:'Ta-da! Look how your idea grew!',praise:'You added more for your listener to picture!',keep:'Add another detail',newAnswer:'Try a new answer',replay:'🎁 Another surprise',growthLabel:'{name}: growth stage {stage} of 4',surpriseLabel:'A surprise from {name}',
+ categories:[['Who?','Who was there?',['a family member','a friend','a teacher','someone who helped','someone else']],['Where?','Where did it happen?',['at home','at school','outside','in the community','another place']],['When?','When did it happen?',['this morning','after school','yesterday','on the weekend','another time']],['What?','What happened?',['what happened first','what happened next','what someone did','what changed','another action']],['Why / How?','Why or how did it happen?',['because…','so…','by…','the reason was…','my own idea']],['Thoughts / Feelings','What did someone think or feel?',['happy','excited','surprised','worried','frustrated','another feeling']]],
+ names:['Sprig','Nova','Puff','Bubbles','Ember','Pip','Luna','Orbit'],types:['Plant','Star','Cloud friend','Octopus','Dragon','Chick','Cat','Robot'],
+ endings:[['A whole garden blooms!','A butterfly visits!','A shower of cherries!'],['A shooting-star adventure!','A new constellation!','A tiny solar system!'],['A rainbow bridge!','A balloon ride!','Snowflake magic!'],['A bubble party!','A hidden pearl!','An underwater parade!'],['A heart-shaped puff!','A flight over the castle!','A dragon’s treasure!'],['A surprise egg party!','A little flower delivery!','A chick with a parachute!'],['A moonbeam swing!','A yarn-ball dance!','A magical fish wish!'],['Ready for takeoff!','Robot dance party!','A surprise gift delivery!']]
+ },
+ es:{
+ title:'Amplío mi respuesta',language:'Idioma',setup:'Configuración para el profesional',intro:'Elige lo que verá la persona. Usa solo dos o tres botones si le ayuda tener menos opciones.',pickDetails:'1. Elige los botones de detalles',pickGoal:'2. ¿Cuántos detalles lo harán crecer?',goalHelp:'Elige una meta que resulte cómoda hoy.',goals:['Un detalle','Dos detalles','Tres detalles'],pickFriend:'3. Elige un amiguito para hacerlo crecer',friendHelp:'¡Ocho amiguitos, cada uno con tres sorpresas finales diferentes!',pickAnswer:'4. Escribe la primera respuesta',example:'Fui a nadar.',exampleHint:'Ejemplo: Fui a nadar.',start:'Comenzar →',listener:'Ayuda a quien te escucha a entender mejor',detailQuestion:'¿Qué detalle podemos añadir?',soundOn:'🔊 Sonido activado',soundOff:'🔇 Sonido desactivado',settings:'⚙ Configuración',myAnswer:'MI RESPUESTA',remember:'Ideas que quiero recordar:',bigger:'Ahora da una respuesta más completa',say:'Dila en voz alta. Escribirla abajo es opcional.',optional:'Opcional: escribe aquí tu nueva respuesta',added:'✨ ¡Añadí un detalle!',reset:'Empezar de nuevo',footer:'Funciona como archivo HTML descargado • Tus respuestas se quedan en este dispositivo',created:'Creado por Kaiting Tu Bronson, M.S., CCC-SLP',services:'Servicios de terapia del habla y lenguaje bilingües y multilingües',languages:'Inglés, chino mandarín, español y portugués',area:'Servicios en Leander, Cedar Park y North Austin, Texas',website:'Visita mi sitio web',choose:'Elige al menos un botón de detalles.',tell:'Dime tu respuesta.',cueHelp:'Toca las ideas que te ayuden. Puedes elegir más de una.',own:'✏️ mis propias palabras',typeIdea:'Escribe una palabra o una idea corta',addIdea:'Añadir idea',remove:'Quitar idea',ready:'¡Pequeñito y listo!',growing:'¡Estoy creciendo!',grown:'¡Mira cuánto crecí!',progressZero:'{goal} detalle(s) para crecer',progress:'{n} de {goal} detalles añadidos',chooseFirst:'Primero elige un botón de detalles y luego da tu respuesta.',saved:'Tu nueva respuesta está guardada.',spoken:'¡Muy bien al responder en voz alta!',grew:'🌟 ¡Tu idea creció!',celebrate:'¡Tarán! ¡Mira cómo creció tu idea!',praise:'¡Añadiste más detalles para que quien te escucha pueda imaginarlos!',keep:'Añadir otro detalle',newAnswer:'Probar otra respuesta',replay:'🎁 Otra sorpresa',growthLabel:'{name}: etapa de crecimiento {stage} de 4',surpriseLabel:'Una sorpresa de {name}',
+ categories:[['¿Quién?','¿Quién estaba ahí?',['un familiar','un amigo o una amiga','un profesor o una profesora','alguien que ayudó','otra persona']],['¿Dónde?','¿Dónde pasó?',['en casa','en la escuela','afuera','en el vecindario','en otro lugar']],['¿Cuándo?','¿Cuándo pasó?',['esta mañana','después de la escuela','ayer','el fin de semana','en otro momento']],['¿Qué?','¿Qué pasó?',['qué pasó primero','qué pasó después','qué hizo alguien','qué cambió','otra acción']],['¿Por qué / Cómo?','¿Por qué o cómo pasó?',['porque…','así que…','al…','la razón fue…','mi propia idea']],['Pensamientos / Emociones','¿Qué pensó o sintió alguien?',['feliz','con emoción','con sorpresa','con preocupación','con frustración','otra emoción']]],
+ names:['Brotito','Nova','Nubecita','Burbujas','Chispita','Pío','Luna','Órbita'],types:['Planta','Estrella','Amiguito nube','Pulpo','Dragón','Pollito','Gato','Robot'],
+ endings:[['¡Florece todo un jardín!','¡Nos visita una mariposa!','¡Una lluvia de cerezas!'],['¡Una aventura de estrella fugaz!','¡Una nueva constelación!','¡Un pequeño sistema solar!'],['¡Un puente de arcoíris!','¡Un paseo en globo!','¡Magia de copos de nieve!'],['¡Una fiesta de burbujas!','¡Una perla escondida!','¡Un desfile bajo el mar!'],['¡Un soplo con forma de corazón!','¡Un vuelo sobre el castillo!','¡El tesoro del dragón!'],['¡Una fiesta de huevos sorpresa!','¡Una entrega de flores!','¡Un pollito con paracaídas!'],['¡Un columpio de luz de luna!','¡Un baile con ovillos de lana!','¡Un deseo mágico de peces!'],['¡Listo para despegar!','¡Fiesta de baile del robot!','¡Una entrega de regalos sorpresa!']]
+ },
+ pt:{
+ title:'Amplio minha resposta',language:'Idioma',setup:'Configuração para o profissional',intro:'Escolha o que a pessoa verá. Use apenas dois ou três botões se menos opções ajudarem.',pickDetails:'1. Escolha os botões de detalhes',pickGoal:'2. Quantos detalhes vão fazê-lo crescer?',goalHelp:'Escolha uma meta confortável para hoje.',goals:['Um detalhe','Dois detalhes','Três detalhes'],pickFriend:'3. Escolha um amiguinho para crescer',friendHelp:'Oito amiguinhos, cada um com três surpresas finais diferentes!',pickAnswer:'4. Escreva a primeira resposta',example:'Fui nadar.',exampleHint:'Exemplo: Fui nadar.',start:'Começar →',listener:'Ajude quem está ouvindo a entender melhor',detailQuestion:'Que detalhe podemos acrescentar?',soundOn:'🔊 Som ligado',soundOff:'🔇 Som desligado',settings:'⚙ Configuração',myAnswer:'MINHA RESPOSTA',remember:'Ideias que quero lembrar:',bigger:'Agora dê uma resposta mais completa',say:'Fale em voz alta. Escrever abaixo é opcional.',optional:'Opcional: escreva sua nova resposta aqui',added:'✨ Acrescentei um detalhe!',reset:'Recomeçar',footer:'Funciona como arquivo HTML baixado • Suas respostas ficam neste dispositivo',created:'Criado por Kaiting Tu Bronson, M.S., CCC-SLP',services:'Serviços de fonoaudiologia bilíngues e multilíngues',languages:'Inglês, chinês mandarim, espanhol e português',area:'Atendimento em Leander, Cedar Park e North Austin, Texas',website:'Visite meu site',choose:'Escolha pelo menos um botão de detalhes.',tell:'Me diga sua resposta.',cueHelp:'Toque nas ideias que podem ajudar. Você pode escolher mais de uma.',own:'✏️ minhas próprias palavras',typeIdea:'Digite uma palavra ou ideia curta',addIdea:'Adicionar ideia',remove:'Remover ideia',ready:'Pequenininho e pronto!',growing:'Estou crescendo!',grown:'Olha como eu cresci!',progressZero:'{goal} detalhe(s) para crescer',progress:'{n} de {goal} detalhes acrescentados',chooseFirst:'Primeiro escolha um botão de detalhes e depois dê sua resposta.',saved:'Sua nova resposta foi guardada.',spoken:'Muito bem ao responder em voz alta!',grew:'🌟 Sua ideia cresceu!',celebrate:'Tcharam! Olha como sua ideia cresceu!',praise:'Você acrescentou mais detalhes para quem está ouvindo imaginar!',keep:'Acrescentar outro detalhe',newAnswer:'Tentar outra resposta',replay:'🎁 Outra surpresa',growthLabel:'{name}: etapa de crescimento {stage} de 4',surpriseLabel:'Uma surpresa de {name}',
+ categories:[['Quem?','Quem estava lá?',['alguém da família','um amigo ou uma amiga','um professor ou uma professora','alguém que ajudou','outra pessoa']],['Onde?','Onde aconteceu?',['em casa','na escola','ao ar livre','no bairro','em outro lugar']],['Quando?','Quando aconteceu?',['hoje de manhã','depois da escola','ontem','no fim de semana','em outro momento']],['O quê?','O que aconteceu?',['o que aconteceu primeiro','o que aconteceu depois','o que alguém fez','o que mudou','outra ação']],['Por quê / Como?','Por que ou como aconteceu?',['porque…','então…','ao…','o motivo foi…','minha própria ideia']],['Pensamentos / Sentimentos','O que alguém pensou ou sentiu?',['feliz','com animação','com surpresa','com preocupação','com frustração','outro sentimento']]],
+ names:['Brotinho','Nova','Nuvem','Bolhas','Faísca','Piu','Lua','Órbita'],types:['Planta','Estrela','Amiguinho nuvem','Polvo','Dragão','Pintinho','Gato','Robô'],
+ endings:[['Um jardim inteiro floresceu!','Uma borboleta veio visitar!','Uma chuva de cerejas!'],['Uma aventura de estrela cadente!','Uma nova constelação!','Um pequeno sistema solar!'],['Uma ponte de arco-íris!','Um passeio de balão!','Magia de flocos de neve!'],['Uma festa de bolhas!','Uma pérola escondida!','Um desfile no fundo do mar!'],['Um sopro em forma de coração!','Um voo sobre o castelo!','O tesouro do dragão!'],['Uma festa de ovos surpresa!','Uma entrega de flores!','Um pintinho de paraquedas!'],['Um balanço de luar!','Uma dança com novelos de lã!','Um desejo mágico de peixes!'],['Pronto para decolar!','Festa de dança do robô!','Uma entrega de presentes surpresa!']]
+ },
+ 'zh-Hant':{
+ title:'讓我的回答更豐富',language:'語言',setup:'治療師設定',intro:'選擇要呈現的提示。如果選項少一點比較適合，可以只選兩到三個。',pickDetails:'1. 選擇細節提示',pickGoal:'2. 加幾個細節，讓小夥伴長大？',goalHelp:'依照今天的狀況，選一個合適的目標。',goals:['一個細節','兩個細節','三個細節'],pickFriend:'3. 選一位會長大的小夥伴',friendHelp:'八位小夥伴，每一位都有三種不同的結尾驚喜！',pickAnswer:'4. 輸入最初的回答',example:'我去游泳了。',exampleHint:'例如：我去游泳了。',start:'開始活動 →',listener:'讓聽的人更了解你的意思',detailQuestion:'我們可以加上什麼細節？',soundOn:'🔊 音效開啟',soundOff:'🔇 音效關閉',settings:'⚙ 設定',myAnswer:'我的回答',remember:'我想記住的點子：',bigger:'現在，把回答說得更豐富',say:'大聲說出來就好，也可以選擇打在下面。',optional:'選填：在這裡輸入新的回答',added:'✨ 我加了一個細節！',reset:'重新開始',footer:'下載 HTML 檔後可離線使用 • 回答只留在這台裝置上',created:'由 Kaiting Tu Bronson, M.S., CCC-SLP 製作',services:'雙語及多語言語言治療服務',languages:'英語、華語、西班牙語、葡萄牙語',area:'服務地區：德州 Leander、Cedar Park、North Austin',website:'造訪我的網站',choose:'請至少選一個細節提示。',tell:'說說你的回答吧。',cueHelp:'點選能幫助你的點子，可以選不只一個。',own:'✏️ 用自己的話',typeIdea:'輸入一個詞或簡短的點子',addIdea:'加入點子',remove:'移除點子',ready:'小小的，準備長大！',growing:'越來越大了！',grown:'看，我長這麼大了！',progressZero:'加上 {goal} 個細節就會長大',progress:'已加上 {n}／{goal} 個細節',chooseFirst:'先選一個細節提示，再說出你的回答。',saved:'新的回答已記下來了。',spoken:'你把回答說出來了，真棒！',grew:'🌟 你的點子變豐富了！',celebrate:'哇！你的點子變得更豐富了！',praise:'你加上的細節，讓聽的人更能想像了！',keep:'再加一個細節',newAnswer:'換一個新的回答',replay:'🎁 再看一個驚喜',growthLabel:'{name}：第 {stage} 個成長階段，共 4 個',surpriseLabel:'{name} 帶來的驚喜',
+ categories:[['誰？','有誰在場？',['家人','朋友','老師','幫忙的人','其他人']],['哪裡？','在哪裡發生的？',['家裡','學校','戶外','社區裡','其他地方']],['什麼時候？','什麼時候發生的？',['今天早上','放學後','昨天','週末','其他時間']],['什麼事？','發生了什麼事？',['先發生的事','接著發生的事','有人做了什麼','有什麼改變','其他動作']],['為什麼／怎麼做？','為什麼會發生？是怎麼做到的？',['因為……','所以……','用……的方法','原因是……','自己的點子']],['想法／感受','有人想了什麼，或有什麼感受？',['開心','興奮','驚訝','擔心','挫折','其他感受']]],
+ names:['小芽','星星','雲朵','泡泡','小火花','啾啾','小月','小軌'],types:['小植物','小星星','雲朵夥伴','小章魚','小龍','小雞','小貓','機器人'],
+ endings:[['整座花園都開花了！','蝴蝶來作客了！','下起櫻桃雨了！'],['流星冒險出發！','新的星座出現了！','迷你太陽系！'],['彩虹橋出現了！','搭氣球去旅行！','雪花魔法！'],['泡泡派對！','找到藏起來的珍珠！','海底大遊行！'],['吹出愛心了！','飛過城堡！','小龍的寶藏！'],['驚喜彩蛋派對！','送你一束小花！','小雞搭降落傘！'],['月光鞦韆！','毛線球舞會！','魔法小魚願望！'],['準備升空！','機器人舞會！','驚喜禮物送到囉！']]
+ },
+ 'zh-Hans':{
+ title:'让我的回答更丰富',language:'语言',setup:'治疗师设置',intro:'选择要呈现的提示。如果选项少一点更合适，可以只选两到三个。',pickDetails:'1. 选择细节提示',pickGoal:'2. 加几个细节，让小伙伴长大？',goalHelp:'根据今天的情况，选一个合适的目标。',goals:['一个细节','两个细节','三个细节'],pickFriend:'3. 选一位会长大的小伙伴',friendHelp:'八位小伙伴，每一位都有三种不同的结尾惊喜！',pickAnswer:'4. 输入最初的回答',example:'我去游泳了。',exampleHint:'例如：我去游泳了。',start:'开始活动 →',listener:'让听的人更了解你的意思',detailQuestion:'我们可以加上什么细节？',soundOn:'🔊 音效开启',soundOff:'🔇 音效关闭',settings:'⚙ 设置',myAnswer:'我的回答',remember:'我想记住的点子：',bigger:'现在，把回答说得更丰富',say:'大声说出来就好，也可以选择打在下面。',optional:'选填：在这里输入新的回答',added:'✨ 我加了一个细节！',reset:'重新开始',footer:'下载 HTML 文件后可离线使用 • 回答只留在这台设备上',created:'由 Kaiting Tu Bronson, M.S., CCC-SLP 制作',services:'双语及多语言言语治疗服务',languages:'英语、普通话、西班牙语、葡萄牙语',area:'服务地区：得克萨斯州 Leander、Cedar Park、North Austin',website:'访问我的网站',choose:'请至少选一个细节提示。',tell:'说说你的回答吧。',cueHelp:'点选能帮助你的点子，可以选不止一个。',own:'✏️ 用自己的话',typeIdea:'输入一个词或简短的点子',addIdea:'加入点子',remove:'移除点子',ready:'小小的，准备长大！',growing:'越来越大了！',grown:'看，我长这么大了！',progressZero:'加上 {goal} 个细节就会长大',progress:'已加上 {n}／{goal} 个细节',chooseFirst:'先选一个细节提示，再说出你的回答。',saved:'新的回答已记下来了。',spoken:'你把回答说出来了，真棒！',grew:'🌟 你的点子变丰富了！',celebrate:'哇！你的点子变得更丰富了！',praise:'你加上的细节，让听的人更能想象了！',keep:'再加一个细节',newAnswer:'换一个新的回答',replay:'🎁 再看一个惊喜',growthLabel:'{name}：第 {stage} 个成长阶段，共 4 个',surpriseLabel:'{name} 带来的惊喜',
+ categories:[['谁？','有谁在场？',['家人','朋友','老师','帮忙的人','其他人']],['哪里？','在哪里发生的？',['家里','学校','户外','社区里','其他地方']],['什么时候？','什么时候发生的？',['今天早上','放学后','昨天','周末','其他时间']],['什么事？','发生了什么事？',['先发生的事','接着发生的事','有人做了什么','有什么改变','其他动作']],['为什么／怎么做？','为什么会发生？是怎么做到的？',['因为……','所以……','用……的方法','原因是……','自己的点子']],['想法／感受','有人想了什么，或有什么感受？',['开心','兴奋','惊讶','担心','沮丧','其他感受']]],
+ names:['小芽','星星','云朵','泡泡','小火花','啾啾','小月','小轨'],types:['小植物','小星星','云朵伙伴','小章鱼','小龙','小鸡','小猫','机器人'],
+ endings:[['整座花园都开花了！','蝴蝶来做客了！','下起樱桃雨了！'],['流星冒险出发！','新的星座出现了！','迷你太阳系！'],['彩虹桥出现了！','搭气球去旅行！','雪花魔法！'],['泡泡派对！','找到藏起来的珍珠！','海底大游行！'],['吹出爱心了！','飞过城堡！','小龙的宝藏！'],['惊喜彩蛋派对！','送你一束小花！','小鸡坐降落伞！'],['月光秋千！','毛线球舞会！','魔法小鱼愿望！'],['准备升空！','机器人舞会！','惊喜礼物送到啦！']]
+ }
+};
+
+function sprigSvg(stage){
+ const leaf=stage>=1?`<g><path d="M75 67 C55 54 50 34 58 24 C76 28 83 45 75 67Z" fill="#79ae72"/><path d="M75 67 C91 51 104 46 115 52 C109 69 93 77 75 67Z" fill="#4f8d68"/><path d="M75 69 C75 54 75 42 70 31" fill="none" stroke="#315f57" stroke-width="5" stroke-linecap="round"/></g>`:'';
+ const leaves=stage>=2?`<g><ellipse cx="43" cy="84" rx="22" ry="12" transform="rotate(24 43 84)" fill="#86bc72"/><ellipse cx="108" cy="88" rx="23" ry="12" transform="rotate(-24 108 88)" fill="#6aa46f"/></g>`:'';
+ const flower=stage>=3?`<g transform="translate(75 18)"><circle r="9" cy="-8" fill="#ef9c83"/><circle r="9" cx="8" fill="#f3b36a"/><circle r="9" cx="-8" fill="#e98278"/><circle r="7" fill="#f4cf63"/></g>`:'';
+ const bodyY=[83,76,68,61][stage],bodyH=[47,58,69,76][stage];
+ return `<svg viewBox="0 0 150 160" aria-hidden="true">${flower}${leaf}${leaves}<ellipse cx="75" cy="143" rx="45" ry="9" fill="#315f57" opacity=".12"/><rect x="35" y="${bodyY}" width="80" height="${bodyH}" rx="38" fill="${stage>=3?'#d8a765':'#d9b37a'}"/><circle cx="61" cy="${bodyY+25}" r="4" fill="#263b36"/><circle cx="89" cy="${bodyY+25}" r="4" fill="#263b36"/><path d="M65 ${bodyY+39} Q75 ${bodyY+47} 85 ${bodyY+39}" fill="none" stroke="#263b36" stroke-width="4" stroke-linecap="round"/>${stage>=2?`<circle cx="50" cy="${bodyY+38}" r="6" fill="#e98a78" opacity=".55"/><circle cx="100" cy="${bodyY+38}" r="6" fill="#e98a78" opacity=".55"/>`:''}</svg>`;
+}
+function novaSvg(stage){
+ const rays=stage>=2?`<g fill="#f6c85f" opacity=".9"><path d="M75 7l7 24H68z"/><path d="M133 55l-23 8 4-15z"/><path d="M17 55l23 8-4-15z"/></g>`:'';
+ const crown=stage>=3?`<path d="M53 34l9-21 13 15 14-15 8 23z" fill="#e78d6b" stroke="#315f57" stroke-width="3" stroke-linejoin="round"/>`:'';
+ const size=[31,39,47,53][stage];
+ return `<svg viewBox="0 0 150 160" aria-hidden="true">${rays}${crown}<ellipse cx="75" cy="143" rx="45" ry="9" fill="#315f57" opacity=".12"/><path d="M75 ${75-size} L86 ${62-size/3} L${75+size} 67 L94 86 L99 ${75+size} L75 105 L51 ${75+size} L56 86 L${75-size} 67 L64 ${62-size/3}Z" fill="${stage>=2?'#f5c85e':'#f0b95a'}" stroke="#315f57" stroke-width="4" stroke-linejoin="round"/><circle cx="62" cy="75" r="4" fill="#263b36"/><circle cx="88" cy="75" r="4" fill="#263b36"/><path d="M64 89 Q75 99 86 89" fill="none" stroke="#263b36" stroke-width="4" stroke-linecap="round"/>${stage>=1?`<circle cx="50" cy="88" r="6" fill="#e88975" opacity=".6"/><circle cx="100" cy="88" r="6" fill="#e88975" opacity=".6"/>`:''}</svg>`;
+}
+function puffSvg(stage){
+ const ears=stage>=1?`<path d="M45 65 Q25 25 58 42Z" fill="#a8d7d1" stroke="#315f57" stroke-width="4"/><path d="M105 65 Q125 25 92 42Z" fill="#a8d7d1" stroke="#315f57" stroke-width="4"/>`:'';
+ const wings=stage>=2?`<path d="M35 90 Q4 72 16 112 Q27 126 43 106Z" fill="#d8eee9" stroke="#315f57" stroke-width="4"/><path d="M115 90 Q146 72 134 112 Q123 126 107 106Z" fill="#d8eee9" stroke="#315f57" stroke-width="4"/>`:'';
+ const halo=stage>=3?`<ellipse cx="75" cy="25" rx="31" ry="9" fill="none" stroke="#e7ad46" stroke-width="7"/>`:'';
+ const r=[36,42,48,53][stage];
+ return `<svg viewBox="0 0 150 160" aria-hidden="true">${halo}${ears}${wings}<ellipse cx="75" cy="143" rx="45" ry="9" fill="#315f57" opacity=".12"/><circle cx="75" cy="91" r="${r}" fill="#9bcfc9" stroke="#315f57" stroke-width="4"/><circle cx="61" cy="83" r="4" fill="#263b36"/><circle cx="89" cy="83" r="4" fill="#263b36"/><path d="M65 98 Q75 108 85 98" fill="none" stroke="#263b36" stroke-width="4" stroke-linecap="round"/>${stage>=2?`<circle cx="49" cy="98" r="6" fill="#e88975" opacity=".55"/><circle cx="101" cy="98" r="6" fill="#e88975" opacity=".55"/>`:''}</svg>`;
+}
+
+const avatarKeys=['sprig','nova','puff','bubbles','ember','pip','luna','orbit'];
+const avatarColors=['#e7f3db','#fff2ce','#e1f3fc','#eee7fc','#fde8dc','#fff4ce','#ece9fa','#e0f1f0'];
+const face=(y=84)=>`<circle cx="61" cy="${y}" r="4" fill="#263b36"/><circle cx="89" cy="${y}" r="4" fill="#263b36"/><path d="M66 ${y+14} Q75 ${y+23} 84 ${y+14}" fill="none" stroke="#263b36" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="49" cy="${y+12}" rx="6" ry="4" fill="#ed9390" opacity=".65"/><ellipse cx="101" cy="${y+12}" rx="6" ry="4" fill="#ed9390" opacity=".65"/>`;
+const shadow='<ellipse cx="75" cy="146" rx="45" ry="7" fill="#315f57" opacity=".12"/>';
+function newAvatarSvg(stage,type){
+ let art='';
+ if(type==='bubbles'){
+  art=`${stage>=2?'<path d="M24 113 Q5 111 13 92 M126 113 Q145 111 137 92" fill="none" stroke="#a78acf" stroke-width="12" stroke-linecap="round"/>':''}<path d="M38 105 Q21 148 43 138 Q50 125 55 117 Q51 153 67 140 L76 117 Q80 151 94 139 L96 116 Q111 150 119 132 L111 103" fill="#bba0e0" stroke="#695786" stroke-width="3"/><ellipse cx="75" cy="84" rx="${36+stage*3}" ry="${36+stage*2}" fill="#c2a4e7" stroke="#695786" stroke-width="3"/>${stage>=1?'<circle cx="54" cy="57" r="8" fill="#ddc9f7"/>':''}${stage===3?'<path d="M55 43 L51 24 L67 32 L76 16 L86 32 L102 24 L97 45Z" fill="#efc65c" stroke="#695786" stroke-width="3"/><circle cx="76" cy="34" r="4" fill="#e78f88"/>':''}${face()}`;
+ }else if(type==='ember'){
+  art=`${stage>=2?'<path d="M37 83 L9 55 L12 99 L40 112 M112 83 L142 55 L139 99 L111 112" fill="#eca28d" stroke="#865441" stroke-width="3"/>':''}<path d="M111 109 Q149 132 129 76 Q119 114 101 109" fill="#dd9872" stroke="#865441" stroke-width="3"/><ellipse cx="75" cy="108" rx="35" ry="32" fill="#dda075"/><ellipse cx="75" cy="112" rx="20" ry="22" fill="#f9d9a7"/><path d="M43 65 L42 35 L61 56 M91 56 L109 35 L108 66" fill="#eac379" stroke="#865441" stroke-width="3"/><rect x="36" y="49" width="78" height="61" rx="29" fill="#e4a17a" stroke="#865441" stroke-width="3"/>${face(74)}${stage>=1?'<path d="M47 138 L58 138 M92 138 L103 138" stroke="#865441" stroke-width="9" stroke-linecap="round"/>':''}${stage===3?'<path d="M60 48 L66 31 L75 44 L85 29 L93 49" fill="#dc795e"/><path d="M69 119 L80 119" stroke="#dd9872" stroke-width="3"/>':''}`;
+ }else if(type==='pip'){
+  art=`<path d="M56 130 L54 145 M94 130 L96 145" stroke="#d68f40" stroke-width="5" stroke-linecap="round"/>${stage>=2?'<path d="M39 86 Q7 65 18 101 Q27 115 41 110 M112 86 Q142 65 132 101 Q123 115 108 110" fill="#efbf57" stroke="#9a773b" stroke-width="3"/>':''}<ellipse cx="75" cy="91" rx="${35+stage*3}" ry="45" fill="#f6d475" stroke="#9a773b" stroke-width="3"/>${stage>=1?'<path d="M67 47 Q55 28 77 40 Q83 24 89 38" fill="#efbd51" stroke="#9a773b" stroke-width="3"/>':''}<circle cx="61" cy="79" r="4" fill="#263b36"/><circle cx="89" cy="79" r="4" fill="#263b36"/><path d="M66 91 L75 103 L84 91Z" fill="#e89b4d"/><circle cx="50" cy="93" r="6" fill="#eca18c"/><circle cx="100" cy="93" r="6" fill="#eca18c"/>${stage===3?'<path d="M63 115 L75 121 L63 130Z M87 115 L75 121 L87 130Z" fill="#d77e75"/><circle cx="75" cy="121" r="4" fill="#b96560"/>':''}`;
+ }else if(type==='luna'){
+  art=`${stage>=1?'<path d="M105 126 Q145 131 130 92" fill="none" stroke="#aaa0c8" stroke-width="13" stroke-linecap="round"/>':''}<ellipse cx="75" cy="115" rx="29" ry="26" fill="#b6acd6"/><path d="M35 72 L36 32 L62 50 Q75 45 88 50 L114 32 L115 75" fill="#b6acd6" stroke="#6c6386" stroke-width="3"/><path d="M42 56 L43 42 L55 53 M95 53 L107 42 L108 56" fill="#eab5bd"/><rect x="34" y="54" width="82" height="57" rx="27" fill="#b6acd6"/>${face(75)}<path d="M70 87 L75 92 L80 87Z" fill="#6c6386"/><path d="M30 83 L48 87 M31 94 L48 92 M103 87 L121 83 M103 92 L120 94" stroke="#6c6386" stroke-width="2" stroke-linecap="round"/>${stage>=2?'<path d="M49 110 Q75 123 100 109" fill="none" stroke="#eac664" stroke-width="6"/><circle cx="75" cy="117" r="6" fill="#f4d881"/>':''}${stage===3?'<path d="M57 45 Q69 44 66 31 Q79 42 68 51 Q59 54 57 45" fill="#f7d67c"/>':''}`;
+ }else if(type==='orbit'){
+  art=`<path d="M54 125 L54 143 M96 125 L96 143" stroke="#588f93" stroke-width="12" stroke-linecap="round"/>${stage>=1?'<path d="M39 102 L21 113 M111 102 L129 89" stroke="#588f93" stroke-width="10" stroke-linecap="round"/><circle cx="20" cy="114" r="8" fill="#e9b96c"/><circle cx="130" cy="86" r="8" fill="#e9b96c"/>':''}<rect x="43" y="92" width="64" height="42" rx="13" fill="#8bc7c4" stroke="#427f83" stroke-width="3"/><path d="M75 50 L75 29" stroke="#427f83" stroke-width="4"/><circle cx="75" cy="26" r="7" fill="${stage===3?'#eb9a87':'#edc673'}"/><rect x="29" y="49" width="92" height="52" rx="17" fill="#a4d7d1" stroke="#427f83" stroke-width="3"/><rect x="41" y="59" width="68" height="30" rx="10" fill="#315f57"/><circle cx="59" cy="71" r="5" fill="#fff8dd"/><circle cx="91" cy="71" r="5" fill="#fff8dd"/><path d="M67 79 Q75 87 83 79" stroke="#fff8dd" stroke-width="3" fill="none"/>${stage>=2?'<path d="M65 110 C58 99 48 117 75 128 C102 117 92 99 85 110 Q75 102 65 110" fill="#e99083"/>':'<circle cx="75" cy="115" r="7" fill="#edc673"/>'}${stage===3?'<path d="M18 57 L13 47 M130 48 L135 38" stroke="#edc673" stroke-width="4" stroke-linecap="round"/>':''}`;
+ }
+ return `<svg viewBox="0 0 150 160" aria-hidden="true">${shadow}${art}</svg>`;
+}
+function avatarSvg(stage,type=state.avatar){
+ const content=type==='sprig'?sprigSvg(stage):type==='nova'?novaSvg(stage):type==='puff'?puffSvg(stage):newAvatarSvg(stage,type);
+ return content;
+}
+
+// Each friend draws from its own shuffled set; all three appear before any repeat.
+const surpriseBags={},lastSurprises={};
+function nextSurprise(key){
+ if(!surpriseBags[key]?.length){
+  const bag=[0,1,2];for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
+  if(bag[0]===lastSurprises[key])[bag[0],bag[1]]=[bag[1],bag[0]];
+  surpriseBags[key]=bag;
+ }
+ return lastSurprises[key]=surpriseBags[key].shift();
+}
+const starShape='<path d="M0 -16 L5 -5 L17 -4 L8 4 L11 16 L0 9 L-11 16 L-8 4 L-17 -4 L-5 -5Z"/>';
+const heartShape='<path d="M0 13 C-28 -2 -16 -23 0 -10 C16 -23 28 -2 0 13Z"/>';
+const flowerShape='<g fill="currentColor"><circle cy="-10" r="9"/><circle cx="10" r="9"/><circle cy="10" r="9"/><circle cx="-10" r="9"/></g><circle r="7" fill="#f4d173"/>';
+const fishShape='<path d="M-15 0 Q0 -19 20 0 Q0 19 -15 0 L-29 -11 L-29 11Z" fill="currentColor"/><circle cx="11" cy="-2" r="2.5" fill="#315f57"/>';
+const noteShape='<path d="M0 8 V-14 L16 -18 V3" stroke="currentColor" stroke-width="4" fill="none"/><ellipse cx="-5" cy="8" rx="7" ry="5" fill="currentColor"/><ellipse cx="11" cy="3" rx="7" ry="5" fill="currentColor"/>';
+const snowShape='<path d="M-15 0 H15 M0 -15 V15 M-11 -11 L11 11 M-11 11 L11 -11" stroke="#83b9d4" stroke-width="3" stroke-linecap="round"/>';
+function motif(x,y,shape,color='#efbf60',size=1,animation='fx-pop',delay=0){return `<g transform="translate(${x} ${y}) scale(${size})"><g class="${animation}" style="color:${color};fill:${color};--delay:${delay}s">${shape}</g></g>`;}
+function scatter(shape,color,animation='fx-pop'){
+ return [[37,45,.7],[100,24,.6],[208,25,.7],[285,46,.8],[33,133,.65],[290,151,.7]].map(([x,y,s],i)=>motif(x,y,shape,color,s,animation,i*.1)).join('');
+}
+function rainbow(){return ['#e98e91','#efb96d','#f4d780','#96c9a8','#83bacf','#b7a2d0'].map((c,i)=>`<path class="fx-draw" d="M${19+i*10} 170 A${141-i*10} ${141-i*10} 0 0 1 ${301-i*10} 170" fill="none" stroke="${c}" stroke-width="9" stroke-linecap="round"/>`).join('');}
+function clouds(){return '<g fill="#fff" opacity=".85"><ellipse cx="45" cy="187" rx="52" ry="17"/><circle cx="37" cy="169" r="20"/><circle cx="63" cy="177" r="17"/><ellipse cx="279" cy="192" rx="48" ry="16"/><circle cx="273" cy="174" r="21"/></g>';}
+function chest(pearl=false){return `<g class="fx-pop"><path d="M${pearl?217:229} 205 Q206 150 254 139 Q300 150 291 205Z" fill="${pearl?'#efb8c4':'#ba824b'}" stroke="#916d56" stroke-width="3"/>${pearl?'<path d="M254 147 L239 199 M272 157 L262 200 M223 165 L233 199" stroke="#d390a3" stroke-width="2"/><circle cx="253" cy="190" r="17" fill="#fff9e9"/><circle cx="247" cy="184" r="5" fill="#fff"/>':'<rect x="219" y="181" width="77" height="39" rx="8" fill="#d7a159" stroke="#916d56" stroke-width="3"/><rect x="247" y="192" width="17" height="19" rx="3" fill="#ffe19a"/>'}</g>`;}
+function balloon(x,y,c){return `<g class="fx-rise"><path d="M${x} ${y+20} Q${x-8} ${y+70} 160 172" fill="none" stroke="#8e9d98" stroke-width="1.5"/><ellipse cx="${x}" cy="${y}" rx="24" ry="29" fill="${c}"/><ellipse cx="${x-8}" cy="${y-8}" rx="5" ry="10" fill="#fff" opacity=".4"/></g>`;}
+const themes={
+ sprig:[
+  {motion:'bounce',bg:'#ecf4dd',art:()=>'<path d="M0 205 Q70 176 150 207 Q260 172 320 202 V250 H0" fill="#b6d1a0"/>'+[25,65,258,295].map((x,i)=>`<path class="fx-draw" d="M${x} 219 Q${x-9} 179 ${x} ${125+i%2*24}" stroke="#77a66d" stroke-width="5" fill="none"/>`+motif(x,125+i%2*24,flowerShape,['#ed9da6','#e5b567','#bba3d1','#eda387'][i],.9,'fx-pop',.2+i*.17)).join('')},
+  {motion:'float',bg:'#f1f6e6',art:()=>scatter(flowerShape,'#edbd91')+`<g class="fx-drift"><g transform="translate(251 91)"><g class="fx-sway"><ellipse cx="-17" cy="-10" rx="19" ry="24" fill="#eaa0ae" transform="rotate(-30)"/><ellipse cx="17" cy="-10" rx="19" ry="24" fill="#e6b876" transform="rotate(30)"/><ellipse cx="-13" cy="14" rx="14" ry="16" fill="#e6b876"/><ellipse cx="13" cy="14" rx="14" ry="16" fill="#eaa0ae"/><path d="M0 -19 V24 M0 -18 L-8 -29 M0 -18 L8 -29" stroke="#5f6953" stroke-width="4" stroke-linecap="round"/></g></g></g>`},
+  {motion:'wiggle',bg:'#fcf0e4',art:()=>[[35,75],[92,40],[239,52],[280,124],[43,180],[257,210]].map(([x,y],i)=>motif(x,y,'<path d="M-7 0 Q0 -29 12 -24 L13 0" stroke="#6b9c66" stroke-width="3" fill="none"/><circle cx="-7" cy="6" r="10" fill="#de7c7c"/><circle cx="15" cy="7" r="10" fill="#ed9891"/><path d="M10 -24 Q29 -36 31 -21 Q18 -15 10 -24" fill="#95b47b"/>','#de7c7c',.85,'fx-fall',i*.13)).join('')}
+ ],
+ nova:[
+  {motion:'fly',bg:'#283a5a',art:()=>scatter(starShape,'#f8df98')+'<g class="fx-drift"><path d="M22 109 Q117 9 248 49" stroke="#d8b8dd" stroke-width="16" opacity=".5" fill="none"/><path d="M42 117 Q132 19 251 52" stroke="#f5d57d" stroke-width="7" fill="none"/>'+motif(259,53,starShape,'#ffe4a0',1.45)+'</g>'},
+  {motion:'spin',bg:'#354560',art:()=>'<path class="fx-draw" d="M27 153 L57 55 L151 28 L256 48 L297 144 M57 55 L111 109 L151 28 L217 105 L256 48" stroke="#d8c4ed" stroke-width="2" fill="none"/>'+[[27,153],[57,55],[151,28],[256,48],[297,144],[111,109],[217,105]].map(([x,y],i)=>motif(x,y,starShape,'#ffe5a6',.5,'fx-pop',i*.15)).join('')},
+  {motion:'float',bg:'#293e55',art:()=>'<ellipse cx="160" cy="115" rx="137" ry="65" fill="none" stroke="#b6c8d5" stroke-width="1.5" stroke-dasharray="5 6"/>'+motif(44,107,'<circle r="21" fill="#dfaaa0"/><ellipse rx="34" ry="9" fill="none" stroke="#f8d58d" stroke-width="5" transform="rotate(-22)"/>','#dfaaa0',1,'fx-float')+motif(264,68,'<circle r="22" fill="#99c7bc"/><path d="M-19 -7 Q0 8 20 -6 M-17 8 Q0 20 18 9" fill="none" stroke="#689d9c" stroke-width="4"/>','#99c7bc',1,'fx-float')+motif(257,170,'<circle r="13" fill="#b5a0d3"/>','#b5a0d3',1,'fx-float')+scatter(starShape,'#f5dfb0')}
+ ],
+ puff:[
+  {motion:'float',bg:'#e8f3fa',art:()=>rainbow()+clouds()},
+  {motion:'launch',bg:'#ecf4fa',art:()=>balloon(69,69,'#efa391')+balloon(147,36,'#e7bd67')+balloon(235,70,'#a994ca')+clouds()},
+  {motion:'spin',bg:'#e6f1f7',art:()=>scatter(snowShape,'#83b9d4','fx-fall')+motif(258,109,snowShape,'#83b9d4',1.7,'fx-spin')+'<path d="M0 225 Q85 200 163 224 Q252 201 320 220 V250 H0Z" fill="#fff"/>'}
+ ],
+ bubbles:[
+  {motion:'bounce',bg:'#e1f1f6',art:()=>[[35,64,19],[90,29,13],[237,41,23],[287,112,20],[31,180,13],[271,207,18]].map(([x,y,r],i)=>motif(x,y,`<circle r="${r}" fill="#e0dcf5" fill-opacity=".5" stroke="#91bacb" stroke-width="2"/><path d="M${-r*.6} -3 Q${-r*.6} ${-r*.7} 2 ${-r*.65}" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,'#bed9e6',1,'fx-rise',i*.12)).join('')},
+  {motion:'wiggle',bg:'#ddeff0',art:()=>chest(true)+scatter(starShape,'#eecb7f')+'<path d="M0 232 Q132 211 320 238 V250 H0" fill="#e9d5ae"/>'+motif(40,195,'<path d="M0 25 Q-21 -19 -3 -36 M5 23 Q29 -3 16 -18" fill="none" stroke="#7fb3a4" stroke-width="7" stroke-linecap="round"/>')},
+  {motion:'hop',bg:'#e2f2f3',art:()=>[[36,72,'#e8b874'],[111,33,'#dd9c9f'],[238,53,'#ad99cf'],[290,128,'#88bbb4'],[260,207,'#e8b874']].map(([x,y,c],i)=>motif(x,y,fishShape,c,.9,'fx-drift',i*.15)).join('')+'<path d="M0 234 Q80 221 160 237 Q260 220 320 230 V250 H0" fill="#b8d7ca"/>'}
+ ],
+ ember:[
+  {motion:'bounce',bg:'#f9e9e3',art:()=>scatter(heartShape,'#e99897','fx-rise')+motif(251,100,heartShape,'#d98384',1.7,'fx-pulse')},
+  {motion:'fly',bg:'#eaf1ef',art:()=>clouds()+'<g class="fx-rise" fill="#b7abc5" stroke="#857493" stroke-width="2"><path d="M20 235 V168 H40 V152 H54 V168 H70 V235 M250 235 V168 H266 V152 H280 V168 H300 V235 M66 235 V194 H253 V235"/><path d="M22 168 L45 138 L68 168 M250 168 L275 138 L299 168" fill="#d9958f"/><path d="M142 235 V205 Q160 185 179 205 V235" fill="#ede3db"/></g>'+scatter(starShape,'#e9c878')},
+  {motion:'wiggle',bg:'#f8eddb',art:()=>chest()+[[35,169],[61,205],[250,110],[276,125],[258,80]].map(([x,y],i)=>motif(x,y,'<circle r="11" fill="#efc85f" stroke="#c89b43" stroke-width="2"/><path d="M0 -6 V6" stroke="#c89b43" stroke-width="2"/>','#efc85f',1,'fx-fall',i*.13)).join('')+scatter(starShape,'#e5b65f')}
+ ],
+ pip:[
+  {motion:'hop',bg:'#fff2d8',art:()=>[40,279].map((x,i)=>`<g transform="translate(${x} 181)"><g class="fx-pop" style="--delay:${i*.3}s"><ellipse cy="5" rx="24" ry="31" fill="#f9df95"/><circle cx="-8" cy="-2" r="3" fill="#655943"/><circle cx="8" cy="-2" r="3" fill="#655943"/><path d="M-4 8 L0 14 L4 8" fill="#df9d61"/><path d="M-25 12 L-13 19 L-2 12 L10 21 L25 12 Q26 41 0 42 Q-26 41 -25 12" fill="#fdfbf5" stroke="#d6c7a4" stroke-width="2"/></g></g>`).join('')+scatter(starShape,'#e5be6b')},
+  {motion:'bounce',bg:'#f0f5e6',art:()=>'<g class="fx-drift"><path d="M42 158 L64 218 L84 154" fill="#edd1b4"/><path d="M61 203 L42 141 M62 203 L63 120 M64 203 L84 142" stroke="#83a879" stroke-width="4"/>'+motif(42,141,flowerShape,'#e39da5',.8)+motif(63,120,flowerShape,'#e7b66b',.9)+motif(84,142,flowerShape,'#af9ccb',.8)+'</g>'+scatter(flowerShape,'#e9b0a0')},
+  {motion:'land',bg:'#e8f1f6',art:()=>clouds()+'<g class="fx-fall"><path d="M64 69 A96 64 0 0 1 256 69 Q230 57 208 69 Q185 57 160 69 Q137 57 113 69 Q89 57 64 69" fill="#e5a39e"/><path d="M113 67 Q112 7 160 5 Q204 7 208 67" fill="#eecb7a"/><path d="M65 70 L126 178 M255 70 L194 178 M112 70 L142 178 M208 70 L178 178" stroke="#8c9996" stroke-width="2"/></g>'}
+ ],
+ luna:[
+  {motion:'swing',bg:'#303e5c',art:()=>motif(267,48,'<path d="M0 -27 Q-33 -22 -24 8 Q-6 34 21 12 Q-11 17 0 -27" fill="#fae2a0"/>','#fae2a0',1,'fx-pop')+scatter(starShape,'#f5dca0')+'<path d="M94 0 L110 214 M222 0 L211 214" stroke="#d5c5e4" stroke-width="2"/><path d="M101 218 Q160 232 220 218" stroke="#d3b7a0" stroke-width="8" fill="none" stroke-linecap="round"/>'},
+  {motion:'hop',bg:'#f1eaf5',art:()=>[[41,169,'#dfa3b1'],[270,179,'#a393c7'],[260,58,'#edbd79']].map(([x,y,c])=>motif(x,y,'<circle r="24" fill="currentColor"/><path d="M-21 -10 Q17 -7 20 13 M-18 -17 Q6 6 23 6 M-23 2 Q7 13 14 21 M-10 -22 Q-3 0 -22 12" stroke="#fff" stroke-opacity=".5" fill="none" stroke-width="2"/>',c,1,'fx-spin')).join('')+'<path class="fx-draw" d="M37 197 Q72 240 103 214 T230 223 T279 199" fill="none" stroke="#c5a1ba" stroke-width="3"/>'},
+  {motion:'wiggle',bg:'#e9f0ef',art:()=>'<path class="fx-draw" d="M28 75 Q162 -30 294 89" stroke="#d1b37c" stroke-width="3" fill="none" stroke-dasharray="4 7"/>'+[[36,77,'#e2b467'],[151,32,'#e7a0a3'],[278,84,'#9dbbb3']].map(([x,y,c])=>motif(x,y,fishShape,c,1,'fx-float')).join('')+motif(270,183,'<path d="M-15 17 L15 -17" stroke="#8d81a9" stroke-width="7" stroke-linecap="round"/>'+starShape,'#e5c575',1.1,'fx-pulse')}
+ ],
+ orbit:[
+  {motion:'launch',bg:'#283e54',art:()=>scatter(starShape,'#f3d794')+'<path class="fx-rise" d="M147 216 Q128 238 160 249 Q192 235 173 216" fill="#e9b267"/><path class="fx-rise" d="M155 217 Q145 239 161 243 Q174 235 166 217" fill="#fff0b8"/>'+clouds()},
+  {motion:'wiggle',bg:'#e9e7f3',art:()=>'<path d="M0 208 H320 V250 H0" fill="#d9d1e5"/><path d="M0 228 H320 M47 208 L31 250 M118 208 L112 250 M197 208 L201 250 M270 208 L287 250" stroke="#fff" stroke-width="2"/>'+motif(160,42,'<circle r="28" fill="#a8c6cb"/><path d="M-26 -8 H26 M-26 8 H26 M-8 -26 V26 M8 -26 V26" stroke="#f5ffff" stroke-width="3"/>','#a8c6cb',1,'fx-spin')+[[35,99],[276,103],[48,170],[265,178]].map(([x,y],i)=>motif(x,y,noteShape,['#a293c4','#d895a5'][i%2],.85,'fx-float')).join('')},
+  {motion:'bounce',bg:'#edf3e7',art:()=>[[40,184,'#dca2a7'],[276,181,'#9fc3be']].map(([x,y,c],i)=>motif(x,y,`<rect x="-26" y="-20" width="52" height="43" rx="5" fill="${c}"/><path d="M0 -20 V23 M-26 -8 H26" stroke="#fce5a1" stroke-width="7"/><path d="M0 -21 Q-29 -43 -20 -21 Q-9 -13 0 -21 Q29 -43 20 -21 Q9 -13 0 -21" fill="none" stroke="#d7b771" stroke-width="4"/>`,c,1,'fx-walk',i*.15)).join('')+scatter(heartShape,'#e2ad98')}
+ ]
+};
+function renderSurprise(){
+ const index=state.ending,theme=themes[state.avatar][index];
+ const scene=$('celebrationScene');
+ scene.className='celebration-scene';
+ scene.style.setProperty('--scene-bg',theme.bg);
+ $('celebrationEffects').innerHTML=`<svg viewBox="0 0 320 250" preserveAspectRatio="xMidYMid meet">${theme.art()}</svg>`;
+ $('celebrateChar').innerHTML=avatarSvg(3);
+ $('surpriseTitle').textContent=locales[state.lang].endings[avatarKeys.indexOf(state.avatar)][index];
+ void scene.offsetWidth;scene.classList.add('motion-'+theme.motion);
+}
+
+const $=id=>document.getElementById(id);
+const categoryKeys=['who','where','when','what','why','feelings'];
+const categoryIcons=['👤','📍','🕒','➡️','🔎','💭'];
+let state={lang:'en',enabled:['who','where','feelings'],avatar:'sprig',goal:1,active:null,cues:[],growth:0,sound:true,busy:false,ending:0,emptyAnswer:false};
+let finishTimer=null,buttonTimer=null,audioContext=null,lastFocus=null;
+const reducedMotion=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function t(key,values={}){let value=locales[state.lang][key];return Object.entries(values).reduce((s,[k,v])=>s.replaceAll('{'+k+'}',String(v)),value);}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function category(key){const i=categoryKeys.indexOf(key),[label,question,prompts]=locales[state.lang].categories[i];return{label,question,prompts,icon:categoryIcons[i]};}
+function friendName(){return locales[state.lang].names[avatarKeys.indexOf(state.avatar)];}
+function tone(frequency,duration=.14,delay=0,volume=.035){
+ if(!state.sound)return;
+ try{
+  const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;
+  if(!audioContext)audioContext=new Audio();
+  if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});
+  const ctx=audioContext,osc=ctx.createOscillator(),gain=ctx.createGain(),at=ctx.currentTime+delay;
+  osc.type='triangle';osc.frequency.setValueAtTime(frequency,at);gain.gain.setValueAtTime(.0001,at);gain.gain.exponentialRampToValueAtTime(volume,at+.02);gain.gain.exponentialRampToValueAtTime(.0001,at+duration);osc.connect(gain).connect(ctx.destination);osc.start(at);osc.stop(at+duration+.03);
+ }catch(_){/* Sound is optional; an unavailable audio device never blocks play. */}
+}
+function growSound(){[330,440,554,660,880].forEach((f,i)=>tone(f,.23,i*.10,.03));}
+function celebrateSound(){
+ const melodies=[[523,659,784,1047],[659,784,988,1319],[392,523,659,784],[440,554,659,880],[294,440,587,880],[587,740,880,1175],[440,523,659,1047],[330,494,660,988]];
+ melodies[avatarKeys.indexOf(state.avatar)].forEach((f,i)=>tone(f,.3,i*.14,.032));
+ tone(523,.48,.65,.017);tone(784,.48,.65,.012);
+}
+function renderSound(){$('soundButton').textContent=t(state.sound?'soundOn':'soundOff');$('soundButton').setAttribute('aria-pressed',String(state.sound));}
+function translateStatic(){
+ document.documentElement.lang=({'en':'en','es':'es','pt':'pt-BR','zh-Hant':'zh-Hant-TW','zh-Hans':'zh-Hans'}[state.lang]);
+ document.title=t('title');
+ document.querySelectorAll('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));
+ document.querySelectorAll('[data-placeholder]').forEach(el=>el.placeholder=t(el.dataset.placeholder));
+ renderSound();
+}
+function renderSetup(){
+ $('categoryChecks').innerHTML=categoryKeys.map(key=>{const c=category(key);return `<label class="check"><input type="checkbox" value="${key}" ${state.enabled.includes(key)?'checked':''}><span class="icon" aria-hidden="true">${c.icon}</span><strong>${c.label}</strong><span class="tiny">${c.question}</span></label>`;}).join('');
+ $('categoryChecks').querySelectorAll('input').forEach(input=>input.onchange=()=>{state.enabled=[...$('categoryChecks').querySelectorAll('input:checked')].map(x=>x.value);$('setupStatus').textContent='';});
+ $('goalChoices').innerHTML=locales[state.lang].goals.map((label,i)=>`<label class="goal-choice"><input type="radio" name="detailGoal" value="${i+1}" ${state.goal===i+1?'checked':''}><span class="goal-number" aria-hidden="true">${i+1}</span><strong>${label}</strong></label>`).join('');
+ $('goalChoices').querySelectorAll('input').forEach(input=>input.onchange=()=>state.goal=Number(input.value));
+ renderAvatars();
+}
+function renderAvatars(){
+ const loc=locales[state.lang];
+ $('avatarChoices').innerHTML=avatarKeys.map((key,i)=>`<button class="avatar-choice ${state.avatar===key?'selected':''}" data-avatar="${key}" aria-pressed="${state.avatar===key}"><div class="avatar-preview">${avatarSvg(1,key)}</div><strong>${loc.names[i]}</strong><span class="tiny">${loc.types[i]}</span></button>`).join('');
+ $('avatarChoices').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.avatar=b.dataset.avatar;renderAvatars();$('avatarChoices').querySelector(`[data-avatar="${state.avatar}"]`).focus({preventScroll:true});});
+}
+function renderDetailButtons(){
+ $('detailButtons').innerHTML=state.enabled.map(key=>{const c=category(key);return `<button class="detail-button ${state.active===key?'active':''}" data-key="${key}" aria-pressed="${state.active===key}"><span class="icon" aria-hidden="true">${c.icon}</span>${c.label}</button>`;}).join('');
+ $('detailButtons').querySelectorAll('button').forEach(b=>b.onclick=()=>openCategory(b.dataset.key));
+}
+function cancelPending(){clearTimeout(finishTimer);clearTimeout(buttonTimer);state.busy=false;$('updateButton').disabled=false;$('updateButton').textContent=t('added');$('characterFace').classList.remove('bouncing');}
+function start(){
+ if(!state.enabled.length){$('setupStatus').textContent=t('choose');return;}
+ cancelPending();tone(440,.08,0,.008);
+ state.active=null;state.cues=[];state.growth=0;state.emptyAnswer=!$('startingAnswer').value.trim();
+ $('answerDisplay').textContent=$('startingAnswer').value.trim()||t('tell');$('biggerAnswer').value='';$('answerStatus').textContent='';$('setupStatus').textContent='';
+ renderDetailButtons();updateGrowth();updateCues();$('promptPanel').classList.add('hidden');$('setup').classList.add('hidden');$('activity').classList.remove('hidden');
+ $('activityHeading').focus({preventScroll:true});window.scrollTo(0,0);
+}
+function cueText(cue){return cue.custom!==undefined?cue.custom:category(cue.key).prompts[cue.index];}
+function openCategory(key){
+ if(state.busy)return;
+ state.active=key;$('answerStatus').textContent='';
+ $('detailButtons').querySelectorAll('button').forEach(b=>{b.classList.toggle('active',b.dataset.key===key);b.setAttribute('aria-pressed',String(b.dataset.key===key));});
+ const c=category(key);
+ $('promptPanel').innerHTML=`<div class="prompt-head"><span class="icon" aria-hidden="true">${c.icon}</span><div><strong>${c.question}</strong><div class="tiny">${t('cueHelp')}</div></div></div><div class="chips">${c.prompts.map((p,i)=>{const selected=state.cues.some(x=>x.key===key&&x.index===i);return `<button class="chip ${selected?'selected':''}" data-i="${i}" aria-pressed="${selected}">${p}</button>`;}).join('')}<button class="chip" data-custom="1" aria-expanded="false">${t('own')}</button></div><div id="customWrap" class="custom-wrap hidden"><input id="customInput" class="field" placeholder="${t('typeIdea')}" aria-label="${t('typeIdea')}"><button id="addCustom" class="secondary" style="margin-top:8px">${t('addIdea')}</button></div>`;
+ $('promptPanel').classList.remove('hidden');
+ $('promptPanel').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{
+  const index=Number(b.dataset.i),found=state.cues.findIndex(x=>x.key===key&&x.index===index);
+  if(found>=0)state.cues.splice(found,1);else state.cues.push({key,index});
+  updateCues();openCategory(key);$('promptPanel').querySelector(`[data-i="${index}"]`).focus({preventScroll:true});
+ });
+ $('promptPanel').querySelector('[data-custom]').onclick=e=>{$('customWrap').classList.remove('hidden');e.currentTarget.setAttribute('aria-expanded','true');$('customInput').focus();};
+ $('addCustom').onclick=()=>{const custom=$('customInput').value.trim();if(custom){if(!state.cues.some(x=>x.key===key&&x.custom===custom))state.cues.push({key,custom});updateCues();$('customInput').value='';$('customInput').focus();}};
+ $('customInput').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('addCustom').click();}};
+}
+function updateCues(){
+ $('selectedCues').classList.toggle('hidden',!state.cues.length);
+ $('cueList').innerHTML=state.cues.map((cue,i)=>`<span class="cue-tag">${category(cue.key).icon} ${escapeHtml(cueText(cue))} <button aria-label="${t('remove')}" data-remove="${i}">×</button></span>`).join('');
+ $('cueList').querySelectorAll('button').forEach(b=>b.onclick=()=>{const index=Number(b.dataset.remove);state.cues.splice(index,1);updateCues();if(state.active)openCategory(state.active);const buttons=$('cueList').querySelectorAll('button');(buttons[Math.min(index,buttons.length-1)]||$('detailButtons').querySelector('button')).focus({preventScroll:true});});
+}
+function updateGrowth(){
+ const ratio=Math.min(1,state.growth/state.goal),stage=state.growth===0?0:Math.min(3,Math.ceil(ratio*3));
+ $('characterFace').innerHTML=avatarSvg(stage);$('characterFace').style.setProperty('--growth-scale',(.42+.86*ratio).toFixed(3));
+ $('characterFace').setAttribute('role','img');$('characterFace').setAttribute('aria-label',t('growthLabel',{name:friendName(),stage:stage+1}));
+ $('characterName').textContent=friendName();$('characterStage').style.setProperty('--friend-color',avatarColors[avatarKeys.indexOf(state.avatar)]);
+ $('stageName').textContent=t(ratio>=1?'grown':ratio===0?'ready':'growing');
+ $('progressLabel').textContent=t(state.growth===0?'progressZero':'progress',{goal:state.goal,n:Math.min(state.growth,state.goal)});
+ $('progressFill').style.width=ratio*100+'%';$('progressBar').setAttribute('aria-valuemax',state.goal);$('progressBar').setAttribute('aria-valuenow',Math.min(state.growth,state.goal));
+}
+function sparkle(){
+ if(reducedMotion())return;
+ const icons={sprig:['🌸','🍃'],nova:['✨','⭐'],puff:['✨','☁️'],bubbles:['🫧','✨'],ember:['💛','✨'],pip:['🌼','✨'],luna:['🌙','✨'],orbit:['⚡','✨']}[state.avatar];
+ for(let i=0;i<10;i++){const s=document.createElement('span');s.className='spark';s.setAttribute('aria-hidden','true');s.textContent=icons[i%2];s.style.left='50%';s.style.top='42%';s.style.setProperty('--x',Math.cos(i/10*Math.PI*2)*105+'px');s.style.setProperty('--y',Math.sin(i/10*Math.PI*2)*92-30+'px');$('characterStage').appendChild(s);setTimeout(()=>s.remove(),1150);}
+}
+function updateAnswer(){
+ if(state.busy)return;
+ if(!state.active){$('answerStatus').textContent=t('chooseFirst');return;}
+ state.busy=true;$('updateButton').disabled=true;
+ const value=$('biggerAnswer').value.trim();if(value){$('answerDisplay').textContent=value;$('biggerAnswer').value='';state.emptyAnswer=false;}
+ state.growth++;updateGrowth();void $('characterFace').offsetWidth;$('characterFace').classList.add('bouncing');sparkle();growSound();
+ $('answerStatus').textContent=t(value?'saved':'spoken');state.active=null;renderDetailButtons();$('promptPanel').classList.add('hidden');$('updateButton').textContent=t('grew');
+ buttonTimer=setTimeout(()=>{$('characterFace').classList.remove('bouncing');$('updateButton').textContent=t('added');},1050);
+ finishTimer=setTimeout(()=>{state.busy=false;$('updateButton').disabled=false;if(state.growth>=state.goal)finish();},reducedMotion()?250:1200);
+}
+function finish(){
+ state.ending=nextSurprise(state.avatar);lastFocus=document.activeElement;
+ $('finalAnswer').textContent=state.emptyAnswer?'':'“'+$('answerDisplay').textContent+'”';
+ $('celebrate').classList.remove('hidden');renderSurprise();
+ document.querySelector('main').inert=true;document.body.style.overflow='hidden';
+ $('keepGoingButton').focus({preventScroll:true});celebrateSound();
+}
+function closeCelebration(restoreFocus=true){
+ $('celebrate').classList.add('hidden');document.querySelector('main').inert=false;document.body.style.overflow='';
+ if(restoreFocus)(lastFocus?.isConnected?lastFocus:$('updateButton')).focus({preventScroll:true});
+}
+function showSetup(clearAnswer=false){
+ cancelPending();closeCelebration(false);
+ if(clearAnswer){$('startingAnswer').value='';state.emptyAnswer=true;}
+ else if(!state.emptyAnswer)$('startingAnswer').value=$('answerDisplay').textContent;
+ $('activity').classList.add('hidden');$('setup').classList.remove('hidden');$('setupStatus').textContent='';renderSetup();
+ $('startButton').focus({preventScroll:true});window.scrollTo(0,0);
+}
+function changeLanguage(next){
+ if(!locales[next]||next===state.lang)return;
+ const old=state.lang,wasExample=$('startingAnswer').value===locales[old].example;
+ const customDraft=$('customInput')?.value,customOpen=$('customWrap')&&!$('customWrap').classList.contains('hidden');
+ state.lang=next;$('language').value=next;
+ if(wasExample)$('startingAnswer').value=t('example');
+ if($('answerDisplay').textContent===locales[old].example)$('answerDisplay').textContent=t('example');
+ else if(state.emptyAnswer)$('answerDisplay').textContent=t('tell');
+ translateStatic();renderSetup();renderDetailButtons();updateGrowth();updateCues();
+ if(state.active){openCategory(state.active);if(customOpen){$('customWrap').classList.remove('hidden');$('promptPanel').querySelector('[data-custom]').setAttribute('aria-expanded','true');$('customInput').value=customDraft;}}
+ $('setupStatus').textContent='';$('answerStatus').textContent='';
+ if(!$('celebrate').classList.contains('hidden')){
+  renderSurprise();$('finalAnswer').textContent=state.emptyAnswer?'':'“'+$('answerDisplay').textContent+'”';
+ }
+ try{localStorage.setItem('biggerAnswerLanguage',next);}catch(_){}
+}
+$('language').onchange=e=>changeLanguage(e.target.value);
+$('startButton').onclick=start;
+$('soundButton').onclick=()=>{state.sound=!state.sound;renderSound();if(state.sound)tone(660,.1);};
+$('settingsButton').onclick=()=>showSetup();
+$('updateButton').onclick=updateAnswer;
+$('resetButton').onclick=()=>showSetup(true);
+$('keepGoingButton').onclick=()=>closeCelebration();
+$('newAnswerButton').onclick=()=>showSetup(true);
+$('replayButton').onclick=()=>{state.ending=nextSurprise(state.avatar);renderSurprise();celebrateSound();};
+$('celebrate').onkeydown=e=>{
+ if(e.key==='Escape'){e.preventDefault();closeCelebration();}
+ if(e.key==='Tab'){
+  const buttons=[...$('celebrate').querySelectorAll('button')],first=buttons[0],last=buttons.at(-1);
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+ }
+};
+try{const saved=localStorage.getItem('biggerAnswerLanguage');if(locales[saved])state.lang=saved;}catch(_){}
+$('language').value=state.lang;$('startingAnswer').value=t('example');translateStatic();renderSetup();updateGrowth();
+
+</script>
+<script>
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+ window.addEventListener('load', () => navigator.serviceWorker.register('./bigger-answer-sw.js', {scope:'./bigger-answer-slp-social-communication-game.html'}).catch(() => {}));
+}
+</script></body></html>

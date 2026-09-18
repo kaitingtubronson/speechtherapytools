@@ -27,7 +27,15 @@ button{font-family:inherit;-webkit-appearance:none;appearance:none;touch-action:
 .reward-copy{min-width:0}
 .reward-title{font-size:24px;font-weight:850;margin-bottom:4px}
 .small{font-size:13px;opacity:.65}
-.reward-photo{display:none;width:clamp(64px,17vw,130px);height:clamp(64px,17vw,130px);border-radius:18px;border:2px solid #eadfce;object-fit:cover;flex:none}
+.reward-photo{
+  display:none;
+  width:clamp(100px,22vw,180px);
+  height:clamp(100px,22vw,180px);
+  border-radius:18px;
+  border:2px solid #eadfce;
+  object-fit:cover;
+  flex:none;
+}
 .reward-photo.show{display:block}
 .reward-input{display:none}
 .board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(7px,1.5vw,15px)}
@@ -83,7 +91,7 @@ button{font-family:inherit;-webkit-appearance:none;appearance:none;touch-action:
     <div class="small" id="rewardSaved">The reward photo is saved locally on this device.</div>
   </div>
   <img id="rewardPhoto" class="reward-photo" alt="Reward">
-  <input id="rewardInput" class="reward-input" type="file" accept="image/*" capture="environment">
+ <input id="rewardInput" class="reward-input" type="file" accept="image/*">
 </div>
 
 <div id="board" class="board" aria-label="Token board"></div>

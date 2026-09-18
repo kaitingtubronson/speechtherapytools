@@ -127,10 +127,7 @@ main{
   font-size:18px;
   font-weight:800;
 }
-.sound{
-  color:var(--muted);
-  font-size:11px;
-}
+
 
 .actions{
   display:flex;
@@ -1028,12 +1025,10 @@ function renderFeelings(){
       "feeling"+
       (selectedFeelings.includes(id)?" selected":"");
 
-    button.innerHTML=`
-      <div class="icon">${f.e}</div>
-      <div class="word">${label(f)}</div>
-      <div class="sound">🔊 ${label(f)}</div>
-    `;
-
+ button.innerHTML=`
+  <div class="icon">${f.e}</div>
+  <div class="word">${label(f)}</div>
+`;
     button.onclick=()=>toggleFeeling(id);
 
     grid.appendChild(button);
@@ -1284,11 +1279,10 @@ if(selectedChoices.includes(choice.id)){
 
     }
 
-    button.innerHTML=`
-      ${visual}
-      <div class="word">${label(choice)}</div>
-      <div class="sound">🔊 ${label(choice)}</div>
-    `;
+  button.innerHTML=`
+  ${visual}
+  <div class="word">${label(choice)}</div>
+`;
 
     button.onclick=()=>{
 

@@ -1111,8 +1111,15 @@ function exitToHome(){
         });
 
 
-    mediaRecorder =
-        new MediaRecorder(stream);
+ let options = {};
+
+if (MediaRecorder.isTypeSupported("audio/mp4")) {
+    options = { mimeType: "audio/mp4" };
+} else if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) {
+    options = { mimeType: "audio/webm;codecs=opus" };
+}
+
+mediaRecorder = new MediaRecorder(stream, options);
 
 
     audioChunks = [];
@@ -1127,11 +1134,10 @@ function exitToHome(){
 
     mediaRecorder.onstop = () => {
 
-        const audioBlob =
-            new Blob(audioChunks, {
-                type:"audio/webm"
-            });
-
+  const audioBlob =
+    new Blob(audioChunks, {
+        type: mediaRecorder.mimeType
+    });
 let reader = new FileReader();
 
 reader.onloadend = function(){
@@ -1173,7 +1179,9 @@ function playRecording(index){
                 choices[index].audio
             );
 
-        audio.play();
+        audio.play().catch(error => {
+            console.log("Audio playback failed:", error);
+        });
 
     }
 
